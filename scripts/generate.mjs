@@ -43,6 +43,7 @@ if (!existsSync(BASE_REFS_FILE)) {
 }
 
 const bare = (url) => (url ? String(url).split('|')[0] : url);
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // Map canonical URL -> { name, kind, type } for resolving references/bindings.
 const byUrl = new Map();
@@ -228,7 +229,12 @@ function buildTemplate(sd, elements) {
     if (el.leaf === 'meta') continue; // meta.profile is already set above
     const required = el.min != null && el.min >= 1;
     if (!required && !el.mustSupport) continue;
-    const key = el.leaf.replace(/\[x\]$/, 'Value');
+    // Choice elements (value[x]) use the concrete type-specific name in a real
+    // instance, e.g. performed[x]:Period -> "performedPeriod", so the template
+    // is a valid skeleton and matches hand-authored examples.
+    const key = el.leaf.endsWith('[x]')
+      ? el.leaf.slice(0, -3) + (el.types[0]?.code ? cap(el.types[0].code) : 'Value')
+      : el.leaf;
     if (seen.has(key)) continue;
     seen.add(key);
     json[key] = placeholder(el);

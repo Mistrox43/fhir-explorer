@@ -1774,7 +1774,7 @@ export const SPEC: SerisSpec = {
             "reference": "Procedure/example"
           },
           "status": "…",
-          "medicationValue": {
+          "medicationCodeableConcept": {
             "coding": [
               {
                 "system": "…",
@@ -1785,7 +1785,7 @@ export const SPEC: SerisSpec = {
           "subject": {
             "reference": "Patient/example"
           },
-          "effectiveValue": {
+          "effectivePeriod": {
             "start": "2025-01-01T09:00:00Z"
           }
         },
@@ -1799,7 +1799,7 @@ export const SPEC: SerisSpec = {
             "note": "anaesthesia was completed or not-done"
           },
           {
-            "path": "medicationValue",
+            "path": "medicationCodeableConcept",
             "note": "The anaesthesia administered to the patient"
           },
           {
@@ -1807,7 +1807,7 @@ export const SPEC: SerisSpec = {
             "note": "The patient receiving anaesthesia"
           },
           {
-            "path": "effectiveValue",
+            "path": "effectivePeriod",
             "note": ""
           }
         ]
@@ -1928,7 +1928,7 @@ export const SPEC: SerisSpec = {
               "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MessageHeader"
             ]
           },
-          "eventValue": {
+          "eventCoding": {
             "system": "…",
             "code": "…"
           },
@@ -1936,7 +1936,7 @@ export const SPEC: SerisSpec = {
         },
         "annotations": [
           {
-            "path": "eventValue",
+            "path": "eventCoding",
             "note": ""
           },
           {
@@ -2187,7 +2187,7 @@ export const SPEC: SerisSpec = {
           },
           "status": "…",
           "code": "…",
-          "valueValue": {
+          "valueCodeableConcept": {
             "coding": [
               {
                 "system": "…",
@@ -2210,7 +2210,7 @@ export const SPEC: SerisSpec = {
             "note": "kind of Observation"
           },
           {
-            "path": "valueValue",
+            "path": "valueCodeableConcept",
             "note": "ASA Score"
           }
         ]
@@ -3689,7 +3689,7 @@ export const SPEC: SerisSpec = {
           "subject": {
             "reference": "Patient/example"
           },
-          "performedValue": {
+          "performedPeriod": {
             "start": "2025-01-01T09:00:00Z"
           },
           "performer": "…",
@@ -3714,7 +3714,7 @@ export const SPEC: SerisSpec = {
             "note": "The patient receiving the surgical procedure"
           },
           {
-            "path": "performedValue",
+            "path": "performedPeriod",
             "note": ""
           },
           {
