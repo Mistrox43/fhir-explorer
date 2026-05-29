@@ -1,0 +1,43 @@
+{
+  "resourceType": "StructureDefinition",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-or-unit",
+  "name": "ORUnit",
+  "status": "draft",
+  "version": "1.0.1",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Location"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-or-unit"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ],
+        "mustSupport": true
+      }
+    ]
+  }
+}

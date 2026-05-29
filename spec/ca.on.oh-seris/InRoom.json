@@ -1,0 +1,53 @@
+{
+  "resourceType": "StructureDefinition",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-in-room",
+  "name": "InRoom",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "version": "1.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Procedure"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "max": "1"
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-in-room"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "type": [
+          {
+            "code": "Period"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.value[x].start",
+        "path": "Extension.value[x].start",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.value[x].end",
+        "path": "Extension.value[x].end",
+        "mustSupport": true
+      }
+    ]
+  }
+}

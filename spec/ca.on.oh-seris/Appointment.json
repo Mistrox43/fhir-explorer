@@ -1,0 +1,362 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Appointment",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Appointment",
+  "version": "1.0.1",
+  "name": "Appointment",
+  "title": "Appointment",
+  "status": "draft",
+  "date": "2023-03-06",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "A booking of a surgical healthcare procedure for a specific date/time.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Appointment",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Appointment",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Appointment.meta",
+        "path": "Appointment.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.meta.profile",
+        "path": "Appointment.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Appointment|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.extension:cancellationDate",
+        "path": "Appointment.extension",
+        "sliceName": "cancellationDate",
+        "short": "Cancellation Date",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-cancellation-date"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Cancellation Date"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.extension:cancellationDate.url",
+        "path": "Appointment.extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-cancellation-date"
+      },
+      {
+        "id": "Appointment.extension:reschedule",
+        "path": "Appointment.extension",
+        "sliceName": "reschedule",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-reschedule"
+            ]
+          }
+        ],
+        "isModifier": false
+      },
+      {
+        "id": "Appointment.extension:reschedule.url",
+        "path": "Appointment.extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-reschedule"
+      },
+      {
+        "id": "Appointment.extension:reschedule.extension:rescheduleFlag",
+        "path": "Appointment.extension.extension",
+        "sliceName": "rescheduleFlag",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Reschedule Flag"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.extension:reschedule.extension:rescheduleDate",
+        "path": "Appointment.extension.extension",
+        "sliceName": "rescheduleDate",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Reschedule Date"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.identifier",
+        "path": "Appointment.identifier",
+        "short": "Case Number",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Case Number"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.identifier.system",
+        "path": "Appointment.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.identifier.value",
+        "path": "Appointment.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.status",
+        "path": "Appointment.status",
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.cancelationReason",
+        "path": "Appointment.cancelationReason",
+        "short": "Cancellation reason",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgery-cancellation-reason"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Cancellation Reason"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.cancelationReason.coding",
+        "path": "Appointment.cancelationReason.coding",
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgery-cancellation-reason"
+        }
+      },
+      {
+        "id": "Appointment.cancelationReason.coding.system",
+        "path": "Appointment.cancelationReason.coding.system",
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/surgery-cancellation-reason",
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.cancelationReason.coding.code",
+        "path": "Appointment.cancelationReason.coding.code",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgery-cancellation-reason"
+        }
+      },
+      {
+        "id": "Appointment.cancelationReason.coding.display",
+        "path": "Appointment.cancelationReason.coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.cancelationReason.text",
+        "path": "Appointment.cancelationReason.text",
+        "short": "Cancellation reason description",
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.serviceCategory",
+        "path": "Appointment.serviceCategory",
+        "short": "Surgeon service",
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "Appointment.serviceCategory.coding",
+        "path": "Appointment.serviceCategory.coding",
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "Appointment.serviceCategory.coding.code",
+        "path": "Appointment.serviceCategory.coding.code",
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "Appointment.appointmentType",
+        "path": "Appointment.appointmentType",
+        "short": "Patient type"
+      },
+      {
+        "id": "Appointment.reasonReference",
+        "path": "Appointment.reasonReference",
+        "short": "The surgical procedure for this appointment",
+        "min": 1,
+        "max": "1",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Procedure"
+            ],
+            "aggregation": [
+              "bundled"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.reasonReference.reference",
+        "path": "Appointment.reasonReference.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.supportingInformation",
+        "path": "Appointment.supportingInformation",
+        "short": "supporting Observations",
+        "max": "1"
+      },
+      {
+        "id": "Appointment.start",
+        "path": "Appointment.start",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Scheduled Start Time"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.end",
+        "path": "Appointment.end",
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.minutesDuration",
+        "path": "Appointment.minutesDuration",
+        "short": "Estimated Case Duration",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Estimated Case Duration"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.created",
+        "path": "Appointment.created",
+        "short": "Booking Date",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Booking Date"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.comment",
+        "path": "Appointment.comment",
+        "short": "Notes on initial case scheduling",
+        "max": "0",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Notes"
+          }
+        ]
+      },
+      {
+        "id": "Appointment.participant",
+        "path": "Appointment.participant",
+        "max": "2",
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.participant.actor",
+        "path": "Appointment.participant.actor",
+        "short": "the surgical patient or OR Room",
+        "min": 1,
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Patient"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.participant.actor.reference",
+        "path": "Appointment.participant.actor.reference",
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.participant.actor.identifier",
+        "path": "Appointment.participant.actor.identifier",
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.participant.actor.identifier.system",
+        "path": "Appointment.participant.actor.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Appointment.participant.actor.identifier.value",
+        "path": "Appointment.participant.actor.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      }
+    ]
+  }
+}

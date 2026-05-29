@@ -1,0 +1,241 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "encounter-delay-reason",
+  "url": "http://ontariohealth.ca/fhir/CodeSystem/encounter-delay-reason",
+  "version": "1.0.1",
+  "name": "EncounterDelayReason",
+  "title": "Encounter Delay Reason",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-09-08",
+  "publisher": "Ontario Health",
+  "description": "Delay reason for encounter",
+  "content": "complete",
+  "count": 6,
+  "concept": [
+    {
+      "code": "coc",
+      "display": "Case Order Change"
+    },
+    {
+      "code": "hosr-1001",
+      "display": "Hospital Resource – Incorrect case booking"
+    },
+    {
+      "code": "hosr-1025",
+      "display": "Hospital Resource – Interpreter required"
+    },
+    {
+      "code": "hosr-1026",
+      "display": "Hospital Resource – Isolation requirements"
+    },
+    {
+      "code": "hosr-1002",
+      "display": "Hospital Resource – Registration error"
+    },
+    {
+      "code": "hosr-1003",
+      "display": "Hospital Resource – Registration / Admission delay"
+    },
+    {
+      "code": "hosr-1004",
+      "display": "Hospital Resource – Case not picked"
+    },
+    {
+      "code": "hosr-1005",
+      "display": "Hospital Resource – Wrong plates"
+    },
+    {
+      "code": "hosr-1027",
+      "display": "Hospital Resource – Poor air quality"
+    },
+    {
+      "code": "hosr-1006",
+      "display": "Hospital Resource – Prolonged OR set up required"
+    },
+    {
+      "code": "hosr-1007",
+      "display": "Hospital Resource – Sentinel events"
+    },
+    {
+      "code": "hosr-1008",
+      "display": "Hospital Resource – Unplanned procedure performed"
+    },
+    {
+      "code": "hosr-1009",
+      "display": "Hospital Resource – Block room delay"
+    },
+    {
+      "code": "hosr-1010",
+      "display": "Hospital Resource – Delay in bed becoming available (Unit Bed, ICU/step-down, PACU)"
+    },
+    {
+      "code": "hosr-1011",
+      "display": "Hospital Resource – Contaminated set-up / housekeeping delay"
+    },
+    {
+      "code": "hosr-1012",
+      "display": "Hospital Resource – Fire alarm"
+    },
+    {
+      "code": "hosr-1013",
+      "display": "Hospital Resource – Emergency code in hospital"
+    },
+    {
+      "code": "hosr-1014",
+      "display": "Hospital Resource – Equipment not working"
+    },
+    {
+      "code": "hosr-1015",
+      "display": "Hospital Resource – Equipment conflict / availability"
+    },
+    {
+      "code": "hosr-1016",
+      "display": "Hospital Resource – Lack of supplies / instruments"
+    },
+    {
+      "code": "mr-2001",
+      "display": "Medical Reasons – Patient was ill"
+    },
+    {
+      "code": "mr-2002",
+      "display": "Medical Reasons – Urgency of case changed"
+    },
+    {
+      "code": "mr-2003",
+      "display": "Medical Reasons – Airway / intubation"
+    },
+    {
+      "code": "mr-2004",
+      "display": "Medical Reasons – Line / IV"
+    },
+    {
+      "code": "mr-2021",
+      "display": "Medical Reasons – Missing orders"
+    },
+    {
+      "code": "mr-2022",
+      "display": "Medical Reasons – Preparedness for surgery"
+    },
+    {
+      "code": "mr-2005",
+      "display": "Medical Reasons – Tests not done / results not available"
+    },
+    {
+      "code": "mr-2006",
+      "display": "Medical Reasons – Imaging not done / not availablek"
+    },
+    {
+      "code": "mr-2007",
+      "display": "Medical Reasons – Consent not signed"
+    },
+    {
+      "code": "ohd-3001",
+      "display": "Other Hospital Staff Delay – Transport"
+    },
+    {
+      "code": "ohd-3002",
+      "display": "Other Hospital Staff Delay – Imaging"
+    },
+    {
+      "code": "ohd-3003",
+      "display": "Other Hospital Staff Delay – Translator"
+    },
+    {
+      "code": "ohd-3004",
+      "display": "Other Hospital Staff Delay – Attendant"
+    },
+    {
+      "code": "ohd-3005",
+      "display": "Other Hospital Staff Delay – Nursing staff late or unavailable"
+    },
+    {
+      "code": "ohd-3006",
+      "display": "Other Hospital Staff Delay – Staff break"
+    },
+    {
+      "code": "ohd-3007",
+      "display": "Other Hospital Staff Delay – In-service ran late"
+    },
+    {
+      "code": "ohd-3008",
+      "display": "Other Hospital Staff Delay – Medical student training"
+    },
+    {
+      "code": "ohd-3009",
+      "display": "Other Hospital Staff Delay – Assisting Physician "
+    },
+    {
+      "code": "ohd-3010",
+      "display": "Other Hospital Staff Delay – Dental Hygienist"
+    },
+    {
+      "code": "ohd-3011",
+      "display": "Other Hospital Staff Delay –  Fellow "
+    },
+    {
+      "code": "ohd-3012",
+      "display": "Other Hospital Staff Delay – Resident"
+    },
+    {
+      "code": "pf-4001",
+      "display": "Patient Factors – Patient arrived late"
+    },
+    {
+      "code": "pf-4002",
+      "display": "Patient Factors – Patient not ready"
+    },
+    {
+      "code": "pf-4003",
+      "display": "Patient Factors – Non-compliant patient"
+    },
+    {
+      "code": "pf-4004",
+      "display": "Patient Factors – Patient ate/drank/not NPO"
+    },
+    {
+      "code": "pf-4005",
+      "display": "Patient Factors – Patient to bathroom"
+    },
+    {
+      "code": "pf-4015",
+      "display": "Patient Factors – Payment"
+    },
+    {
+      "code": "pc-late",
+      "display": "Previous Case Ran Late  – Previous case went longer than expected"
+    },
+    {
+      "code": "sad-5001",
+      "display": "Surgeon / Anaesthetist Delayed – Surgeon late or unavailable"
+    },
+    {
+      "code": "sad-5002",
+      "display": "Surgeon / Anaesthetist Delayed – Surgeon marking patient"
+    },
+    {
+      "code": "sad-5003",
+      "display": "Surgeon / Anaesthetist Delayed – Surgeon consulting with patient"
+    },
+    {
+      "code": "sad-5004",
+      "display": "Surgeon / Anaesthetist Delayed – Surgeon on break / in meeting"
+    },
+    {
+      "code": "sad-5005",
+      "display": "Surgeon / Anaesthetist Delayed – Anaesthetist late or unavailable"
+    },
+    {
+      "code": "sad-5006",
+      "display": "Surgeon / Anaesthetist Delayed – Anaesthetist required elsewhere"
+    },
+    {
+      "code": "sad-5007",
+      "display": "Surgeon / Anaesthetist Delayed – Anaesthetist consulting with patient"
+    },
+    {
+      "code": "sad-5008",
+      "display": "Surgeon / Anaesthetist Delayed – Anaesthetist on break / in meeting"
+    }
+  ]
+}

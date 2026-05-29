@@ -1,0 +1,77 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-setp-ext-admissiontype",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-setp-ext-admissiontype",
+  "name": "SETPAdmissionType",
+  "title": "Extension: SETP Admission Type",
+  "version": "1.0.1",
+  "status": "draft",
+  "date": "2023-03-06",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "Facility-specific value for the admission type of the patient.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Appointment"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Admission Type",
+        "definition": "Facility-specific value for the admission type of the patient."
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-setp-ext-admissiontype"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "type",
+              "path": "$this"
+            }
+          ],
+          "ordered": false,
+          "rules": "open"
+        },
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/SETP-encounter-class"
+        }
+      }
+    ]
+  }
+}

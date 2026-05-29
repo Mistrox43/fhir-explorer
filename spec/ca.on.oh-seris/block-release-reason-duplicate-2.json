@@ -1,0 +1,41 @@
+{
+  "resourceType": "ValueSet",
+  "id": "block-release-reason",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/block-release-reason",
+  "version": "1.0.1",
+  "name": "BlockReleaseReason",
+  "title": "Block Release Reason",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "The value indicates the Reason for Block Release",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://ontariohealth.ca/fhir/CodeSystem/block-release-reason",
+        "concept": [
+          {
+            "code": "hd",
+            "display": "Holiday"
+          },
+          {
+            "code": "i-s",
+            "display": "In-service"
+          },
+          {
+            "code": "sm",
+            "display": "Staff Meeting"
+          },
+          {
+            "code": "sr",
+            "display": "Surgeon Request"
+          },
+          {
+            "code": "tnb",
+            "display": "Time not booked"
+          }
+        ]
+      }
+    ]
+  }
+}

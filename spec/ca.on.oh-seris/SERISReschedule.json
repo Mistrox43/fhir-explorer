@@ -1,0 +1,114 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-ext-reschedule",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-reschedule",
+  "version": "0.0.2",
+  "name": "SERISReschedule",
+  "title": "Extension: Reschedule",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "Defines when a surgery was rescheduled for",
+  "purpose": "captures a reason and time the procedure was rescheduled for",
+  "copyright": "Used by permission of HL7 International, all rights reserved Creative Commons License",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    }
+  ],
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Appointment"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Reschedule",
+        "definition": "defines when a surgery was rescheduled for",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:rescheduleFlag",
+        "path": "Extension.extension",
+        "sliceName": "rescheduleFlag",
+        "short": "Reschedule Flag",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:rescheduleFlag.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "rescheduleFlag"
+      },
+      {
+        "id": "Extension.extension:rescheduleFlag.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "boolean"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:rescheduleDate",
+        "path": "Extension.extension",
+        "sliceName": "rescheduleDate",
+        "short": "Reschedule DateTime",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:rescheduleDate.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "rescheduleDate"
+      },
+      {
+        "id": "Extension.extension:rescheduleDate.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "dateTime"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-reschedule"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

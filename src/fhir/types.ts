@@ -1,76 +1,150 @@
-// Type model describing the curated slice of the FHIR R4 specification
-// that this tool renders. It is intentionally simpler than the full
-// StructureDefinition format — just enough to teach the concepts.
+// Type model for the SERIS Implementation Guide data that this tool renders.
+// The data is produced by scripts/generate.mjs from the vendored FHIR package
+// (spec/ca.on.oh-seris) and written to src/generated/seris.ts. These types
+// describe that generated shape.
 
-/** A value-set binding attached to a coded element. */
+/** A single data type a profile element may hold. */
+export interface ElementType {
+  /** FHIR data type code, e.g. "string", "Reference", "CodeableConcept". */
+  code: string;
+  /** For Reference types: the profile names this element may point at. */
+  targets?: string[];
+  /** For Extension types: the name of the extension definition used. */
+  extensionProfile?: string;
+}
+
+/** A terminology binding on a coded element. */
 export interface ElementBinding {
-  /** How strongly the value set is enforced. */
   strength: 'required' | 'extensible' | 'preferred' | 'example';
-  /** Human-friendly name of the bound value set. */
-  valueSet: string;
+  /** Canonical URL of the bound value set (version stripped). */
+  valueSetUrl?: string;
+  /** Resolved value-set name, when it is defined in this IG. */
+  valueSetName?: string;
 }
 
-/** A single element (field) within a FHIR resource. */
-export interface FhirElement {
-  /** Dotted path, e.g. "Patient.name.family". */
-  path: string;
-  /** One or more data types this element may hold. */
-  type: string[];
-  /** Minimum cardinality (0 = optional). */
-  min: number;
-  /** Maximum cardinality ("1" or "*"). */
-  max: string;
-  /** Short, one-line summary shown in the tree. */
-  short: string;
-  /** Longer explanation shown when the element is expanded. */
-  definition?: string;
-  /** True if changing this element changes the meaning of the resource. */
-  isModifier?: boolean;
-  /** True if the element appears in summary views. */
-  isSummary?: boolean;
-  /** Value-set binding, when the element is coded. */
+/** A fixed or pattern value constraint. */
+export interface FixedValue {
+  kind: 'fixed' | 'pattern';
+  /** The FHIR type of the value (e.g. "CodeableConcept", "code"). */
+  type: string;
+  value: unknown;
+}
+
+/** One element row within a profile or extension differential. */
+export interface ProfileElement {
+  /** Full element id, including slice names, e.g. "Patient.identifier:MRN.type". */
+  id: string;
+  /** Leaf label shown in the tree, e.g. "identifier:MRN" or "value[x]". */
+  leaf: string;
+  /** Nesting depth (1 = direct child of the resource/extension root). */
+  depth: number;
+  /** Slice name when this element is a slice, e.g. "MRN". */
+  sliceName?: string;
+  /** Minimum cardinality, when constrained by the differential. */
+  min: number | null;
+  /** Maximum cardinality ("1", "*", …), when constrained. */
+  max: string | null;
+  mustSupport: boolean;
+  types: ElementType[];
   binding?: ElementBinding;
-  /** Target resource types when `type` includes "Reference". */
-  references?: string[];
+  fixed?: FixedValue;
+  short?: string;
+  definition?: string;
 }
 
-/** A note tying a JSON path in an example to a plain-language explanation. */
-export interface ExampleAnnotation {
-  /** JSON pointer-ish path, e.g. "name[0].family". */
-  path: string;
-  /** Plain-language explanation of what that part means. */
-  note: string;
+/** A resource profile constrained by the IG. */
+export interface Profile {
+  name: string;
+  /** The base FHIR resource type the profile constrains. */
+  baseType: string;
+  url: string;
+  description?: string;
+  elements: ProfileElement[];
+  /** Names of other profiles this one references (for the relationship graph). */
+  referencedProfiles: string[];
+  /** Names of extensions this profile uses. */
+  usedExtensions: string[];
+  /** A generated minimal starter instance. */
+  template?: TemplateExample;
 }
 
-/** A worked example payload with teaching annotations. */
-export interface AnnotatedExample {
+/** An extension definition. */
+export interface ExtensionDef {
+  name: string;
+  url: string;
+  /** Where the extension may be used (FHIRPath contexts). */
+  contexts: string[];
+  description?: string;
+  elements: ProfileElement[];
+}
+
+/** One include block of a value set's composition. */
+export interface ValueSetInclude {
+  system?: string;
+  systemName?: string;
+  concepts: { code: string; display?: string }[];
+  /** Human-readable filter descriptions, when concepts are not enumerated. */
+  filters?: string[];
+}
+
+export interface ValueSetDef {
+  name: string;
+  url: string;
+  description?: string;
+  includes: ValueSetInclude[];
+}
+
+export interface CodeSystemDef {
+  name: string;
+  url: string;
+  description?: string;
+  concepts: { code: string; display?: string; definition?: string }[];
+}
+
+/** A resource entry within a CapabilityStatement's REST mode. */
+export interface CapabilityResource {
+  type: string;
+  profile?: string;
+  interactions: string[];
+}
+
+export interface CapabilityStatementDef {
+  name: string;
+  description?: string;
+  mode?: string;
+  resources: CapabilityResource[];
+}
+
+/** A directed reference edge between two profiles. */
+export interface ReferenceEdge {
+  from: string;
+  to: string;
+  via: string;
+}
+
+/** A worked/generated example payload with teaching annotations. */
+export interface TemplateExample {
   title: string;
   description: string;
-  /** The example resource as a JSON value. */
   json: unknown;
-  annotations: ExampleAnnotation[];
+  annotations: { path: string; note: string }[];
 }
 
-/** A curated FHIR resource definition. */
-export interface FhirResource {
-  /** Resource type name, e.g. "Patient". */
-  name: string;
-  /** Spec module the resource belongs to. */
-  category: 'Foundation' | 'Administrative' | 'Clinical' | 'Financial';
-  /** One-paragraph description of the resource's purpose. */
-  description: string;
-  /** Canonical URL of the resource in the HL7 FHIR R4 spec. */
-  url: string;
-  elements: FhirElement[];
-  examples: AnnotatedExample[];
-}
-
-/** A directed reference edge between two resource types. */
-export interface ReferenceEdge {
-  /** The resource that holds the reference. */
-  from: string;
-  /** The resource being referenced. */
-  to: string;
-  /** The element path that creates the reference. */
-  via: string;
+/** The whole generated IG dataset. */
+export interface SerisSpec {
+  meta: {
+    package: string;
+    packageVersion: string;
+    fhirVersion: string;
+    guideVersion: string;
+    guideUrl: string;
+    canonicalBase: string;
+    generatedAt: string;
+  };
+  profiles: Profile[];
+  extensions: ExtensionDef[];
+  valueSets: ValueSetDef[];
+  codeSystems: CodeSystemDef[];
+  capabilityStatements: CapabilityStatementDef[];
+  referenceEdges: ReferenceEdge[];
 }

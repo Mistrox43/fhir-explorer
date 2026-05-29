@@ -1,0 +1,77 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Organization",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Organization",
+  "version": "1.0.1",
+  "name": "Organization",
+  "title": "Organization",
+  "status": "draft",
+  "date": "2023-02-28",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "Organization profile describes the details of the organization where the SERIS data originated from.",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Organization",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Organization",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Organization.meta",
+        "path": "Organization.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Organization.meta.profile",
+        "path": "Organization.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Organization|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Organization.identifier",
+        "path": "Organization.identifier",
+        "short": "Facility ID",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Organization.identifier.system",
+        "path": "Organization.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Organization.identifier.value",
+        "path": "Organization.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Organization.name",
+        "path": "Organization.name",
+        "short": "Facility Name",
+        "min": 1,
+        "mustSupport": true
+      }
+    ]
+  }
+}

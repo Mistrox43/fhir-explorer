@@ -1,0 +1,13 @@
+{
+  "name": "ca.on.oh-seris",
+  "version": "0.11.0-alpha1.0.5",
+  "description": "Updated VS to remove references of Netherlands SNOMED codes",
+  "author": "radhikaverma",
+  "fhirVersions": [
+    "4.0.1"
+  ],
+  "jurisdiction": "urn:iso:std:iso:3166#CA",
+  "dependencies": {
+    "hl7.fhir.r4.core": "4.0.1"
+  }
+}

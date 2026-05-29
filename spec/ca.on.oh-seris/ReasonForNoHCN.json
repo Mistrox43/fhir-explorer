@@ -1,0 +1,44 @@
+{
+  "resourceType": "StructureDefinition",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-setp-ext-reason-for-no-HCN",
+  "version": "0.10.2",
+  "name": "ReasonForNoHCN",
+  "title": "ReasonForNoHCN",
+  "status": "draft",
+  "description": "This extension is used to convey the reason for not providing the patient's health card number as a business identifier.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Patient.identifier"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "definition": "A reason for not providing the patient's health card number as a business identifier"
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-setp-ext-reason-for-no-HCN"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ]
+      }
+    ]
+  }
+}

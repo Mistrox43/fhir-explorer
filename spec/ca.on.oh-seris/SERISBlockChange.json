@@ -1,0 +1,170 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-ext-blockchange",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-blockchange",
+  "version": "0.0.2",
+  "name": "SERISBlockChange",
+  "title": "Extension: Block Change",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "Define when a block is changed",
+  "purpose": "to define when a block is changed",
+  "copyright": "Used by permission of HL7 International, all rights reserved Creative Commons License",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    }
+  ],
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Slot"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Block Changes",
+        "definition": "to define when a block is changed",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:changeDate",
+        "path": "Extension.extension",
+        "sliceName": "changeDate",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:changeDate.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "changeDate"
+      },
+      {
+        "id": "Extension.extension:changeDate.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "dateTime"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:changeAuthority",
+        "path": "Extension.extension",
+        "sliceName": "changeAuthority",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:changeAuthority.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "changeAuthority"
+      },
+      {
+        "id": "Extension.extension:changeAuthority.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:changeReason",
+        "path": "Extension.extension",
+        "sliceName": "changeReason",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:changeReason.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "changeReason"
+      },
+      {
+        "id": "Extension.extension:changeReason.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/block-change-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:changeReason.value[x].coding",
+        "path": "Extension.extension.value[x].coding",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "The value indicates the reason why Block was changed",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/block-change-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:changeReason.value[x].coding.system",
+        "path": "Extension.extension.value[x].coding.system",
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/block-change-reason",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:changeReason.value[x].coding.code",
+        "path": "Extension.extension.value[x].coding.code",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "The value indicates the reason why Block was changed",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/block-change-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:changeReason.value[x].coding.display",
+        "path": "Extension.extension.value[x].coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-blockchange"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

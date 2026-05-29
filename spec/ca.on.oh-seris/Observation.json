@@ -1,0 +1,196 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Observation",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Observation",
+  "version": "1.0.1",
+  "name": "Observation",
+  "title": "Observation",
+  "status": "draft",
+  "date": "2023-02-28",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "An Observation is used to record ASA (American Society of Anesthesiologists) physical status of the patient who will/did receive the surgical procedure.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Observation",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Observation",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Observation.meta",
+        "path": "Observation.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.meta.profile",
+        "path": "Observation.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Observation|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.partOf",
+        "path": "Observation.partOf",
+        "min": 1,
+        "max": "1",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Procedure"
+            ],
+            "aggregation": [
+              "bundled"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.partOf.reference",
+        "path": "Observation.partOf.reference",
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.partOf.display",
+        "path": "Observation.partOf.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.status",
+        "path": "Observation.status",
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.code",
+        "path": "Observation.code",
+        "short": "kind of Observation",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/observation-types"
+        }
+      },
+      {
+        "id": "Observation.code.coding",
+        "path": "Observation.code.coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "Codes identifying names of simple observations.",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/observation-types"
+        }
+      },
+      {
+        "id": "Observation.code.coding.system",
+        "path": "Observation.code.coding.system",
+        "min": 1,
+        "fixedUri": "http://snomed.info/sct",
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.code.coding.code",
+        "path": "Observation.code.coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "Codes identifying names of simple observations.",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/observation-types"
+        }
+      },
+      {
+        "id": "Observation.code.coding.display",
+        "path": "Observation.code.coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.subject",
+        "path": "Observation.subject",
+        "short": "The patient the physical status pertain to"
+      },
+      {
+        "id": "Observation.value[x]",
+        "path": "Observation.value[x]",
+        "short": "ASA Score",
+        "min": 1,
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/ASA-physical-status"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "ASA Score"
+          }
+        ]
+      },
+      {
+        "id": "Observation.value[x].coding",
+        "path": "Observation.value[x].coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "Physical Status of Patient as assessed by Anaethesiology",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/ASA-physical-status"
+        }
+      },
+      {
+        "id": "Observation.value[x].coding.system",
+        "path": "Observation.value[x].coding.system",
+        "min": 1,
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/asa-physical-status",
+        "mustSupport": true
+      },
+      {
+        "id": "Observation.value[x].coding.code",
+        "path": "Observation.value[x].coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "Physical Status of Patient as assessed by Anaethesiology",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/ASA-physical-status"
+        }
+      },
+      {
+        "id": "Observation.value[x].coding.display",
+        "path": "Observation.value[x].coding.display",
+        "mustSupport": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,307 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Location",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Location",
+  "version": "1.0.1",
+  "name": "Location",
+  "title": "Location",
+  "status": "draft",
+  "date": "2023-02-28",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "Details and position information for a physical place where surgical procedures are performed.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Location",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Location",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Location.meta",
+        "path": "Location.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Location.meta.profile",
+        "path": "Location.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Location|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Location.meta.security",
+        "path": "Location.meta.security",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Location.meta.security.system",
+        "path": "Location.meta.security.system",
+        "fixedUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+        "mustSupport": true
+      },
+      {
+        "id": "Location.meta.security.code",
+        "path": "Location.meta.security.code",
+        "fixedCode": "HTEST",
+        "mustSupport": true
+      },
+      {
+        "id": "Location.meta.tag",
+        "path": "Location.meta.tag",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Location.meta.tag.system",
+        "path": "Location.meta.tag.system",
+        "min": 1,
+        "fixedUri": "https://fhir.infoway-inforoute.ca/NamingSystem/ca-on-health-care-facility-id",
+        "mustSupport": true
+      },
+      {
+        "id": "Location.meta.tag.code",
+        "path": "Location.meta.tag.code",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Location.extension:ORClosureReason",
+        "path": "Location.extension",
+        "sliceName": "ORClosureReason",
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-or-closure-reason"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Planned/Unplanned OR Closure Reason"
+          }
+        ]
+      },
+      {
+        "id": "Location.extension:MISFunctionalCentre",
+        "path": "Location.extension",
+        "sliceName": "MISFunctionalCentre",
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-mis-functional-centre"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "OR MIS Functional Center"
+          }
+        ]
+      },
+      {
+        "id": "Location.extension:ORUnit",
+        "path": "Location.extension",
+        "sliceName": "ORUnit",
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-or-unit"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "OR Unit"
+          }
+        ]
+      },
+      {
+        "id": "Location.extension:functionalCentre",
+        "path": "Location.extension",
+        "sliceName": "functionalCentre",
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-functional-centre"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Functional Center"
+          }
+        ]
+      },
+      {
+        "id": "Location.identifier",
+        "path": "Location.identifier",
+        "short": "OR Room Identifier",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Actual Room ID"
+          }
+        ]
+      },
+      {
+        "id": "Location.identifier.system",
+        "path": "Location.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Location.identifier.value",
+        "path": "Location.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Location.status",
+        "path": "Location.status",
+        "min": 1,
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "OR room status"
+          }
+        ]
+      },
+      {
+        "id": "Location.name",
+        "path": "Location.name",
+        "short": "OR Room name",
+        "min": 1,
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Actual Room Name"
+          }
+        ]
+      },
+      {
+        "id": "Location.type",
+        "path": "Location.type",
+        "max": "1",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "OR Room Type"
+          }
+        ]
+      },
+      {
+        "id": "Location.type.coding",
+        "path": "Location.type.coding",
+        "definition": "A reference to a code defined by a terminology system.",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "A role of a place that further classifies the setting (e.g., accident site, road side, work site, community location) in which services are delivered.",
+          "valueSet": "http://terminology.hl7.org/ValueSet/v3-ServiceDeliveryLocationRoleType"
+        }
+      },
+      {
+        "id": "Location.type.coding.system",
+        "path": "Location.type.coding.system",
+        "short": "For SERIS usage, only \"Emergency Room\" value code will be used",
+        "fixedUri": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+        "mustSupport": true
+      },
+      {
+        "id": "Location.type.coding.code",
+        "path": "Location.type.coding.code",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "A role of a place that further classifies the setting (e.g., accident site, road side, work site, community location) in which services are delivered.",
+          "valueSet": "http://terminology.hl7.org/ValueSet/v3-ServiceDeliveryLocationRoleType"
+        }
+      },
+      {
+        "id": "Location.type.coding.display",
+        "path": "Location.type.coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Location.partOf",
+        "path": "Location.partOf",
+        "short": "captures the identifer of the Site",
+        "min": 1,
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Site"
+          }
+        ]
+      },
+      {
+        "id": "Location.partOf.identifier",
+        "path": "Location.partOf.identifier",
+        "short": "Site Identifier",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Location.partOf.identifier.system",
+        "path": "Location.partOf.identifier.system",
+        "min": 1,
+        "fixedUri": "https://fhir.infoway-inforoute.ca/NamingSystem/ca-on-health-care-facility-id",
+        "mustSupport": true
+      },
+      {
+        "id": "Location.partOf.identifier.value",
+        "path": "Location.partOf.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      }
+    ]
+  }
+}

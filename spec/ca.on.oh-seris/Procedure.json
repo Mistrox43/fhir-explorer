@@ -1,0 +1,463 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Procedure",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Procedure",
+  "version": "1.0.1",
+  "name": "Procedure",
+  "title": "Procedure",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "SERIS Procedure Profile",
+  "copyright": "Used by permission of HL7 International, all rights reserved Creative Commons License",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "workflow",
+      "uri": "http://hl7.org/fhir/workflow",
+      "name": "Workflow Pattern"
+    },
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    },
+    {
+      "identity": "w5",
+      "uri": "http://hl7.org/fhir/fivews",
+      "name": "FiveWs Pattern Mapping"
+    },
+    {
+      "identity": "v2",
+      "uri": "http://hl7.org/v2",
+      "name": "HL7 v2 Mapping"
+    },
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Procedure",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Procedure",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Procedure.meta",
+        "path": "Procedure.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.meta.profile",
+        "path": "Procedure.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Procedure|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.extension:preadmissionScreening",
+        "path": "Procedure.extension",
+        "sliceName": "preadmissionScreening",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-preadmissionscreening"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Preadmission Screening Indicator"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.extension:preadmissionScreening.url",
+        "path": "Procedure.extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-preadmissionscreening"
+      },
+      {
+        "id": "Procedure.extension:surgicalChecklist",
+        "path": "Procedure.extension",
+        "sliceName": "surgicalChecklist",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-surgicalchecklist"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Surgical Checklist"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.extension:surgicalChecklist.url",
+        "path": "Procedure.extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-surgicalchecklist"
+      },
+      {
+        "id": "Procedure.extension:inRoom",
+        "path": "Procedure.extension",
+        "sliceName": "inRoom",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-in-room"
+            ]
+          }
+        ],
+        "mustSupport": true,
+        "isModifier": false
+      },
+      {
+        "id": "Procedure.extension:inRoom.url",
+        "path": "Procedure.extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-in-room"
+      },
+      {
+        "id": "Procedure.extension:inRoom.value[x]",
+        "path": "Procedure.extension.value[x]"
+      },
+      {
+        "id": "Procedure.extension:inRoom.value[x].start",
+        "path": "Procedure.extension.value[x].start",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient In Room Time"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.extension:inRoom.value[x].end",
+        "path": "Procedure.extension.value[x].end",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient Out of Room Time"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.partOf",
+        "path": "Procedure.partOf",
+        "mustSupport": false
+      },
+      {
+        "id": "Procedure.status",
+        "path": "Procedure.status",
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.category",
+        "path": "Procedure.category",
+        "short": "Procedure Service",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Procedure Service"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.category.coding",
+        "path": "Procedure.category.coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Hospital Service used for Procedure Service or Surgeon Service",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "Procedure.category.coding.system",
+        "path": "Procedure.category.coding.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.category.coding.code",
+        "path": "Procedure.category.coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Hospital Service used for Procedure Service or Surgeon Service",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "Procedure.category.coding.display",
+        "path": "Procedure.category.coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.code",
+        "path": "Procedure.code",
+        "short": "Procedure Code/Description",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/procedure-code"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Procedure Code/Description"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.code.coding",
+        "path": "Procedure.code.coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "A code to identify a specific procedure .",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/procedure-code"
+        }
+      },
+      {
+        "id": "Procedure.code.coding.system",
+        "path": "Procedure.code.coding.system",
+        "min": 1,
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/WTIS-procedure-code",
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.code.coding.code",
+        "path": "Procedure.code.coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "A code to identify a specific procedure .",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/procedure-code"
+        }
+      },
+      {
+        "id": "Procedure.code.coding.display",
+        "path": "Procedure.code.coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.subject",
+        "path": "Procedure.subject",
+        "short": "The patient receiving the surgical procedure",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Patient"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.subject.reference",
+        "path": "Procedure.subject.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.performed[x]",
+        "path": "Procedure.performed[x]",
+        "type": [
+          {
+            "code": "Period"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.performed[x].start",
+        "path": "Procedure.performed[x].start",
+        "short": "Surgery Date/Procedure Start Time",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Procedure Start Time"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.performed[x].end",
+        "path": "Procedure.performed[x].end",
+        "short": "Procedure End Time",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Procedure Stop Time"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.performer",
+        "path": "Procedure.performer",
+        "min": 1,
+        "max": "2",
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.performer.function",
+        "path": "Procedure.performer.function",
+        "short": "the category of the performer",
+        "mustSupport": false
+      },
+      {
+        "id": "Procedure.performer.actor",
+        "path": "Procedure.performer.actor",
+        "short": "the surgeon or anaesthetist",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-practitionerrole"
+            ],
+            "aggregation": [
+              "bundled"
+            ]
+          }
+        ],
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Surgeon, Anaesthesiologist"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.performer.actor.reference",
+        "path": "Procedure.performer.actor.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.location",
+        "path": "Procedure.location",
+        "short": "Reference to the OR Room for this Procedure",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.location.identifier",
+        "path": "Procedure.location.identifier",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.location.identifier.system",
+        "path": "Procedure.location.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.location.identifier.value",
+        "path": "Procedure.location.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.complication",
+        "path": "Procedure.complication",
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "example",
+          "description": "Complication following the procedure",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/procedure-complication"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Reason for unplanned OR return"
+          }
+        ]
+      },
+      {
+        "id": "Procedure.complication.coding",
+        "path": "Procedure.complication.coding",
+        "mustSupport": true,
+        "binding": {
+          "strength": "example",
+          "description": "Complication following the procedure",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/procedure-complication"
+        }
+      },
+      {
+        "id": "Procedure.complication.coding.system",
+        "path": "Procedure.complication.coding.system",
+        "fixedUri": "http://snomed.info/sct",
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.complication.coding.code",
+        "path": "Procedure.complication.coding.code",
+        "mustSupport": true,
+        "binding": {
+          "strength": "example",
+          "description": "Complication following the procedure",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/procedure-complication"
+        }
+      },
+      {
+        "id": "Procedure.complication.coding.display",
+        "path": "Procedure.complication.coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Procedure.note",
+        "path": "Procedure.note",
+        "max": "0",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Notes"
+          }
+        ]
+      }
+    ]
+  }
+}

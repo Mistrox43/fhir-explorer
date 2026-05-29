@@ -1,0 +1,43 @@
+{
+  "resourceType": "StructureDefinition",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-setp-ext-health-card-version-code",
+  "name": "HCNVersionCode",
+  "status": "draft",
+  "description": "An assigned sequence code, uniquely identifying a Health Card issued (or potentially issued) to a Registered Person",
+  "fhirVersion": "4.0.1",
+  "version": "1.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Patient.identifier"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "definition": "An assigned sequence code, uniquely identifying a Health Card issued (or potentially issued) to a Registered Person"
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-setp-ext-health-card-version-code"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      }
+    ]
+  }
+}

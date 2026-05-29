@@ -1,0 +1,121 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-ext-cancellation",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-cancellation",
+  "version": "0.9.1",
+  "name": "SERISCancellation",
+  "title": "Extension: Cancellation",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Encounter"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:CancellationDate",
+        "path": "Extension.extension",
+        "sliceName": "CancellationDate",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:CancellationDate.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "CancellationDate"
+      },
+      {
+        "id": "Extension.extension:CancellationDate.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "dateTime"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:CancellationReason",
+        "path": "Extension.extension",
+        "sliceName": "CancellationReason",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:CancellationReason.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "CancellationReason"
+      },
+      {
+        "id": "Extension.extension:CancellationReason.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgery-cancellation-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:CancellationReason.value[x].coding",
+        "path": "Extension.extension.value[x].coding",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Reason Surgery was Cancelled",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgery-cancellation-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:CancellationReason.value[x].coding.system",
+        "path": "Extension.extension.value[x].coding.system",
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/surgery-cancellation-reason",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:CancellationReason.value[x].coding.code",
+        "path": "Extension.extension.value[x].coding.code",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Reason Surgery was Cancelled",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgery-cancellation-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:CancellationReason.value[x].coding.display",
+        "path": "Extension.extension.value[x].coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-cancellation"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "label": "To Date",
+        "max": "0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Bundle",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Bundle",
+  "version": "1.0.1",
+  "name": "Bundle",
+  "title": "Bundle",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "Constraints on Bundle resource ensuring that message is defined.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "v2",
+      "uri": "http://hl7.org/v2",
+      "name": "HL7 v2 Mapping"
+    },
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    },
+    {
+      "identity": "cda",
+      "uri": "http://hl7.org/v3/cda",
+      "name": "CDA (R2)"
+    },
+    {
+      "identity": "w5",
+      "uri": "http://hl7.org/fhir/fivews",
+      "name": "FiveWs Pattern Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Bundle",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Bundle",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Bundle.meta",
+        "path": "Bundle.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.meta.profile",
+        "path": "Bundle.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Bundle|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.meta.security",
+        "path": "Bundle.meta.security",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.meta.security.system",
+        "path": "Bundle.meta.security.system",
+        "fixedUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.meta.security.code",
+        "path": "Bundle.meta.security.code",
+        "fixedCode": "HTEST",
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.meta.tag",
+        "path": "Bundle.meta.tag",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.meta.tag.system",
+        "path": "Bundle.meta.tag.system",
+        "min": 1,
+        "fixedUri": "https://fhir.infoway-inforoute.ca/NamingSystem/ca-on-health-care-facility-id",
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.meta.tag.code",
+        "path": "Bundle.meta.tag.code",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.identifier",
+        "path": "Bundle.identifier",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.identifier.system",
+        "path": "Bundle.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.identifier.value",
+        "path": "Bundle.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.type",
+        "path": "Bundle.type",
+        "fixedCode": "message",
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.timestamp",
+        "path": "Bundle.timestamp",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.entry",
+        "path": "Bundle.entry",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.entry.fullUrl",
+        "path": "Bundle.entry.fullUrl",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Bundle.entry.resource",
+        "path": "Bundle.entry.resource",
+        "min": 1,
+        "mustSupport": true
+      }
+    ]
+  }
+}

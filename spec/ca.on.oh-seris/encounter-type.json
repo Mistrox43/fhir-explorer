@@ -1,0 +1,33 @@
+{
+  "resourceType": "ValueSet",
+  "id": "encounter-type",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/encounter-type",
+  "version": "1.0.1",
+  "name": "EncounterType",
+  "title": "Encounter Type",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Indicates the circumstances under which the patient was or will be admitted.",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://cihi.ca/fhir/CodeSystem/aac-admit-category",
+        "concept": [
+          {
+            "code": "U",
+            "display": "Urgent"
+          },
+          {
+            "code": "E",
+            "display": "Emergency"
+          },
+          {
+            "code": "L",
+            "display": "Elective"
+          }
+        ]
+      }
+    ]
+  }
+}

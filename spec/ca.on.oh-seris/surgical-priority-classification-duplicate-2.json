@@ -1,0 +1,41 @@
+{
+  "resourceType": "ValueSet",
+  "id": "surgical-priority-classification",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/surgical-priority-classification",
+  "version": "1.0.1",
+  "name": "SurgicalPriorityClassification",
+  "title": "Surgical Priority Classification",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Facility-specific number identifying emergency classification or priority.",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://ontariohealth.ca/fhir/CodeSystem/surgical-priority-classification",
+        "concept": [
+          {
+            "code": "P1A",
+            "display": "Access within 0-2 hours"
+          },
+          {
+            "code": "P1B",
+            "display": "Access within 2-8 hours"
+          },
+          {
+            "code": "P1C",
+            "display": "Access within 8-48 hours"
+          },
+          {
+            "code": "P1D",
+            "display": "Access within 2-7 days"
+          },
+          {
+            "code": "SDNU",
+            "display": "Scheduled,Non-Urgent"
+          }
+        ]
+      }
+    ]
+  }
+}

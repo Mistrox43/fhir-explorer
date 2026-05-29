@@ -1,0 +1,428 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Patient",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Patient",
+  "version": "1.0.1",
+  "name": "Patient",
+  "title": "Patient",
+  "status": "draft",
+  "date": "2023-03-02",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "The Patient resources contain demographics about the individual who is the subject of the surgical case.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Patient",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Patient",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Patient.meta",
+        "path": "Patient.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.meta.profile",
+        "path": "Patient.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Patient|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.extension",
+        "path": "Patient.extension",
+        "min": 1
+      },
+      {
+        "id": "Patient.extension:genderIdentity",
+        "path": "Patient.extension",
+        "sliceName": "genderIdentity",
+        "min": 1,
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/patient-genderIdentity"
+            ]
+          }
+        ],
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Gender"
+          }
+        ]
+      },
+      {
+        "id": "Patient.extension:genderIdentity.value[x]",
+        "path": "Patient.extension.value[x]",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/GenderIdentity"
+        }
+      },
+      {
+        "id": "Patient.extension:genderIdentity.value[x].coding",
+        "path": "Patient.extension.value[x].coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/GenderIdentity"
+        }
+      },
+      {
+        "id": "Patient.extension:genderIdentity.value[x].coding.system",
+        "path": "Patient.extension.value[x].coding.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.extension:genderIdentity.value[x].coding.code",
+        "path": "Patient.extension.value[x].coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/GenderIdentity"
+        }
+      },
+      {
+        "id": "Patient.extension:genderIdentity.value[x].coding.display",
+        "path": "Patient.extension.value[x].coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.extension:indigenousIdentity",
+        "path": "Patient.extension",
+        "sliceName": "indigenousIdentity",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-indigenousidentity"
+            ]
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Indigenous Identity"
+          }
+        ]
+      },
+      {
+        "id": "Patient.extension:race",
+        "path": "Patient.extension",
+        "sliceName": "race",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-race"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Race"
+          }
+        ]
+      },
+      {
+        "id": "Patient.identifier",
+        "path": "Patient.identifier",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "pattern",
+              "path": "type"
+            }
+          ],
+          "rules": "open"
+        },
+        "short": "Health Card Number and Medical Record Number",
+        "comment": "Include patient health card number.",
+        "max": "2",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier.type.coding.system",
+        "path": "Patient.identifier.type.coding.system",
+        "min": 1
+      },
+      {
+        "id": "Patient.identifier.type.coding.code",
+        "path": "Patient.identifier.type.coding.code",
+        "min": 1
+      },
+      {
+        "id": "Patient.identifier.system",
+        "path": "Patient.identifier.system",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier.value",
+        "path": "Patient.identifier.value",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:MRN",
+        "path": "Patient.identifier",
+        "sliceName": "MRN",
+        "max": "1",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Medical Record Number"
+          }
+        ]
+      },
+      {
+        "id": "Patient.identifier:MRN.type",
+        "path": "Patient.identifier.type",
+        "short": "Medical Record Number",
+        "fixedCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+              "code": "MR"
+            }
+          ]
+        },
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:MRN.type.coding",
+        "path": "Patient.identifier.type.coding",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:MRN.type.coding.system",
+        "path": "Patient.identifier.type.coding.system",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:MRN.type.coding.code",
+        "path": "Patient.identifier.type.coding.code",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:JHN",
+        "path": "Patient.identifier",
+        "sliceName": "JHN",
+        "max": "1",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Health Card Number"
+          }
+        ]
+      },
+      {
+        "id": "Patient.identifier:JHN.extension:versionCode",
+        "path": "Patient.identifier.extension",
+        "sliceName": "versionCode",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://hl7.org/fhir/ca/baseline/StructureDefinition/ext-identifierversion"
+            ]
+          }
+        ],
+        "mustSupport": true,
+        "isModifier": false
+      },
+      {
+        "id": "Patient.identifier:JHN.extension:versionCode.value[x]",
+        "path": "Patient.identifier.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:JHN.type",
+        "path": "Patient.identifier.type",
+        "fixedCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+              "code": "JHN"
+            }
+          ]
+        },
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:JHN.type.coding",
+        "path": "Patient.identifier.type.coding",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:JHN.type.coding.system",
+        "path": "Patient.identifier.type.coding.system",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:JHN.type.coding.code",
+        "path": "Patient.identifier.type.coding.code",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:JHN.system",
+        "path": "Patient.identifier.system",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:JHN.value",
+        "path": "Patient.identifier.value",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.name",
+        "path": "Patient.name",
+        "comment": "name.family and name.given will only be used. \r\nMiddle name is supported by using subsequent given names.",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.name.family",
+        "path": "Patient.name.family",
+        "short": "Patient Last name",
+        "min": 1,
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient Last Name"
+          }
+        ]
+      },
+      {
+        "id": "Patient.name.given",
+        "path": "Patient.name.given",
+        "short": "Patient First and Patient Middle names",
+        "min": 1,
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient First Name"
+          },
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient Middle Name"
+          }
+        ]
+      },
+      {
+        "id": "Patient.gender",
+        "path": "Patient.gender",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.birthDate",
+        "path": "Patient.birthDate",
+        "min": 1,
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient Date of Birth"
+          }
+        ]
+      },
+      {
+        "id": "Patient.address",
+        "path": "Patient.address",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.address.use",
+        "path": "Patient.address.use",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.address.type",
+        "path": "Patient.address.type",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.address.text",
+        "path": "Patient.address.text",
+        "short": "Patient Address",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient Address"
+          }
+        ]
+      },
+      {
+        "id": "Patient.address.line",
+        "path": "Patient.address.line",
+        "short": "Patient Address",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.address.city",
+        "path": "Patient.address.city",
+        "short": "Patient Address",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.address.state",
+        "path": "Patient.address.state",
+        "short": "Patient Address",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.address.postalCode",
+        "path": "Patient.address.postalCode",
+        "short": "Patient Postal Code",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient Postal Code"
+          }
+        ]
+      },
+      {
+        "id": "Patient.address.country",
+        "path": "Patient.address.country",
+        "mustSupport": true
+      }
+    ]
+  }
+}

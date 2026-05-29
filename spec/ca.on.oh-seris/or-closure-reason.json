@@ -1,0 +1,37 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "or-closure-reason",
+  "url": "http://ontariohealth.ca/fhir/CodeSystem/or-closure-reason",
+  "version": "1.0.1",
+  "name": "ORClosureReason",
+  "title": "OR Closure Reason",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "description": "Identifies the  reason for the OR closure",
+  "content": "complete",
+  "count": 5,
+  "concept": [
+    {
+      "code": "p-b",
+      "display": "Planned-Budget"
+    },
+    {
+      "code": "p-h",
+      "display": "Planned-Holidays"
+    },
+    {
+      "code": "p-hr",
+      "display": "Planned-Human Resources"
+    },
+    {
+      "code": "u-e",
+      "display": "Unplanned-Environmental"
+    },
+    {
+      "code": "u-hr",
+      "display": "Unplanned-Human Resources"
+    }
+  ]
+}

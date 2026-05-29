@@ -1,0 +1,65 @@
+{
+  "resourceType": "ValueSet",
+  "id": "adjustment-reason",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/adjustment-reason",
+  "version": "1.0.1",
+  "name": "AdjustmentReason",
+  "title": "Adjustment Reason",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Reason for Adjustment",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://ontariohealth.ca/fhir/CodeSystem/adjustment-reason",
+        "concept": [
+          {
+            "code": "p-b",
+            "display": "Planned-Budget"
+          },
+          {
+            "code": "p-dt",
+            "display": "Planned-Downtime"
+          },
+          {
+            "code": "p-h",
+            "display": "Planned-Holidays"
+          },
+          {
+            "code": "p-m",
+            "display": "Planned-Meetings"
+          },
+          {
+            "code": "p-hr",
+            "display": "Planned-Human Resources"
+          },
+          {
+            "code": "p-br",
+            "display": "Planned-Block release"
+          },
+          {
+            "code": "u-e",
+            "display": "Unplanned-Environmental"
+          },
+          {
+            "code": "u-hr",
+            "display": "Unplanned-Human Resources"
+          },
+          {
+            "code": "u-sr",
+            "display": "Unplanned-Supply Resources"
+          },
+          {
+            "code": "u-br",
+            "display": "Unplanned-Block releases"
+          },
+          {
+            "code": "o",
+            "display": "Opening"
+          }
+        ]
+      }
+    ]
+  }
+}

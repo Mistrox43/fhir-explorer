@@ -1,0 +1,181 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-ext-block-release",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-block-release",
+  "version": "0.0.2",
+  "name": "SERISBlockRelease",
+  "title": "Extension: Block Release",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "description": "Define when a block is released",
+  "purpose": "to define when a block is released",
+  "copyright": "Used by permission of HL7 International, all rights reserved Creative Commons License",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    }
+  ],
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Slot"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Block Release",
+        "definition": "to define when a block is released",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseMinutes",
+        "path": "Extension.extension",
+        "sliceName": "releaseMinutes",
+        "short": "Block Release Minutes",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseMinutes.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "releaseMinutes"
+      },
+      {
+        "id": "Extension.extension:releaseMinutes.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "integer"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseReason",
+        "path": "Extension.extension",
+        "sliceName": "releaseReason",
+        "short": "Block Release Reason",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseReason.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "releaseReason"
+      },
+      {
+        "id": "Extension.extension:releaseReason.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/block-release-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:releaseReason.value[x].coding",
+        "path": "Extension.extension.value[x].coding",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "The value indicates the Reason for Block Release",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/block-release-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:releaseReason.value[x].coding.system",
+        "path": "Extension.extension.value[x].coding.system",
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/block-release-reason",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseReason.value[x].coding.code",
+        "path": "Extension.extension.value[x].coding.code",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "The value indicates the Reason for Block Release",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/block-release-reason"
+        }
+      },
+      {
+        "id": "Extension.extension:releaseReason.value[x].coding.display",
+        "path": "Extension.extension.value[x].coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseDate",
+        "path": "Extension.extension",
+        "sliceName": "releaseDate",
+        "short": "Block Release Date",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseDate.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "releaseDate"
+      },
+      {
+        "id": "Extension.extension:releaseDate.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "dateTime"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseRequestDate",
+        "path": "Extension.extension",
+        "sliceName": "releaseRequestDate",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:releaseRequestDate.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "releaseRequestDate"
+      },
+      {
+        "id": "Extension.extension:releaseRequestDate.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "dateTime"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-block-release"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

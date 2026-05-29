@@ -1,67 +1,84 @@
-# FHIR Explorer
+# SERIS Explorer
 
-An intuitive, interactive guide to the **[FHIR R4](https://hl7.org/fhir/R4/)** specification.
-The official FHIR spec is comprehensive but dense — this tool is meant to make the core
-concepts (resources, elements, cardinality, codings, and references) approachable for
-people who are learning FHIR.
+An intuitive, interactive guide to the **Ontario SERIS** (Surgical Efficiency Reporting
+Information System) **HL7® FHIR® R4 Implementation Guide**. The official IG on
+[Simplifier](https://simplifier.net/guide/ca-on-seris-r4-iguide) is comprehensive but dense;
+this tool makes its profiles, extensions, and terminology approachable for implementers who
+are learning the spec.
+
+The content is **generated directly from the published FHIR package** (`ca.on.oh-seris`), so
+it stays faithful to the spec and can be regenerated whenever the IG is updated.
 
 ## Features
 
-- **Explorer** — Browse FHIR resources and drill into each element. Every field shows its
-  cardinality (`0..1`, `1..*`, …), data type(s), whether it's a *modifier* or *summary*
-  element, and any value-set binding. Reference elements link straight to the resources
-  they point at.
-- **Relationships** — A radial diagram centred on the selected resource, showing what it
-  references (outgoing) and what references it (incoming). Click any node to navigate.
-- **Examples** — Worked example payloads with plain-language annotations tying each part of
-  the JSON back to what it means.
+- **Explorer** — Browse the 15 resource profiles and drill into each constrained element:
+  cardinality, **must-support** (`S`), data type(s), value-set bindings, fixed/pattern values,
+  and slicing. Reference elements and extensions link straight to their definitions.
+- **Relationships** — A radial diagram of how each profile references (and is referenced by)
+  the others. Click a node to navigate.
+- **Template** — A generated minimal starter instance for each profile, showing its required
+  and must-support top-level elements with annotations.
+- **Extensions** — All ~47 SERIS/SETP extensions, their contexts, and their value types.
+- **Terminology** — Browse the 22 value sets and 16 code systems with their concepts.
+- **Capabilities** — The IG's CapabilityStatements and their REST interactions.
 
-All content is driven by a curated data model, so adding resources or new FHIR versions is
-just a matter of extending the dataset — the UI adapts automatically.
+## How the data is built
+
+The IG's FHIR package is vendored into [`spec/ca.on.oh-seris/`](spec/ca.on.oh-seris). A
+generator reads the StructureDefinitions, ValueSets, CodeSystems, and CapabilityStatements and
+emits a single typed module:
+
+```bash
+npm run generate   # spec/ca.on.oh-seris/*.json  ->  src/generated/seris.ts
+```
+
+The profiles are differential-only `constraint` definitions, so the Explorer shows exactly
+what SERIS adds on top of base FHIR R4. To update to a newer IG release, replace the package
+files in `spec/` and re-run `npm run generate`.
 
 ## Tech stack
 
-- [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vite.dev/) for dev server and bundling
-- No runtime UI dependencies — the relationship graph is hand-drawn SVG and the styling is
-  plain CSS with light/dark support.
+- [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) + [Vite](https://vite.dev/)
+- No runtime UI dependencies — the relationship graph is hand-drawn SVG, styling is plain CSS
+  with light/dark support.
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev      # start the dev server (http://localhost:5183)
-npm run build    # type-check and build for production
-npm run preview  # preview the production build
-npm run lint     # run ESLint
+npm run generate   # build the data module from the vendored package
+npm run dev        # http://localhost:5183
+npm run build      # type-check and build for production
+npm run lint
 ```
 
 ## Project structure
 
 ```
+spec/ca.on.oh-seris/   # vendored FHIR package (the source of truth)
+scripts/generate.mjs   # transforms the package into the typed data module
 src/
+  generated/seris.ts   # AUTO-GENERATED data (do not edit by hand)
   fhir/
-    types.ts        # the type model for the curated spec data
-    data.ts         # curated FHIR R4 resources, examples, and reference edges
+    types.ts           # the data-model types
+    spec.ts            # loads SPEC and provides lookups
   components/
-    ResourceList.tsx       # sidebar, resources grouped by category
-    ElementTree.tsx        # expandable element list (the Explorer view)
+    ResourceList.tsx       # filterable sidebar grouped by artifact kind
+    ElementTree.tsx        # expandable differential element list
     RelationshipGraph.tsx  # radial SVG reference diagram
-    ExampleViewer.tsx      # annotated example payloads
-  App.tsx           # layout, resource selection, and view tabs
+    ExampleViewer.tsx      # generated template instances
+    TerminologyView.tsx    # value sets & code systems
+    CapabilityView.tsx     # capability statements
+  App.tsx
 ```
 
-## Adding a resource
+## Version & disclaimer
 
-Append a `FhirResource` to the `RESOURCES` array in [`src/fhir/data.ts`](src/fhir/data.ts).
-Give it elements (with `references` for `Reference`-typed fields) and at least one annotated
-example. The sidebar, explorer, relationship graph, and examples all update from that data.
+Built from package `ca.on.oh-seris` **0.11.0-alpha1.0.5** (the latest build on the public
+Simplifier registry; the IG's final v1.1.0 package is not published publicly). This is a
+**learning aid**, not a conformance or validation tool — always refer to the
+[official SERIS Implementation Guide](https://simplifier.net/guide/ca-on-seris-r4-iguide) and
+[eHealth Ontario](https://ehealthontario.on.ca/en/standards/ontario-surgical-efficiency-reporting-information-system-hl7-fhir-implementation-guide)
+for authoritative details.
 
-## Scope & disclaimer
-
-This is a **learning aid**, not a conformance tool. It covers a hand-picked subset of FHIR
-R4 resources and elements chosen to illustrate the concepts clearly — it is not a complete
-or authoritative copy of the specification. Always refer to the
-[official HL7 FHIR specification](https://hl7.org/fhir/R4/) for definitive details.
-
-FHIR® is a registered trademark of HL7.
+FHIR® is a registered trademark of HL7. SERIS and its artifacts are © Ontario Health.

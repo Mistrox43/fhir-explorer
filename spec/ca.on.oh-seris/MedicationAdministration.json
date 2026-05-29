@@ -1,0 +1,247 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-MedicationAdministration",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MedicationAdministration",
+  "version": "1.0.1",
+  "name": "MedicationAdministration",
+  "title": "MedicationAdministration",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "SERIS Profile for Anaesthesia on MedicationAdministration",
+  "copyright": "Used by permission of HL7 International, all rights reserved Creative Commons License",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "workflow",
+      "uri": "http://hl7.org/fhir/workflow",
+      "name": "Workflow Pattern"
+    },
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    },
+    {
+      "identity": "w5",
+      "uri": "http://hl7.org/fhir/fivews",
+      "name": "FiveWs Pattern Mapping"
+    },
+    {
+      "identity": "v2",
+      "uri": "http://hl7.org/v2",
+      "name": "HL7 v2 Mapping"
+    },
+    {
+      "identity": "w3c.prov",
+      "uri": "http://www.w3.org/ns/prov",
+      "name": "W3C PROV"
+    },
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "MedicationAdministration",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "MedicationAdministration.meta",
+        "path": "MedicationAdministration.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.meta.profile",
+        "path": "MedicationAdministration.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MedicationAdministration|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.extension:anaesthesiaReadyTime",
+        "path": "MedicationAdministration.extension",
+        "sliceName": "anaesthesiaReadyTime",
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-anaesthesia-ready-time"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Anaesthesia Ready Time"
+          }
+        ]
+      },
+      {
+        "id": "MedicationAdministration.partOf",
+        "path": "MedicationAdministration.partOf",
+        "min": 1,
+        "max": "1",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Procedure"
+            ],
+            "aggregation": [
+              "bundled"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.partOf.reference",
+        "path": "MedicationAdministration.partOf.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.status",
+        "path": "MedicationAdministration.status",
+        "short": "anaesthesia was completed or not-done",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.medication[x]",
+        "path": "MedicationAdministration.medication[x]",
+        "short": "The anaesthesia administered to the patient",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/anaesthesia-type"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Anaesthesia Type"
+          }
+        ]
+      },
+      {
+        "id": "MedicationAdministration.medication[x].coding",
+        "path": "MedicationAdministration.medication[x].coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "Specific value for type of anaesthesia used for the procedure.",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/anaesthesia-type"
+        }
+      },
+      {
+        "id": "MedicationAdministration.medication[x].coding.system",
+        "path": "MedicationAdministration.medication[x].coding.system",
+        "min": 1,
+        "fixedUri": "http://snomed.info/sct",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.medication[x].coding.code",
+        "path": "MedicationAdministration.medication[x].coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "Specific value for type of anaesthesia used for the procedure.",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/anaesthesia-type"
+        }
+      },
+      {
+        "id": "MedicationAdministration.medication[x].coding.display",
+        "path": "MedicationAdministration.medication[x].coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.subject",
+        "path": "MedicationAdministration.subject",
+        "short": "The patient receiving anaesthesia",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Patient"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.subject.reference",
+        "path": "MedicationAdministration.subject.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.subject.display",
+        "path": "MedicationAdministration.subject.display",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.effective[x]",
+        "path": "MedicationAdministration.effective[x]",
+        "type": [
+          {
+            "code": "Period"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationAdministration.effective[x].start",
+        "path": "MedicationAdministration.effective[x].start",
+        "short": "Anaesthesia Start Time",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Anaesthesia Start Time"
+          }
+        ]
+      },
+      {
+        "id": "MedicationAdministration.effective[x].end",
+        "path": "MedicationAdministration.effective[x].end",
+        "short": "Anaesthesia Finish Time",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Anaesthesia Finish Time"
+          }
+        ]
+      }
+    ]
+  }
+}

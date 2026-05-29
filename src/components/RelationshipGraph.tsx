@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
-import { getReferenceEdges } from '../fhir/data';
+import { SPEC } from '../fhir/spec';
+import type { Selection } from '../fhir/spec';
 
 interface Props {
-  /** The resource placed at the centre of the graph. */
+  /** The profile placed at the centre of the graph. */
   focus: string;
-  onNavigate: (name: string) => void;
+  onNavigate: (sel: Selection) => void;
 }
 
 interface Node {
@@ -15,17 +16,24 @@ interface Node {
 }
 
 const WIDTH = 720;
-const HEIGHT = 480;
-const RADIUS = 170;
+const HEIGHT = 460;
+const RADIUS = 165;
 
 /**
- * A radial diagram showing how the focused resource references, and is
- * referenced by, other curated resources. Outgoing references fan out to the
- * right, incoming to the left.
+ * Radial diagram showing how the focused profile references (outgoing, right)
+ * and is referenced by (incoming, left) other SERIS profiles.
  */
 export function RelationshipGraph({ focus, onNavigate }: Props) {
   const { nodes, edges } = useMemo(() => buildGraph(focus), [focus]);
   const nodeByName = Object.fromEntries(nodes.map((n) => [n.name, n]));
+
+  if (nodes.length <= 1) {
+    return (
+      <p className="empty">
+        {focus} has no references to or from other profiles in this implementation guide.
+      </p>
+    );
+  }
 
   return (
     <div className="graph">
@@ -35,16 +43,15 @@ export function RelationshipGraph({ focus, onNavigate }: Props) {
           const to = nodeByName[e.to];
           if (!from || !to) return null;
           return (
-            <g key={`${e.from}->${e.to}:${e.via}`}>
-              <line
-                className="graph__edge"
-                x1={from.x}
-                y1={from.y}
-                x2={to.x}
-                y2={to.y}
-                markerEnd="url(#arrow)"
-              />
-            </g>
+            <line
+              key={`${e.from}->${e.to}`}
+              className="graph__edge"
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
+              markerEnd="url(#arrow)"
+            />
           );
         })}
 
@@ -53,14 +60,14 @@ export function RelationshipGraph({ focus, onNavigate }: Props) {
             key={n.name}
             className={`graph__node graph__node--${n.direction}`}
             transform={`translate(${n.x}, ${n.y})`}
-            onClick={() => onNavigate(n.name)}
+            onClick={() => onNavigate({ kind: 'profile', name: n.name })}
             role="button"
             tabIndex={0}
             onKeyDown={(ev) => {
-              if (ev.key === 'Enter' || ev.key === ' ') onNavigate(n.name);
+              if (ev.key === 'Enter' || ev.key === ' ') onNavigate({ kind: 'profile', name: n.name });
             }}
           >
-            <rect x={-58} y={-18} width={116} height={36} rx={18} />
+            <rect x={-60} y={-17} width={120} height={34} rx={17} />
             <text textAnchor="middle" dominantBaseline="central">
               {n.name}
             </text>
@@ -93,16 +100,14 @@ export function RelationshipGraph({ focus, onNavigate }: Props) {
 }
 
 function buildGraph(focus: string) {
-  const allEdges = getReferenceEdges();
   const cx = WIDTH / 2;
   const cy = HEIGHT / 2;
+  const all = SPEC.referenceEdges;
 
-  // Distinct neighbours, split by direction relative to the focus.
-  const outgoing = unique(allEdges.filter((e) => e.from === focus && e.to !== focus).map((e) => e.to));
-  const incoming = unique(allEdges.filter((e) => e.to === focus && e.from !== focus).map((e) => e.from));
+  const outgoing = unique(all.filter((e) => e.from === focus && e.to !== focus).map((e) => e.to));
+  const incoming = unique(all.filter((e) => e.to === focus && e.from !== focus).map((e) => e.from));
 
   const nodes: Node[] = [{ name: focus, x: cx, y: cy, direction: 'focus' }];
-
   placeArc(outgoing, -60, 60, RADIUS, cx, cy).forEach((p, i) =>
     nodes.push({ name: outgoing[i], x: p.x, y: p.y, direction: 'outgoing' }),
   );
@@ -111,11 +116,15 @@ function buildGraph(focus: string) {
   );
 
   const present = new Set(nodes.map((n) => n.name));
-  const edges = allEdges.filter((e) => present.has(e.from) && present.has(e.to));
+  const edges = unique(
+    all.filter((e) => present.has(e.from) && present.has(e.to)).map((e) => `${e.from}|${e.to}`),
+  ).map((s) => {
+    const [from, to] = s.split('|');
+    return { from, to };
+  });
   return { nodes, edges };
 }
 
-/** Evenly distribute points along an arc (degrees) around a centre. */
 function placeArc(items: string[], startDeg: number, endDeg: number, r: number, cx: number, cy: number) {
   if (items.length === 0) return [];
   return items.map((_, i) => {

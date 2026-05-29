@@ -1,0 +1,98 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-MessageHeader",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MessageHeader",
+  "version": "1.0.1",
+  "name": "MessageHeader",
+  "title": "MessageHeader",
+  "status": "draft",
+  "date": "2023-03-02",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "The header for a message exchange that is submitting data.",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "MessageHeader",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/MessageHeader",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "MessageHeader.meta",
+        "path": "MessageHeader.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "MessageHeader.meta.profile",
+        "path": "MessageHeader.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MessageHeader|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "MessageHeader.event[x]",
+        "path": "MessageHeader.event[x]",
+        "type": [
+          {
+            "code": "Coding"
+          }
+        ],
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Code that identifies the event this message represents and connects it with its definition",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/message-event-code"
+        }
+      },
+      {
+        "id": "MessageHeader.event[x].system",
+        "path": "MessageHeader.event[x].system",
+        "min": 1,
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/message-event-code",
+        "mustSupport": true
+      },
+      {
+        "id": "MessageHeader.event[x].code",
+        "path": "MessageHeader.event[x].code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Code that identifies the event this message represents and connects it with its definition.",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/message-event-code"
+        }
+      },
+      {
+        "id": "MessageHeader.event[x].display",
+        "path": "MessageHeader.event[x].display",
+        "mustSupport": true
+      },
+      {
+        "id": "MessageHeader.source",
+        "path": "MessageHeader.source",
+        "mustSupport": true
+      },
+      {
+        "id": "MessageHeader.source.endpoint",
+        "path": "MessageHeader.source.endpoint",
+        "mustSupport": true
+      }
+    ]
+  }
+}

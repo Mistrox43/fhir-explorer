@@ -1,0 +1,128 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Task",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Task",
+  "version": "1.0.1",
+  "name": "Task",
+  "title": "Task",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health"
+    }
+  ],
+  "description": "Task captures the status of the OR Case",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Task",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Task",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Task.meta",
+        "path": "Task.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Task.meta.profile",
+        "path": "Task.meta.profile",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Task.identifier",
+        "path": "Task.identifier",
+        "mustSupport": false
+      },
+      {
+        "id": "Task.identifier.system",
+        "path": "Task.identifier.system",
+        "mustSupport": false
+      },
+      {
+        "id": "Task.identifier.value",
+        "path": "Task.identifier.value",
+        "mustSupport": false
+      },
+      {
+        "id": "Task.basedOn",
+        "path": "Task.basedOn",
+        "min": 2,
+        "max": "2",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Appointment",
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Encounter"
+            ],
+            "aggregation": [
+              "bundled"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Task.basedOn.reference",
+        "path": "Task.basedOn.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Task.status",
+        "path": "Task.status",
+        "mustSupport": true
+      },
+      {
+        "id": "Task.businessStatus",
+        "path": "Task.businessStatus",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Surgery case information and status",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/business-status"
+        }
+      },
+      {
+        "id": "Task.businessStatus.coding",
+        "path": "Task.businessStatus.coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Surgery case information and status",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/business-status"
+        }
+      },
+      {
+        "id": "Task.businessStatus.coding.system",
+        "path": "Task.businessStatus.coding.system",
+        "min": 1,
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/business-status",
+        "mustSupport": true
+      },
+      {
+        "id": "Task.businessStatus.coding.code",
+        "path": "Task.businessStatus.coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/business-status"
+        }
+      },
+      {
+        "id": "Task.businessStatus.coding.display",
+        "path": "Task.businessStatus.coding.display",
+        "mustSupport": true
+      }
+    ]
+  }
+}

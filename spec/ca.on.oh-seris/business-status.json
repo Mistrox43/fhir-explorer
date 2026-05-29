@@ -1,0 +1,33 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "business-status",
+  "url": "http://ontariohealth.ca/fhir/CodeSystem/business-status",
+  "version": "1.0.1",
+  "name": "BusinessStatus",
+  "title": "Business Status",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "description": "Surgery case information and status",
+  "content": "complete",
+  "count": 4,
+  "concept": [
+    {
+      "code": "booked",
+      "display": "Booked"
+    },
+    {
+      "code": "cancelled",
+      "display": "Cancelled"
+    },
+    {
+      "code": "entered-in-error",
+      "display": "Entered in Error"
+    },
+    {
+      "code": "performed",
+      "display": "Performed"
+    }
+  ]
+}

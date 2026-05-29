@@ -1,0 +1,45 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "MIS-functional-centre",
+  "url": "http://ontariohealth.ca/fhir/CodeSystem/MIS-functional-centre",
+  "version": "1.0.1",
+  "name": "MISFunctionalCentre",
+  "title": "MIS Functional Centre",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-09-08",
+  "publisher": "Ontario Health",
+  "description": "Indicates the type of function performed at the location.",
+  "content": "complete",
+  "count": 7,
+  "concept": [
+    {
+      "code": "71260",
+      "display": "In-patient OR"
+    },
+    {
+      "code": "71262",
+      "display": "In-patient OR / Post Anaesthetic Recovery Room (PARR) - used by small hospitals"
+    },
+    {
+      "code": "71367",
+      "display": "Day Surgery Pre- and Post- Operative Care"
+    },
+    {
+      "code": "71360",
+      "display": "Day Surgery OR"
+    },
+    {
+      "code": "71362",
+      "display": "Day Surgery combined OR and PARR"
+    },
+    {
+      "code": "71365",
+      "display": "Day Surgery Post-Anaesthetic Recovery Room"
+    },
+    {
+      "code": "71369",
+      "display": "Day Surgery combined OR, PARR, Pre- and Post- Care"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "hospital-service",
+  "url": "http://ontariohealth.ca/fhir/CodeSystem/hospital-service",
+  "version": "1.0.1",
+  "name": "HospitalService",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "description": "Hospital Service used for Procedure Service or Surgeon Service",
+  "content": "complete",
+  "count": 1,
+  "concept": [
+    {
+      "code": "p-as",
+      "display": "Pediatric Anesthetic service"
+    },
+    {
+      "code": "p-gs",
+      "display": "Pediatric Gynecology service"
+    },
+    {
+      "code": "p-os",
+      "display": "Pediatric Obstetrics service"
+    },
+    {
+      "code": "p-vs",
+      "display": "Pediatric Vascular surgery service"
+    },
+    {
+      "code": "p-cvs",
+      "display": "Pediatric Cardiovascular service"
+    },
+    {
+      "code": "p-gsts",
+      "display": "Pediatric general surgery and thoracic service"
+    }
+  ]
+}

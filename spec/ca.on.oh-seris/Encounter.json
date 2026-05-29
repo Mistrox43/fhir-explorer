@@ -1,0 +1,324 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Encounter",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Encounter",
+  "version": "1.0.1",
+  "name": "Encounter",
+  "title": "Encounter",
+  "status": "draft",
+  "description": "Encounter is used to capture Patient and Admission Type for SERIS OR case.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Encounter",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Encounter",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Encounter.meta",
+        "path": "Encounter.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.meta.profile",
+        "path": "Encounter.meta.profile",
+        "comment": "\"#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Encounter|1.0.1 `_**\\n\\n.It is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.extension:delayReason",
+        "path": "Encounter.extension",
+        "sliceName": "delayReason",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-delay-reason"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Delay Reason"
+          }
+        ]
+      },
+      {
+        "id": "Encounter.extension:cancellation",
+        "path": "Encounter.extension",
+        "sliceName": "cancellation",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-cancellation"
+            ]
+          }
+        ],
+        "isModifier": false
+      },
+      {
+        "id": "Encounter.extension:cancellation.extension:CancellationDate",
+        "path": "Encounter.extension.extension",
+        "sliceName": "CancellationDate",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Cancellation Date/Time"
+          }
+        ]
+      },
+      {
+        "id": "Encounter.extension:cancellation.extension:CancellationReason",
+        "path": "Encounter.extension.extension",
+        "sliceName": "CancellationReason",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Cancellation Reason"
+          }
+        ]
+      },
+      {
+        "id": "Encounter.status",
+        "path": "Encounter.status",
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.class",
+        "path": "Encounter.class",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/encounter-class"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Patient Type"
+          }
+        ]
+      },
+      {
+        "id": "Encounter.class.system",
+        "path": "Encounter.class.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.class.code",
+        "path": "Encounter.class.code",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.class.display",
+        "path": "Encounter.class.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.type",
+        "path": "Encounter.type",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/encounter-type"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Admission Type"
+          }
+        ]
+      },
+      {
+        "id": "Encounter.type.coding",
+        "path": "Encounter.type.coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Type of encounter",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/encounter-type"
+        }
+      },
+      {
+        "id": "Encounter.type.coding.system",
+        "path": "Encounter.type.coding.system",
+        "min": 1,
+        "fixedUri": "http://cihi.ca/fhir/CodeSystem/aac-admit-category",
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.type.coding.code",
+        "path": "Encounter.type.coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Type of encounter",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/encounter-type"
+        }
+      },
+      {
+        "id": "Encounter.type.coding.display",
+        "path": "Encounter.type.coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.priority",
+        "path": "Encounter.priority",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgical-priority-classification"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Surgical Priority Classification/Description"
+          }
+        ]
+      },
+      {
+        "id": "Encounter.priority.coding",
+        "path": "Encounter.priority.coding",
+        "min": 1,
+        "max": "1",
+        "binding": {
+          "strength": "required",
+          "description": "Indicates the urgency of the encounter.",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgical-priority-classification"
+        }
+      },
+      {
+        "id": "Encounter.priority.coding.system",
+        "path": "Encounter.priority.coding.system",
+        "min": 1,
+        "fixedUri": "http://ontariohealth.ca/fhir/CodeSystem/surgical-priority-classification",
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.priority.coding.code",
+        "path": "Encounter.priority.coding.code",
+        "min": 1,
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "description": "Indicates the urgency of the encounter.",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/surgical-priority-classification"
+        }
+      },
+      {
+        "id": "Encounter.priority.coding.display",
+        "path": "Encounter.priority.coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.subject",
+        "path": "Encounter.subject",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Patient"
+            ],
+            "aggregation": [
+              "bundled"
+            ]
+          }
+        ],
+        "mustSupport": false
+      },
+      {
+        "id": "Encounter.appointment",
+        "path": "Encounter.appointment",
+        "min": 1,
+        "max": "1",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Appointment"
+            ],
+            "aggregation": [
+              "bundled"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.appointment.reference",
+        "path": "Encounter.appointment.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.appointment.display",
+        "path": "Encounter.appointment.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.period",
+        "path": "Encounter.period",
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.period.start",
+        "path": "Encounter.period.start",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Surgery Date"
+          }
+        ]
+      },
+      {
+        "id": "Encounter.reasonReference",
+        "path": "Encounter.reasonReference",
+        "min": 1,
+        "max": "1",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Procedure"
+            ],
+            "aggregation": [
+              "bundled"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.reasonReference.reference",
+        "path": "Encounter.reasonReference.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Encounter.reasonReference.display",
+        "path": "Encounter.reasonReference.display",
+        "mustSupport": false
+      }
+    ]
+  }
+}

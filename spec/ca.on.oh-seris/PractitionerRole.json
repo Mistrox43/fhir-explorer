@@ -1,0 +1,128 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-PractitionerRole",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-practitionerrole",
+  "version": "1.0.1",
+  "name": "PractitionerRole",
+  "title": "PractitionerRole",
+  "status": "draft",
+  "date": "2023-03-29",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "SERIS PractitionerRole Profile",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "PractitionerRole",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "PractitionerRole.meta",
+        "path": "PractitionerRole.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "PractitionerRole.meta.profile",
+        "path": "PractitionerRole.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-practitionerrole|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "PractitionerRole.identifier",
+        "path": "PractitionerRole.identifier",
+        "comment": "Can be populated with a system identifier such as a UUID. Should not be populated with college license number; license number should be conveyed in the Practitioner resource"
+      },
+      {
+        "id": "PractitionerRole.practitioner",
+        "path": "PractitionerRole.practitioner",
+        "min": 1,
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Practitioner"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "PractitionerRole.practitioner.reference",
+        "path": "PractitionerRole.practitioner.reference",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "PractitionerRole.specialty",
+        "path": "PractitionerRole.specialty",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Hospital Service used for Procedure Service or Surgeon Service",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        },
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Surgeon Service"
+          }
+        ]
+      },
+      {
+        "id": "PractitionerRole.specialty.coding",
+        "path": "PractitionerRole.specialty.coding",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true,
+        "binding": {
+          "strength": "extensible",
+          "description": "Hospital Service used for Procedure Service or Surgeon Service",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "PractitionerRole.specialty.coding.system",
+        "path": "PractitionerRole.specialty.coding.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "PractitionerRole.specialty.coding.code",
+        "path": "PractitionerRole.specialty.coding.code",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "PractitionerRole.specialty.coding.display",
+        "path": "PractitionerRole.specialty.coding.display",
+        "mustSupport": true
+      }
+    ]
+  }
+}

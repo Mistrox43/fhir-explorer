@@ -1,0 +1,188 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-ext-block",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-block",
+  "version": "0.0.2",
+  "name": "SERISBlock",
+  "title": "Extension: Block Release",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "description": "Capture the block details",
+  "purpose": "to define when a block is released",
+  "copyright": "Used by permission of HL7 International, all rights reserved Creative Commons License",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    }
+  ],
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Slot"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "definition": "to define when a block is released",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockFrequency",
+        "path": "Extension.extension",
+        "sliceName": "blockFrequency",
+        "short": "Block Release Minutes",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockFrequency.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "blockFrequency"
+      },
+      {
+        "id": "Extension.extension:blockFrequency.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockAutoRelease",
+        "path": "Extension.extension",
+        "sliceName": "blockAutoRelease",
+        "short": "Block Auto Release (Hours)",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockAutoRelease.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "blockAutoRelease"
+      },
+      {
+        "id": "Extension.extension:blockAutoRelease.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "integer"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockSurgeons",
+        "path": "Extension.extension",
+        "sliceName": "blockSurgeons",
+        "short": "Block Surgeon Details",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockSurgeons.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "blockSurgeons"
+      },
+      {
+        "id": "Extension.extension:blockSurgeons.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "Identifier"
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockSurgeons.value[x].system",
+        "path": "Extension.extension.value[x].system",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockSurgeons.value[x].value",
+        "path": "Extension.extension.value[x].value",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockService",
+        "path": "Extension.extension",
+        "sliceName": "blockService",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockService.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "blockService"
+      },
+      {
+        "id": "Extension.extension:blockService.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "mustSupport": true,
+        "binding": {
+          "strength": "example",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "Extension.extension:blockService.value[x].coding",
+        "path": "Extension.extension.value[x].coding",
+        "mustSupport": true,
+        "binding": {
+          "strength": "example",
+          "description": "Hospital Service used for Procedure Service or Surgeon Service",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "Extension.extension:blockService.value[x].coding.system",
+        "path": "Extension.extension.value[x].coding.system",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blockService.value[x].coding.code",
+        "path": "Extension.extension.value[x].coding.code",
+        "mustSupport": true,
+        "binding": {
+          "strength": "example",
+          "description": "Hospital Service used for Procedure Service or Surgeon Service",
+          "valueSet": "http://ontariohealth.ca/fhir/ValueSet/hospital-service"
+        }
+      },
+      {
+        "id": "Extension.extension:blockService.value[x].coding.display",
+        "path": "Extension.extension.value[x].coding.display",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-block"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

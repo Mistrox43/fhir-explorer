@@ -1,0 +1,82 @@
+{
+  "resourceType": "ValueSet",
+  "id": "race",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/Race",
+  "version": "1.0.1",
+  "name": "Race",
+  "title": "Race",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "A code that represents the race of the person",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "concept": [
+          {
+            "code": "413464008",
+            "display": "African Origin"
+          },
+          {
+            "code": "413582008",
+            "display": "Asian"
+          },
+          {
+            "code": "413655005",
+            "display": "Black"
+          },
+          {
+            "code": "413773004",
+            "display": "Caucasian"
+          },
+          {
+            "code": "414481008",
+            "display": "Indian Sub-Continent"
+          },
+          {
+            "code": "26631000087109",
+            "display": "Indigenous"
+          },
+          {
+            "code": "26641000087103",
+            "display": "Latin American"
+          },
+          {
+            "code": "26651000087100",
+            "display": "Middle Eastern"
+          },
+          {
+            "code": "414752008",
+            "display": "Multiracial"
+          },
+          {
+            "code": "413581001",
+            "display": "Asian or Pacific islander"
+          },
+          {
+            "code": "386761002",
+            "display": "Unknown racial group"
+          }
+        ]
+      },
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+        "concept": [
+          {
+            "code": "asked-unknown",
+            "display": "Asked But Unknown"
+          },
+          {
+            "code": "not-asked",
+            "display": "Not Asked"
+          },
+          {
+            "code": "asked-declined",
+            "display": "Asked But Declined"
+          }
+        ]
+      }
+    ]
+  }
+}

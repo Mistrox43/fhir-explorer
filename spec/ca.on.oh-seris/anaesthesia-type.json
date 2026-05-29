@@ -1,0 +1,37 @@
+{
+  "resourceType": "ValueSet",
+  "id": "anaesthesia-type",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/anaesthesia-type",
+  "version": "1.0.1",
+  "name": "AnaesthesiaType",
+  "title": "Anaesthesia Type",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Specific value for type of anaesthesia used for the procedure.",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "concept": [
+          {
+            "code": "50697003",
+            "display": "General anesthesia"
+          },
+          {
+            "code": "386761002",
+            "display": "Local anesthesia"
+          },
+          {
+            "code": "26402001",
+            "display": "Nerve block anesthesia"
+          },
+          {
+            "code": "260413007",
+            "display": "None"
+          }
+        ]
+      }
+    ]
+  }
+}

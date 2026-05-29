@@ -1,0 +1,44 @@
+{
+  "resourceType": "CapabilityStatement",
+  "id": "ca-on-seris-RESTfulServer",
+  "url": "http://ontariohealth.ca/fhir/CapabilityStatement/ca-on-seris-RESTfulServer",
+  "version": "0.1.1",
+  "name": "RESTfulServer",
+  "title": "SERIS Repository RESTful Server",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-03-09",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "This is the FHIR capability statement for the SERIS Repository RESTful Server as defined in this IG",
+  "purpose": "Main SERIS Repository capability statement, published for contracting and operational support",
+  "copyright": "Copyright © Ontario Health",
+  "kind": "requirements",
+  "fhirVersion": "4.0.1",
+  "format": [
+    "json"
+  ],
+  "rest": [
+    {
+      "mode": "server",
+      "documentation": "Support the submission of Ontario Surgical Efficiency and Real-Time OR data.",
+      "resource": [
+        {
+          "type": "Bundle",
+          "profile": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Bundle",
+          "documentation": "Perform submission of SERIS messages"
+        }
+      ]
+    }
+  ]
+}

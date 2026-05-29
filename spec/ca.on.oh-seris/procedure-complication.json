@@ -1,0 +1,53 @@
+{
+  "resourceType": "ValueSet",
+  "id": "procedure-complication",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/procedure-complication",
+  "version": "1.0.1",
+  "name": "ProcedureComplication",
+  "title": "Procedure Complication",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Complication following the procedure",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "concept": [
+          {
+            "code": "131148009",
+            "display": "Bleeding"
+          },
+          {
+            "code": "239160006",
+            "display": "Wound hematoma"
+          },
+          {
+            "code": "111245009",
+            "display": "Compartment syndrome"
+          },
+          {
+            "code": "108367008",
+            "display": "Dislocation of joint"
+          },
+          {
+            "code": "274392008",
+            "display": "Examination under anesthesia"
+          },
+          {
+            "code": "48422000",
+            "display": "Open wound with complication"
+          },
+          {
+            "code": "230745008",
+            "display": "Hydrocephalus"
+          },
+          {
+            "code": "766955008",
+            "display": "Obstruction of vein"
+          }
+        ]
+      }
+    ]
+  }
+}

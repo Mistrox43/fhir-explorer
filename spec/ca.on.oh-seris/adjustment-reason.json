@@ -1,0 +1,61 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "adjustment-reason",
+  "url": "http://ontariohealth.ca/fhir/CodeSystem/adjustment-reason",
+  "version": "1.0.1",
+  "name": "AdjustmentReason",
+  "title": "Adjustment Reason",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "description": "Reason for Adjustment",
+  "content": "complete",
+  "count": 11,
+  "concept": [
+    {
+      "code": "p-b",
+      "display": "Planned-Budget"
+    },
+    {
+      "code": "p-dt",
+      "display": "Planned-Downtime"
+    },
+    {
+      "code": "p-h",
+      "display": "Planned-Holidays"
+    },
+    {
+      "code": "p-m",
+      "display": "Planned-Meetings"
+    },
+    {
+      "code": "p-hr",
+      "display": "Planned-Human Resources"
+    },
+    {
+      "code": "p-br",
+      "display": "Planned-Block release"
+    },
+    {
+      "code": "u-e",
+      "display": "Unplanned-Environmental"
+    },
+    {
+      "code": "u-hr",
+      "display": "Unplanned-Human Resources"
+    },
+    {
+      "code": "u-sr",
+      "display": "Unplanned-Supply Resources"
+    },
+    {
+      "code": "u-br",
+      "display": "Unplanned-Block releases"
+    },
+    {
+      "code": "o",
+      "display": "Opening"
+    }
+  ]
+}

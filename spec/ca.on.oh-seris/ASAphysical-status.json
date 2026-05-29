@@ -1,0 +1,49 @@
+{
+  "resourceType": "ValueSet",
+  "id": "ASAphysical-status",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/ASA-physical-status",
+  "version": "1.0.1",
+  "name": "ASAphysicalStatus",
+  "title": "ASAPhysical Status",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Physical Status of Patient as assessed by Anaethesiology",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://ontariohealth.ca/fhir/CodeSystem/asa-physical-status",
+        "concept": [
+          {
+            "code": "ASA I",
+            "display": "A normal healthy patient"
+          },
+          {
+            "code": "ASA II",
+            "display": "A patient with mild systemic disease"
+          },
+          {
+            "code": "ASA III",
+            "display": "A patient with severe systemic disease"
+          },
+          {
+            "code": "ASA IV",
+            "display": "A patient with severe systemic disease that is a constant threat to life"
+          },
+          {
+            "code": "ASA V",
+            "display": "A moribund patient who is not expected to survive without the operation"
+          },
+          {
+            "code": "ASA VI",
+            "display": "A declared brain-dead patient whose organs are being removed for donor purposes"
+          },
+          {
+            "code": "NA",
+            "display": "Local procedure, no assessment required"
+          }
+        ]
+      }
+    ]
+  }
+}

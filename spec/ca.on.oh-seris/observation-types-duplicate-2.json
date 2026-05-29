@@ -1,0 +1,23 @@
+{
+  "resourceType": "ValueSet",
+  "id": "observation-types",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/observation-types",
+  "version": "1.0.1",
+  "name": "ObservationTypes",
+  "title": "Observation Types",
+  "status": "draft",
+  "description": "The types of Observations that are associated with SERIS Case submission transactions.",
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "concept": [
+          {
+            "code": "302132005",
+            "display": "American Society of Anesthesiologists physical status"
+          }
+        ]
+      }
+    ]
+  }
+}

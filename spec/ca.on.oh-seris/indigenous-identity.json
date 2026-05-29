@@ -1,0 +1,50 @@
+{
+  "resourceType": "ValueSet",
+  "id": "indigenous-identity",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/IndigenousIdentity",
+  "version": "1.0.1",
+  "name": "IndigenousIdentity",
+  "title": "Indigenous Identity",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "A code that represents the indigenous identity of the person",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "concept": [
+          {
+            "code": "29921000087109",
+            "display": "First Nations"
+          },
+          {
+            "code": "29931000087106",
+            "display": "Inuk/Inuit"
+          },
+          {
+            "code": "29941000087100",
+            "display": "Métis"
+          }
+        ]
+      },
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+        "concept": [
+          {
+            "code": "asked-unknown",
+            "display": "Asked But Unknown"
+          },
+          {
+            "code": "not-asked",
+            "display": "Not Asked"
+          },
+          {
+            "code": "asked-declined",
+            "display": "Asked But Declined"
+          }
+        ]
+      }
+    ]
+  }
+}

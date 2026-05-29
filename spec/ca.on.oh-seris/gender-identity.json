@@ -1,0 +1,58 @@
+{
+  "resourceType": "ValueSet",
+  "id": "gender-identity",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/GenderIdentity",
+  "version": "1.0.1",
+  "name": "GenderIdentity",
+  "title": "Gender Identity",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "A code that represents the gender identity of the person",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "concept": [
+          {
+            "code": "446151000124109",
+            "display": "Identifies as male gender"
+          },
+          {
+            "code": "446141000124107",
+            "display": "Identifies as female gender"
+          },
+          {
+            "code": "33801000087109",
+            "display": "Identifies as Two-Spirit gender"
+          },
+          {
+            "code": "33791000087105",
+            "display": "Identifies as nonbinary gender"
+          },
+          {
+            "code": "34071000087106",
+            "display": "Queer sexual orientation identity"
+          }
+        ]
+      },
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+        "concept": [
+          {
+            "code": "asked-unknown",
+            "display": "Asked But Unknown"
+          },
+          {
+            "code": "not-asked",
+            "display": "Not Asked"
+          },
+          {
+            "code": "asked-declined",
+            "display": "Asked But Declined"
+          }
+        ]
+      }
+    ]
+  }
+}

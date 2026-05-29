@@ -1,0 +1,35 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "encounter-class",
+  "url": "http://ontariohealth.ca/fhir/CodeSystem/encounter-class",
+  "version": "1.0.1",
+  "name": "EncounterClass",
+  "title": "Encounter Class",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "A code specifying the kind of encounter",
+  "content": "complete",
+  "count": 5,
+  "concept": [
+    {
+      "code": "mp-imp",
+      "display": "Minor Procedure-Inpatient"
+    },
+    {
+      "code": "mp-amb",
+      "display": "Minor Procedure-Outpatient"
+    },
+    {
+      "code": "mp-sd",
+      "display": "Minor Procedure-Same Day Admit"
+    },
+    {
+      "code": "mp-ss",
+      "display": "Minor Procedure-Short Stay"
+    },
+    {
+      "code": "sd",
+      "display": "Same Day Admit"
+    }
+  ]
+}

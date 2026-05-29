@@ -1,0 +1,53 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "block-change-reason",
+  "url": "http://ontariohealth.ca/fhir/CodeSystem/block-change-reason",
+  "version": "1.0.1",
+  "name": "BlockChangeReason",
+  "title": "Block Change Reason",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "description": "The value indicates the reason why Block was changed",
+  "content": "complete",
+  "count": 6,
+  "concept": [
+    {
+      "code": "b-add",
+      "display": "Block Added"
+    },
+    {
+      "code": "b-oh",
+      "display": "Block On-Hold"
+    },
+    {
+      "code": "b-r",
+      "display": "Block Removed"
+    },
+    {
+      "code": "b-ti",
+      "display": "Block Time Increased"
+    },
+    {
+      "code": "b-tr",
+      "display": "Block Time Revoked"
+    },
+    {
+      "code": "r-ch",
+      "display": "Room Change"
+    },
+    {
+      "code": "s-a",
+      "display": "Schedule Adjustment"
+    },
+    {
+      "code": "su-ch",
+      "display": "Surgeon Changed"
+    },
+    {
+      "code": "se-ch",
+      "display": "Service Changed"
+    }
+  ]
+}

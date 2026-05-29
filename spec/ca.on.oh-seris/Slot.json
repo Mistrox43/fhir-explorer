@@ -1,0 +1,448 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Slot",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Slot",
+  "version": "1.0.1",
+  "name": "Slot",
+  "title": "Slot",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "SERIS Slot Profile",
+  "copyright": "Used by permission of HL7 International, all rights reserved Creative Commons License",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    },
+    {
+      "identity": "ical",
+      "uri": "http://ietf.org/rfc/2445",
+      "name": "iCalendar"
+    },
+    {
+      "identity": "w5",
+      "uri": "http://hl7.org/fhir/fivews",
+      "name": "FiveWs Pattern Mapping"
+    },
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Slot",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Slot",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Slot.meta",
+        "path": "Slot.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.meta.profile",
+        "path": "Slot.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Slot|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.meta.security",
+        "path": "Slot.meta.security",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.meta.security.system",
+        "path": "Slot.meta.security.system",
+        "fixedUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.meta.security.code",
+        "path": "Slot.meta.security.code",
+        "fixedCode": "HTEST",
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.meta.tag",
+        "path": "Slot.meta.tag",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.meta.tag.system",
+        "path": "Slot.meta.tag.system",
+        "min": 1,
+        "fixedUri": "https://fhir.infoway-inforoute.ca/NamingSystem/ca-on-health-care-facility-id",
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.meta.tag.code",
+        "path": "Slot.meta.tag.code",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.extension:slotName",
+        "path": "Slot.extension",
+        "sliceName": "slotName",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-slot-name"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Slot Name"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:blockChange",
+        "path": "Slot.extension",
+        "sliceName": "blockChange",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-blockchange"
+            ]
+          }
+        ],
+        "isModifier": false
+      },
+      {
+        "id": "Slot.extension:blockChange.extension:changeDate",
+        "path": "Slot.extension.extension",
+        "sliceName": "changeDate",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Change Request Date"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:blockChange.extension:changeAuthority",
+        "path": "Slot.extension.extension",
+        "sliceName": "changeAuthority",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Change Authority"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:blockChange.extension:changeReason",
+        "path": "Slot.extension.extension",
+        "sliceName": "changeReason",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Change Reason"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:blockRelease",
+        "path": "Slot.extension",
+        "sliceName": "blockRelease",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-block-release"
+            ]
+          }
+        ],
+        "isModifier": false
+      },
+      {
+        "id": "Slot.extension:blockRelease.extension:releaseMinutes",
+        "path": "Slot.extension.extension",
+        "sliceName": "releaseMinutes",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Release Minutes"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:blockRelease.extension:releaseReason",
+        "path": "Slot.extension.extension",
+        "sliceName": "releaseReason",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Reason for Release"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:blockRelease.extension:releaseDate",
+        "path": "Slot.extension.extension",
+        "sliceName": "releaseDate",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Release Date"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:blockRelease.extension:releaseRequestDate",
+        "path": "Slot.extension.extension",
+        "sliceName": "releaseRequestDate",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Release Request DateTime"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:block",
+        "path": "Slot.extension",
+        "sliceName": "block",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-block"
+            ]
+          }
+        ],
+        "isModifier": false
+      },
+      {
+        "id": "Slot.extension:block.extension:blockFrequency",
+        "path": "Slot.extension.extension",
+        "sliceName": "blockFrequency",
+        "short": "Block Frequency",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Frequency"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:block.extension:blockAutoRelease",
+        "path": "Slot.extension.extension",
+        "sliceName": "blockAutoRelease",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Auto Release (Hours)"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:block.extension:blockSurgeons",
+        "path": "Slot.extension.extension",
+        "sliceName": "blockSurgeons",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Surgeon"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:block.extension:blockService",
+        "path": "Slot.extension.extension",
+        "sliceName": "blockService",
+        "short": "Block Service",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Service"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:block.extension:blockService.value[x]",
+        "path": "Slot.extension.extension.value[x]",
+        "binding": {
+          "strength": "extensible"
+        }
+      },
+      {
+        "id": "Slot.extension:block.extension:blockService.value[x].coding",
+        "path": "Slot.extension.extension.value[x].coding",
+        "binding": {
+          "strength": "extensible"
+        }
+      },
+      {
+        "id": "Slot.extension:block.extension:blockService.value[x].coding.code",
+        "path": "Slot.extension.extension.value[x].coding.code",
+        "binding": {
+          "strength": "extensible"
+        }
+      },
+      {
+        "id": "Slot.extension:adjustmentReason",
+        "path": "Slot.extension",
+        "sliceName": "adjustmentReason",
+        "short": "Adjustment Reason",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-adjustment-reason"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Adjustment Reason"
+          }
+        ]
+      },
+      {
+        "id": "Slot.extension:isRemoved",
+        "path": "Slot.extension",
+        "sliceName": "isRemoved",
+        "short": "If block is removed or not",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-is-removed"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Block Removed (Y/N)"
+          }
+        ]
+      },
+      {
+        "id": "Slot.identifier",
+        "path": "Slot.identifier",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.identifier.system",
+        "path": "Slot.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.identifier.value",
+        "path": "Slot.identifier.value",
+        "min": 1
+      },
+      {
+        "id": "Slot.serviceType",
+        "path": "Slot.serviceType",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.schedule",
+        "path": "Slot.schedule",
+        "short": "Schedule this block/slot belongs to which will be specified by identifier of the block/slot",
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.schedule.identifier",
+        "path": "Slot.schedule.identifier",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.schedule.identifier.system",
+        "path": "Slot.schedule.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.schedule.identifier.value",
+        "path": "Slot.schedule.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Slot.status",
+        "path": "Slot.status",
+        "short": "Block Type",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "slot status (busy, free, busy-unavailable, removed)"
+          }
+        ]
+      },
+      {
+        "id": "Slot.start",
+        "path": "Slot.start",
+        "short": "Block Start Date/Time",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Slot/Block Start Date Time"
+          }
+        ]
+      },
+      {
+        "id": "Slot.end",
+        "path": "Slot.end",
+        "short": "Block Stop Date/Time",
+        "definition": "For blocks that are ending this would be used in calculating block utilization",
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Slot/Block Stop Date Time"
+          }
+        ]
+      },
+      {
+        "id": "Slot.comment",
+        "path": "Slot.comment",
+        "short": "Block Change Description",
+        "mustSupport": false
+      }
+    ]
+  }
+}

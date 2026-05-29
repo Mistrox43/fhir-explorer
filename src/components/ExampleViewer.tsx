@@ -1,31 +1,14 @@
 import { useState } from 'react';
-import type { AnnotatedExample, FhirResource } from '../fhir/types';
+import type { TemplateExample } from '../fhir/types';
 
-interface Props {
-  resource: FhirResource;
-}
-
-/** Shows worked example payloads with toggleable teaching annotations. */
-export function ExampleViewer({ resource }: Props) {
-  if (resource.examples.length === 0) {
-    return <p className="empty">No examples yet for {resource.name}.</p>;
-  }
-  return (
-    <div className="example-viewer">
-      {resource.examples.map((ex) => (
-        <Example key={ex.title} example={ex} />
-      ))}
-    </div>
-  );
-}
-
-function Example({ example }: { example: AnnotatedExample }) {
+/** Shows a (generated) example payload with toggleable teaching annotations. */
+export function ExampleViewer({ example }: { example?: TemplateExample }) {
   const [active, setActive] = useState<string | null>(null);
+  if (!example) return <p className="empty">No template available for this profile.</p>;
   const json = JSON.stringify(example.json, null, 2);
 
   return (
     <article className="example">
-      <h3>{example.title}</h3>
       <p className="example__desc">{example.description}</p>
       <div className="example__body">
         <pre className="example__code">
@@ -40,7 +23,7 @@ function Example({ example }: { example: AnnotatedExample }) {
               onMouseLeave={() => setActive(null)}
             >
               <code className="example__note-path">{a.path}</code>
-              <span>{a.note}</span>
+              {a.note && <span>{a.note}</span>}
             </li>
           ))}
         </ul>

@@ -1,0 +1,29 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "encounter-type",
+  "url": "http://cihi.ca/fhir/CodeSystem/aac-admit-category",
+  "version": "1.0.1",
+  "name": "EncounterType",
+  "title": "Encounter Type",
+  "status": "draft",
+  "experimental": false,
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "description": "Indicates the circumstances under which the patient was or will be admitted.",
+  "content": "complete",
+  "count": 2,
+  "concept": [
+    {
+      "code": "U",
+      "display": "Urgent"
+    },
+    {
+      "code": "E",
+      "display": "Emergency"
+    },
+    {
+      "code": "L",
+      "display": "Elective"
+    }
+  ]
+}

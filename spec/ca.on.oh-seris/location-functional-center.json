@@ -1,0 +1,29 @@
+{
+  "resourceType": "ValueSet",
+  "id": "location-functional-centre",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/location-functional-centre",
+  "version": "1.0.1",
+  "name": "LocationFunctionalCentre",
+  "title": "Location Functional Centre",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Indicates the type of function performed at the centre",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://ontariohealth.ca/fhir/CodeSystem/location-functional-centre",
+        "concept": [
+          {
+            "code": "71350",
+            "display": "Specialty Clinic"
+          },
+          {
+            "code": "71415",
+            "display": "Diagnostic Imaging"
+          }
+        ]
+      }
+    ]
+  }
+}

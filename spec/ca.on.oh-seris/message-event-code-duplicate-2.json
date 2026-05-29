@@ -1,0 +1,33 @@
+{
+  "resourceType": "ValueSet",
+  "id": "message-event-code",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/message-event-code",
+  "version": "1.0.1",
+  "name": "MessageEventCode",
+  "title": "Message Event Code",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Code that identifies the event this message represents and connects it with its definition.",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://ontariohealth.ca/fhir/CodeSystem/message-event-code",
+        "concept": [
+          {
+            "code": "case-scheduled",
+            "display": "An EventCode used by SERIS to submit Elective Surgery case information when a surgery is Booked"
+          },
+          {
+            "code": "case-performed",
+            "display": "An EventCode used by SERIS to submit Elective/Add-On Surgery case information when a surgery is Performed"
+          },
+          {
+            "code": "case-cancelled",
+            "display": "An EventCode used by SERIS to submit Elective/Add-On Surgery case information when surgery is Cancelled"
+          }
+        ]
+      }
+    ]
+  }
+}

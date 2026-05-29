@@ -1,0 +1,90 @@
+{
+  "resourceType": "CapabilityStatement",
+  "id": "ca-on-seris-CapabilityStatement-Client",
+  "url": "http://ontariohealth.ca/fhir/CapabilityStatement/ca-on-seris-RESTfulClient",
+  "version": "0.9.1",
+  "name": "SERISClientFHIRCapabilityStatement",
+  "title": "SERIS Client (OR Schedule/Case submitter) FHIR Capability Statement",
+  "status": "active",
+  "experimental": false,
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "name": "Ontario Health",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "DigitalStandards@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "This is the FHIR R4 capability statement for the Ontario SERIS Client",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "CA",
+          "display": "Canada"
+        }
+      ]
+    }
+  ],
+  "purpose": "Main client capability statement, published for contracting and operational support",
+  "copyright": "Copyright © Ontario Health",
+  "kind": "requirements",
+  "fhirVersion": "4.0.1",
+  "format": [
+    "json"
+  ],
+  "rest": [
+    {
+      "mode": "client",
+      "documentation": "Support submission of Ontario Surgical Efficiency and Real-Time OR data",
+      "resource": [
+        {
+          "type": "Bundle",
+          "profile": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Bundle",
+          "interaction": [
+            {
+              "code": "create"
+            }
+          ],
+          "documentation": "Submit SERIS OR Case Bundles"
+        },
+        {
+          "type": "Schedule",
+          "profile": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Schedule",
+          "interaction": [
+            {
+              "code": "create"
+            }
+          ],
+          "documentation": "Submit SERIS OR Schedule Resource"
+        },
+        {
+          "type": "Slot",
+          "profile": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Slot",
+          "interaction": [
+            {
+              "code": "create"
+            }
+          ],
+          "documentation": "Submit SERIS OR Slot Resource"
+        },
+        {
+          "type": "Location",
+          "profile": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Location",
+          "interaction": [
+            {
+              "code": "create"
+            }
+          ],
+          "documentation": "Submit SERIS OR Location Resource"
+        }
+      ]
+    }
+  ]
+}

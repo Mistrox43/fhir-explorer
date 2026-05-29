@@ -1,0 +1,313 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ca-on-seris-profile-Schedule",
+  "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Schedule",
+  "version": "1.0.1",
+  "name": "Schedule",
+  "title": "Schedule",
+  "status": "draft",
+  "date": "2023-03-10",
+  "publisher": "Ontario Health",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://ontariohealth.ca/fhir/"
+        },
+        {
+          "system": "email",
+          "value": "some.email@ontariohealth.ca"
+        }
+      ]
+    }
+  ],
+  "description": "SERIS Schedule Profile",
+  "copyright": "Used by permission of HL7 International, all rights reserved Creative Commons License",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "rim",
+      "uri": "http://hl7.org/v3",
+      "name": "RIM Mapping"
+    },
+    {
+      "identity": "ical",
+      "uri": "http://ietf.org/rfc/2445",
+      "name": "iCalendar"
+    },
+    {
+      "identity": "w5",
+      "uri": "http://hl7.org/fhir/fivews",
+      "name": "FiveWs Pattern Mapping"
+    },
+    {
+      "identity": "SERIS-MDS-Mapping",
+      "name": "SERIS MDS Mapping"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Schedule",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Schedule",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Schedule.meta",
+        "path": "Schedule.meta",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.meta.profile",
+        "path": "Schedule.meta.profile",
+        "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Schedule|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.meta.security",
+        "path": "Schedule.meta.security",
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.meta.security.system",
+        "path": "Schedule.meta.security.system",
+        "fixedUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.meta.security.code",
+        "path": "Schedule.meta.security.code",
+        "fixedCode": "HTEST",
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.meta.tag",
+        "path": "Schedule.meta.tag",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.meta.tag.system",
+        "path": "Schedule.meta.tag.system",
+        "min": 1,
+        "fixedUri": "https://fhir.infoway-inforoute.ca/NamingSystem/ca-on-health-care-facility-id",
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.meta.tag.code",
+        "path": "Schedule.meta.tag.code",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.extension",
+        "path": "Schedule.extension",
+        "min": 1
+      },
+      {
+        "id": "Schedule.extension:shiftType",
+        "path": "Schedule.extension",
+        "sliceName": "shiftType",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-shift-type"
+            ]
+          }
+        ],
+        "isModifier": false,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Shift Type (Main, Second, etc)"
+          }
+        ]
+      },
+      {
+        "id": "Schedule.extension:shiftType.url",
+        "path": "Schedule.extension.url",
+        "fixedUri": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-shift-type"
+      },
+      {
+        "id": "Schedule.extension:hoursOfOperation",
+        "path": "Schedule.extension",
+        "sliceName": "hoursOfOperation",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-hours-of-operation"
+            ]
+          }
+        ],
+        "isModifier": false
+      },
+      {
+        "id": "Schedule.extension:hoursOfOperation.extension:startTime",
+        "path": "Schedule.extension.extension",
+        "sliceName": "startTime",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Elective Schedule Start Time (Availability Hours)"
+          }
+        ]
+      },
+      {
+        "id": "Schedule.extension:hoursOfOperation.extension:stopTime",
+        "path": "Schedule.extension.extension",
+        "sliceName": "stopTime",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Elective Schedule Stop Time (Availability Hours)"
+          }
+        ]
+      },
+      {
+        "id": "Schedule.extension:hoursOfOperation.extension:daysOfWeek",
+        "path": "Schedule.extension.extension",
+        "sliceName": "daysOfWeek",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Days of the week (Mon-Fri)"
+          }
+        ]
+      },
+      {
+        "id": "Schedule.extension:hoursOfOperationAdjustment",
+        "path": "Schedule.extension",
+        "sliceName": "hoursOfOperationAdjustment",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-ext-hours-of-operationAdjustment"
+            ]
+          }
+        ],
+        "isModifier": false
+      },
+      {
+        "id": "Schedule.extension:hoursOfOperationAdjustment.extension:startTime",
+        "path": "Schedule.extension.extension",
+        "sliceName": "startTime",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Elective Schedule Start Time Adjustment (Availability Hours)"
+          }
+        ]
+      },
+      {
+        "id": "Schedule.extension:hoursOfOperationAdjustment.extension:stopTime",
+        "path": "Schedule.extension.extension",
+        "sliceName": "stopTime",
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Elective Schedule Stop Time Adjustment (Availability Hours)"
+          }
+        ]
+      },
+      {
+        "id": "Schedule.identifier",
+        "path": "Schedule.identifier",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.identifier.system",
+        "path": "Schedule.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.identifier.value",
+        "path": "Schedule.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.active",
+        "path": "Schedule.active",
+        "short": "Whether this schedule is entered-in-error or not",
+        "min": 1,
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Entered In Error (Y/N)"
+          }
+        ]
+      },
+      {
+        "id": "Schedule.actor",
+        "path": "Schedule.actor",
+        "short": "Reference to the Location(OR Room) which will be specified by identifier for this Schedule",
+        "max": "1",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Location"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.actor.identifier",
+        "path": "Schedule.actor.identifier",
+        "short": "indicates the identifier of the Location(OR Room)",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.actor.identifier.system",
+        "path": "Schedule.actor.identifier.system",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.actor.identifier.value",
+        "path": "Schedule.actor.identifier.value",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.planningHorizon",
+        "path": "Schedule.planningHorizon",
+        "short": "Main Schedule Start/Stop Time",
+        "min": 1,
+        "mustSupport": true,
+        "mapping": [
+          {
+            "identity": "SERIS-MDS-Mapping",
+            "map": "Planning Horizon"
+          }
+        ]
+      },
+      {
+        "id": "Schedule.planningHorizon.start",
+        "path": "Schedule.planningHorizon.start",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Schedule.planningHorizon.end",
+        "path": "Schedule.planningHorizon.end",
+        "min": 1,
+        "mustSupport": true
+      }
+    ]
+  }
+}

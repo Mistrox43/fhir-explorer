@@ -1,0 +1,154 @@
+{
+  "resourceType": "ValueSet",
+  "id": "hospital-service",
+  "url": "http://ontariohealth.ca/fhir/ValueSet/hospital-service",
+  "version": "1.0.1",
+  "name": "HospitalService",
+  "title": "Hospital Service",
+  "status": "draft",
+  "publisher": "Ontario Health",
+  "description": "Hospital Service used for Procedure Service or Surgeon Service",
+  "immutable": false,
+  "compose": {
+    "include": [
+      {
+        "system": "http://snomed.info/sct",
+        "concept": [
+          {
+            "code": "310001007",
+            "display": "Anesthetic service"
+          },
+          {
+            "code": "310142007",
+            "display": "Cardiac surgery service"
+          },
+          {
+            "code": "310030000",
+            "display": "Endoscopy service"
+          },
+          {
+            "code": "310156009",
+            "display": "General surgical service"
+          },
+          {
+            "code": "310061009",
+            "display": "Gynecology service"
+          },
+          {
+            "code": "310159002",
+            "display": "Neurosurgical service"
+          },
+          {
+            "code": "310063007",
+            "display": "Obstetrics service"
+          },
+          {
+            "code": "310149003",
+            "display": "Ear, nose and throat service"
+          },
+          {
+            "code": "310160007",
+            "display": "Ophthalmology service"
+          },
+          {
+            "code": "788008002",
+            "display": "Oral and maxillofacial surgery service"
+          },
+          {
+            "code": "310161006",
+            "display": "Orthopedic service"
+          },
+          {
+            "code": "310163009",
+            "display": "Pediatric surgical service"
+          },
+          {
+            "code": "1280013002",
+            "display": "Pediatric neurosurgical service"
+          },
+          {
+            "code": "310069006",
+            "display": "Pediatric oncology service"
+          },
+          {
+            "code": "419983000",
+            "display": "Pediatric ophthalmology"
+          },
+          {
+            "code": "310147001",
+            "display": "Pediatric dentistry service"
+          },
+          {
+            "code": "789716007",
+            "display": "Pediatric ear, nose and throat service"
+          },
+          {
+            "code": "1231392007",
+            "display": "Pediatric orthopedic service"
+          },
+          {
+            "code": "24001000087103",
+            "display": "Pediatric plastic surgery service"
+          },
+          {
+            "code": "1231394008",
+            "display": "Pediatric urology service"
+          },
+          {
+            "code": "310164003",
+            "display": "Plastic surgery service"
+          },
+          {
+            "code": "699478002",
+            "display": "Surgical oncology service"
+          },
+          {
+            "code": "310141000",
+            "display": "Thoracic surgery service"
+          },
+          {
+            "code": "310165002",
+            "display": "Transplant surgery service"
+          },
+          {
+            "code": "310167005",
+            "display": "Urology service"
+          },
+          {
+            "code": "310168000",
+            "display": "Vascular surgery service"
+          }
+        ]
+      },
+      {
+        "system": "http://ontariohealth.ca/fhir/CodeSystem/hospital-service",
+        "concept": [
+          {
+            "code": "p-as",
+            "display": "Pediatric Anesthetic service"
+          },
+          {
+            "code": "p-gs",
+            "display": "Pediatric Gynecology service"
+          },
+          {
+            "code": "p-os",
+            "display": "Pediatric Obstetrics service"
+          },
+          {
+            "code": "p-vs",
+            "display": "Pediatric Vascular surgery service"
+          },
+          {
+            "code": "p-cvs",
+            "display": "Pediatric Cardiovascular service"
+          },
+          {
+            "code": "p-gsts",
+            "display": "Pediatric general surgery and thoracic service"
+          }
+        ]
+      }
+    ]
+  }
+}
