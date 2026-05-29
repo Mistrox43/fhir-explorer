@@ -15,7 +15,12 @@ it stays faithful to the spec and can be regenerated whenever the IG is updated.
   cardinality, **must-support** (`S`), data type(s), value-set bindings, fixed/pattern values,
   and slicing. Reference elements and extensions link straight to their definitions.
 - **Relationships** — A radial diagram of how each profile references (and is referenced by)
-  the others. Click a node to navigate.
+  the others. Solid edges are references the IG explicitly constrains; dashed edges are
+  inherited from base FHIR R4 (recovered from `spec/base-references.json`). Click a node to
+  navigate.
+- **Extensions on a profile** — Each profile lists the extensions that target it, derived from
+  every extension's declared `context` (including element-level contexts like
+  `Slot.blockReleaseRequest`).
 - **Template** — A generated minimal starter instance for each profile, showing its required
   and must-support top-level elements with annotations.
 - **Extensions** — All ~47 SERIS/SETP extensions, their contexts, and their value types.
@@ -35,6 +40,11 @@ npm run generate   # spec/ca.on.oh-seris/*.json  ->  src/generated/seris.ts
 The profiles are differential-only `constraint` definitions, so the Explorer shows exactly
 what SERIS adds on top of base FHIR R4. To update to a newer IG release, replace the package
 files in `spec/` and re-run `npm run generate`.
+
+Because the IG rarely restates inherited references, the relationship graph is completed with
+[`spec/base-references.json`](spec/base-references.json) — the Reference structure of the 15
+base resource types, derived once from `hl7.fhir.r4.core` by
+[`scripts/extract-base-references.mjs`](scripts/extract-base-references.mjs).
 
 ## Tech stack
 

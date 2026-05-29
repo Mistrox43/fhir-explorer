@@ -30,6 +30,14 @@ export interface FixedValue {
   value: unknown;
 }
 
+/** Slicing definition on a repeating element. */
+export interface SlicingInfo {
+  /** How slices are told apart, e.g. "value @ url". */
+  discriminator: string[];
+  rules?: string;
+  ordered?: boolean;
+}
+
 /** One element row within a profile or extension differential. */
 export interface ProfileElement {
   /** Full element id, including slice names, e.g. "Patient.identifier:MRN.type". */
@@ -45,11 +53,16 @@ export interface ProfileElement {
   /** Maximum cardinality ("1", "*", …), when constrained. */
   max: string | null;
   mustSupport: boolean;
+  /** True if changing this element changes the resource's meaning. */
+  isModifier?: boolean;
   types: ElementType[];
   binding?: ElementBinding;
   fixed?: FixedValue;
+  slicing?: SlicingInfo;
   short?: string;
   definition?: string;
+  /** Implementer guidance from the IG. */
+  comment?: string;
 }
 
 /** A resource profile constrained by the IG. */
@@ -62,10 +75,17 @@ export interface Profile {
   elements: ProfileElement[];
   /** Names of other profiles this one references (for the relationship graph). */
   referencedProfiles: string[];
-  /** Names of extensions this profile uses. */
-  usedExtensions: string[];
+  /** Extensions that target this profile, via their declared context. */
+  extensionsOnProfile: ProfileExtensionUse[];
   /** A generated minimal starter instance. */
   template?: TemplateExample;
+}
+
+/** An extension that attaches to a profile, and where. */
+export interface ProfileExtensionUse {
+  name: string;
+  /** The FHIRPath context the extension declares, e.g. "Patient.identifier". */
+  context: string;
 }
 
 /** An extension definition. */
@@ -120,6 +140,11 @@ export interface ReferenceEdge {
   from: string;
   to: string;
   via: string;
+  /**
+   * "profiled" = the IG restates the reference target on this profile;
+   * "inherited" = the reference comes from the base FHIR R4 resource.
+   */
+  kind: 'profiled' | 'inherited';
 }
 
 /** A worked/generated example payload with teaching annotations. */

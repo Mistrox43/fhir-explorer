@@ -45,7 +45,7 @@ export function RelationshipGraph({ focus, onNavigate }: Props) {
           return (
             <line
               key={`${e.from}->${e.to}`}
-              className="graph__edge"
+              className={`graph__edge graph__edge--${e.kind}`}
               x1={from.x}
               y1={from.y}
               x2={to.x}
@@ -89,12 +89,20 @@ export function RelationshipGraph({ focus, onNavigate }: Props) {
         </defs>
       </svg>
 
-      <p className="graph__legend">
-        <span className="graph__legend-item graph__legend-item--outgoing">outgoing</span>
-        {focus} references these&nbsp;·&nbsp;
-        <span className="graph__legend-item graph__legend-item--incoming">incoming</span>
-        these reference {focus}
-      </p>
+      <div className="graph__legend">
+        <p>
+          <span className="graph__legend-item graph__legend-item--outgoing">outgoing</span>
+          {focus} references these&nbsp;·&nbsp;
+          <span className="graph__legend-item graph__legend-item--incoming">incoming</span>
+          these reference {focus}
+        </p>
+        <p className="graph__legend-edges">
+          <span className="graph__legend-line graph__legend-line--profiled" /> constrained by SERIS
+          &nbsp;·&nbsp;
+          <span className="graph__legend-line graph__legend-line--inherited" /> inherited from base
+          FHIR R4
+        </p>
+      </div>
     </div>
   );
 }
@@ -116,12 +124,7 @@ function buildGraph(focus: string) {
   );
 
   const present = new Set(nodes.map((n) => n.name));
-  const edges = unique(
-    all.filter((e) => present.has(e.from) && present.has(e.to)).map((e) => `${e.from}|${e.to}`),
-  ).map((s) => {
-    const [from, to] = s.split('|');
-    return { from, to };
-  });
+  const edges = all.filter((e) => present.has(e.from) && present.has(e.to));
   return { nodes, edges };
 }
 

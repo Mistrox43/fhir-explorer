@@ -35,7 +35,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Appointment|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Appointment.extension:cancellationDate",
@@ -430,36 +431,59 @@ export const SPEC: SerisSpec = {
         }
       ],
       "referencedProfiles": [
+        "Location",
+        "Observation",
         "Patient",
-        "Procedure"
+        "Practitioner",
+        "PractitionerRole",
+        "Procedure",
+        "Slot"
       ],
-      "usedExtensions": [
-        "CancellationDate",
-        "SERISReschedule"
+      "extensionsOnProfile": [
+        {
+          "name": "CancellationDate",
+          "context": "Appointment"
+        },
+        {
+          "name": "SERISReschedule",
+          "context": "Appointment"
+        },
+        {
+          "name": "SETPAdmissionType",
+          "context": "Appointment"
+        },
+        {
+          "name": "SETPBookingDate",
+          "context": "Appointment"
+        },
+        {
+          "name": "SETPDelayReason",
+          "context": "Appointment"
+        }
       ],
       "template": {
         "title": "Minimal Appointment",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Appointment",
-          "meta": "<value>",
-          "identifier": "<value>",
-          "status": "<value>",
-          "cancelationReason": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Appointment"
+            ]
+          },
+          "identifier": "…",
+          "status": "…",
+          "cancelationReason": "…",
           "reasonReference": {
             "reference": "Procedure/example"
           },
-          "start": "<value>",
-          "end": "<value>",
-          "minutesDuration": "<value>",
-          "created": "<value>",
-          "participant": "<value>"
+          "start": "…",
+          "end": "…",
+          "minutesDuration": "…",
+          "created": "…",
+          "participant": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "identifier",
             "note": "Case Number"
@@ -521,7 +545,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Bundle|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Bundle.meta.security",
@@ -671,23 +696,23 @@ export const SPEC: SerisSpec = {
         }
       ],
       "referencedProfiles": [],
-      "usedExtensions": [],
+      "extensionsOnProfile": [],
       "template": {
         "title": "Minimal Bundle",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Bundle",
-          "meta": "<value>",
-          "identifier": "<value>",
-          "type": "<value>",
-          "timestamp": "<value>",
-          "entry": "<value>"
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Bundle"
+            ]
+          },
+          "identifier": "…",
+          "type": "…",
+          "timestamp": "…",
+          "entry": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "identifier",
             "note": ""
@@ -729,7 +754,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "\"#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Encounter|1.0.1 `_**\\n\\n.It is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Encounter.extension:delayReason",
@@ -1066,36 +1092,47 @@ export const SPEC: SerisSpec = {
       ],
       "referencedProfiles": [
         "Appointment",
+        "Location",
+        "Observation",
+        "Organization",
         "Patient",
+        "Practitioner",
+        "PractitionerRole",
         "Procedure"
       ],
-      "usedExtensions": [
-        "DelayReason",
-        "SERISCancellation"
+      "extensionsOnProfile": [
+        {
+          "name": "DelayReason",
+          "context": "Encounter"
+        },
+        {
+          "name": "SERISCancellation",
+          "context": "Encounter"
+        }
       ],
       "template": {
         "title": "Minimal Encounter",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Encounter",
-          "meta": "<value>",
-          "status": "<value>",
-          "class": "<value>",
-          "type": "<value>",
-          "priority": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Encounter"
+            ]
+          },
+          "status": "…",
+          "class": "…",
+          "type": "…",
+          "priority": "…",
           "appointment": {
             "reference": "Appointment/example"
           },
-          "period": "<value>",
+          "period": "…",
           "reasonReference": {
             "reference": "Procedure/example"
           }
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "status",
             "note": ""
@@ -1149,7 +1186,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Location|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Location.meta.security",
@@ -1433,30 +1471,44 @@ export const SPEC: SerisSpec = {
           "types": []
         }
       ],
-      "referencedProfiles": [],
-      "usedExtensions": [
-        "FunctionalCentre",
-        "MisFunctionalCentre",
-        "ORClosureReason",
-        "ORUnit"
+      "referencedProfiles": [
+        "Organization"
+      ],
+      "extensionsOnProfile": [
+        {
+          "name": "FunctionalCentre",
+          "context": "Location"
+        },
+        {
+          "name": "MisFunctionalCentre",
+          "context": "Location"
+        },
+        {
+          "name": "ORClosureReason",
+          "context": "Location"
+        },
+        {
+          "name": "ORUnit",
+          "context": "Location"
+        }
       ],
       "template": {
         "title": "Minimal Location",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Location",
-          "meta": "<value>",
-          "identifier": "<value>",
-          "status": "<value>",
-          "name": "<value>",
-          "type": "<value>",
-          "partOf": "<value>"
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Location"
+            ]
+          },
+          "identifier": "…",
+          "status": "…",
+          "name": "…",
+          "type": "…",
+          "partOf": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "identifier",
             "note": "OR Room Identifier"
@@ -1502,7 +1554,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MedicationAdministration|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "MedicationAdministration.extension:anaesthesiaReadyTime",
@@ -1694,22 +1747,33 @@ export const SPEC: SerisSpec = {
         }
       ],
       "referencedProfiles": [
+        "Encounter",
+        "Observation",
         "Patient",
+        "Practitioner",
+        "PractitionerRole",
         "Procedure"
       ],
-      "usedExtensions": [
-        "SERISAnaesthesiaReadyTimeExt"
+      "extensionsOnProfile": [
+        {
+          "name": "SERISAnaesthesiaReadyTimeExt",
+          "context": "MedicationAdministration"
+        }
       ],
       "template": {
         "title": "Minimal MedicationAdministration",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "MedicationAdministration",
-          "meta": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MedicationAdministration"
+            ]
+          },
           "partOf": {
             "reference": "Procedure/example"
           },
-          "status": "<value>",
+          "status": "…",
           "medicationValue": {
             "coding": [
               {
@@ -1726,10 +1790,6 @@ export const SPEC: SerisSpec = {
           }
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "partOf",
             "note": ""
@@ -1775,7 +1835,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MessageHeader|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "MessageHeader.event[x]",
@@ -1851,25 +1912,29 @@ export const SPEC: SerisSpec = {
           "types": []
         }
       ],
-      "referencedProfiles": [],
-      "usedExtensions": [],
+      "referencedProfiles": [
+        "Organization",
+        "Practitioner",
+        "PractitionerRole"
+      ],
+      "extensionsOnProfile": [],
       "template": {
         "title": "Minimal MessageHeader",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "MessageHeader",
-          "meta": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-MessageHeader"
+            ]
+          },
           "eventValue": {
             "system": "…",
             "code": "…"
           },
-          "source": "<value>"
+          "source": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "eventValue",
             "note": ""
@@ -1903,7 +1968,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Observation|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Observation.partOf",
@@ -2096,20 +2162,31 @@ export const SPEC: SerisSpec = {
         }
       ],
       "referencedProfiles": [
+        "Encounter",
+        "Location",
+        "MedicationAdministration",
+        "Organization",
+        "Patient",
+        "Practitioner",
+        "PractitionerRole",
         "Procedure"
       ],
-      "usedExtensions": [],
+      "extensionsOnProfile": [],
       "template": {
         "title": "Minimal Observation",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Observation",
-          "meta": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Observation"
+            ]
+          },
           "partOf": {
             "reference": "Procedure/example"
           },
-          "status": "<value>",
-          "code": "<value>",
+          "status": "…",
+          "code": "…",
           "valueValue": {
             "coding": [
               {
@@ -2120,10 +2197,6 @@ export const SPEC: SerisSpec = {
           }
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "partOf",
             "note": ""
@@ -2165,7 +2238,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Organization|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Organization.identifier",
@@ -2207,21 +2281,21 @@ export const SPEC: SerisSpec = {
         }
       ],
       "referencedProfiles": [],
-      "usedExtensions": [],
+      "extensionsOnProfile": [],
       "template": {
         "title": "Minimal Organization",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Organization",
-          "meta": "<value>",
-          "identifier": "<value>",
-          "name": "<value>"
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Organization"
+            ]
+          },
+          "identifier": "…",
+          "name": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "identifier",
             "note": "Facility ID"
@@ -2255,7 +2329,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Patient|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Patient.extension",
@@ -2379,7 +2454,14 @@ export const SPEC: SerisSpec = {
           "max": "2",
           "mustSupport": true,
           "types": [],
-          "short": "Health Card Number and Medical Record Number"
+          "slicing": {
+            "discriminator": [
+              "pattern @ type"
+            ],
+            "rules": "open"
+          },
+          "short": "Health Card Number and Medical Record Number",
+          "comment": "Include patient health card number."
         },
         {
           "id": "Patient.identifier.type.coding.system",
@@ -2583,7 +2665,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": "1",
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "name.family and name.given will only be used. \r\nMiddle name is supported by using subsequent given names."
         },
         {
           "id": "Patient.name.family",
@@ -2710,30 +2793,50 @@ export const SPEC: SerisSpec = {
           "types": []
         }
       ],
-      "referencedProfiles": [],
-      "usedExtensions": [
-        "ExtensionIdentifierVersion",
-        "SERISIndigenousIdentity",
-        "SERISRace",
-        "patient-genderIdentity"
+      "referencedProfiles": [
+        "Organization",
+        "Practitioner",
+        "PractitionerRole"
+      ],
+      "extensionsOnProfile": [
+        {
+          "name": "ExtensionIdentifierVersion",
+          "context": "Patient.identifier"
+        },
+        {
+          "name": "HCNVersionCode",
+          "context": "Patient.identifier"
+        },
+        {
+          "name": "ReasonForNoHCN",
+          "context": "Patient.identifier"
+        },
+        {
+          "name": "SERISIndigenousIdentity",
+          "context": "Patient"
+        },
+        {
+          "name": "SERISRace",
+          "context": "Patient"
+        }
       ],
       "template": {
         "title": "Minimal Patient",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Patient",
-          "meta": "<value>",
-          "identifier": "<value>",
-          "name": "<value>",
-          "gender": "<value>",
-          "birthDate": "<value>",
-          "address": "<value>"
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Patient"
+            ]
+          },
+          "identifier": "…",
+          "name": "…",
+          "gender": "…",
+          "birthDate": "…",
+          "address": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "identifier",
             "note": "Health Card Number and Medical Record Number"
@@ -2779,7 +2882,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Practitioner|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Practitioner.identifier",
@@ -2847,22 +2951,24 @@ export const SPEC: SerisSpec = {
           "types": []
         }
       ],
-      "referencedProfiles": [],
-      "usedExtensions": [],
+      "referencedProfiles": [
+        "Organization"
+      ],
+      "extensionsOnProfile": [],
       "template": {
         "title": "Minimal Practitioner",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Practitioner",
-          "meta": "<value>",
-          "identifier": "<value>",
-          "name": "<value>"
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Practitioner"
+            ]
+          },
+          "identifier": "…",
+          "name": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "identifier",
             "note": "Surgeon/Anaesthetist Identifier"
@@ -2896,7 +3002,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-practitionerrole|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "PractitionerRole.identifier",
@@ -2905,7 +3012,8 @@ export const SPEC: SerisSpec = {
           "min": null,
           "max": null,
           "mustSupport": false,
-          "types": []
+          "types": [],
+          "comment": "Can be populated with a system identifier such as a UUID. Should not be populated with college license number; license number should be conveyed in the Practitioner resource"
         },
         {
           "id": "PractitionerRole.practitioner",
@@ -2989,25 +3097,27 @@ export const SPEC: SerisSpec = {
         }
       ],
       "referencedProfiles": [
+        "Location",
+        "Organization",
         "Practitioner"
       ],
-      "usedExtensions": [],
+      "extensionsOnProfile": [],
       "template": {
         "title": "Minimal PractitionerRole",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "PractitionerRole",
-          "meta": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-practitionerrole"
+            ]
+          },
           "practitioner": {
             "reference": "Practitioner/example"
           },
-          "specialty": "<value>"
+          "specialty": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "practitioner",
             "note": ""
@@ -3041,7 +3151,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Procedure|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Procedure.extension:preadmissionScreening",
@@ -3519,38 +3630,73 @@ export const SPEC: SerisSpec = {
         }
       ],
       "referencedProfiles": [
+        "Encounter",
+        "Location",
+        "MedicationAdministration",
+        "Observation",
+        "Organization",
         "Patient",
+        "Practitioner",
         "PractitionerRole"
       ],
-      "usedExtensions": [
-        "InRoom",
-        "SERISPreadmissionScreening",
-        "SERISSurgicalChecklist"
+      "extensionsOnProfile": [
+        {
+          "name": "InRoom",
+          "context": "Procedure"
+        },
+        {
+          "name": "SERISPreadmissionScreening",
+          "context": "Procedure"
+        },
+        {
+          "name": "SERISSurgicalChecklist",
+          "context": "Procedure"
+        },
+        {
+          "name": "SETPAnaesthesia Type",
+          "context": "Procedure"
+        },
+        {
+          "name": "SETPCancel",
+          "context": "Procedure"
+        },
+        {
+          "name": "SETPInRoomPeriod",
+          "context": "Procedure"
+        },
+        {
+          "name": "SETPSurgicalPriority",
+          "context": "Procedure"
+        },
+        {
+          "name": "SETPUnplannedReturn",
+          "context": "Procedure"
+        }
       ],
       "template": {
         "title": "Minimal Procedure",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Procedure",
-          "meta": "<value>",
-          "status": "<value>",
-          "category": "<value>",
-          "code": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Procedure"
+            ]
+          },
+          "status": "…",
+          "category": "…",
+          "code": "…",
           "subject": {
             "reference": "Patient/example"
           },
           "performedValue": {
             "start": "2025-01-01T09:00:00Z"
           },
-          "performer": "<value>",
-          "location": "<value>",
-          "complication": "<value>"
+          "performer": "…",
+          "location": "…",
+          "complication": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "status",
             "note": ""
@@ -3608,7 +3754,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Schedule|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Schedule.meta.security",
@@ -3909,31 +4056,59 @@ export const SPEC: SerisSpec = {
         }
       ],
       "referencedProfiles": [
-        "Location"
+        "Location",
+        "Patient",
+        "Practitioner",
+        "PractitionerRole"
       ],
-      "usedExtensions": [
-        "HoursOfOperation",
-        "HoursOfOperationAdjustment",
-        "ShiftType"
+      "extensionsOnProfile": [
+        {
+          "name": "HoursOfOperation",
+          "context": "Schedule"
+        },
+        {
+          "name": "HoursOfOperationAdjustment",
+          "context": "Schedule"
+        },
+        {
+          "name": "SETPClosure",
+          "context": "Schedule"
+        },
+        {
+          "name": "SETPScheduleAdjustmentExt",
+          "context": "Schedule"
+        },
+        {
+          "name": "SETPScheduleShift",
+          "context": "Schedule"
+        },
+        {
+          "name": "SETPScheduleWeek",
+          "context": "Schedule"
+        },
+        {
+          "name": "ShiftType",
+          "context": "Schedule"
+        }
       ],
       "template": {
         "title": "Minimal Schedule",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Schedule",
-          "meta": "<value>",
-          "identifier": "<value>",
-          "active": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Schedule"
+            ]
+          },
+          "identifier": "…",
+          "active": "…",
           "actor": {
             "reference": "Location/example"
           },
-          "planningHorizon": "<value>"
+          "planningHorizon": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "identifier",
             "note": ""
@@ -3975,7 +4150,8 @@ export const SPEC: SerisSpec = {
           "min": 1,
           "max": null,
           "mustSupport": true,
-          "types": []
+          "types": [],
+          "comment": "#### **_` FOR SERIS USAGE: The meta.profile = http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Slot|1.0.1 `_**\r\n\r\nIt is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set."
         },
         {
           "id": "Slot.meta.security",
@@ -4401,33 +4577,93 @@ export const SPEC: SerisSpec = {
           "short": "Block Change Description"
         }
       ],
-      "referencedProfiles": [],
-      "usedExtensions": [
-        "AdjustmentReason",
-        "SERISBlock",
-        "SERISBlockChange",
-        "SERISBlockRelease",
-        "SlotName",
-        "StatusRemoved"
+      "referencedProfiles": [
+        "Schedule"
+      ],
+      "extensionsOnProfile": [
+        {
+          "name": "AdjustmentReason",
+          "context": "Slot"
+        },
+        {
+          "name": "BlockChangeReason",
+          "context": "Slot"
+        },
+        {
+          "name": "BlockService",
+          "context": "Slot"
+        },
+        {
+          "name": "BlockSurgeons",
+          "context": "Slot"
+        },
+        {
+          "name": "BlockType",
+          "context": "Slot"
+        },
+        {
+          "name": "SERISBlock",
+          "context": "Slot"
+        },
+        {
+          "name": "SERISBlockChange",
+          "context": "Slot"
+        },
+        {
+          "name": "SERISBlockRelease",
+          "context": "Slot"
+        },
+        {
+          "name": "SETPBlockAutoRelease",
+          "context": "Slot"
+        },
+        {
+          "name": "SETPBlockFrequency",
+          "context": "Slot"
+        },
+        {
+          "name": "SETPBlockName",
+          "context": "Slot.blockName"
+        },
+        {
+          "name": "SETPBlockORRoom",
+          "context": "Slot"
+        },
+        {
+          "name": "SETPBlockReleaseRequest",
+          "context": "Slot.blockReleaseRequest"
+        },
+        {
+          "name": "SETPScheduleWeek",
+          "context": "Slot"
+        },
+        {
+          "name": "SlotName",
+          "context": "Slot"
+        },
+        {
+          "name": "StatusRemoved",
+          "context": "Slot"
+        }
       ],
       "template": {
         "title": "Minimal Slot",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Slot",
-          "meta": "<value>",
-          "identifier": "<value>",
-          "serviceType": "<value>",
-          "schedule": "<value>",
-          "status": "<value>",
-          "start": "<value>",
-          "end": "<value>"
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Slot"
+            ]
+          },
+          "identifier": "…",
+          "serviceType": "…",
+          "schedule": "…",
+          "status": "…",
+          "start": "…",
+          "end": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "identifier",
             "note": ""
@@ -4609,26 +4845,31 @@ export const SPEC: SerisSpec = {
       ],
       "referencedProfiles": [
         "Appointment",
-        "Encounter"
+        "Encounter",
+        "Location",
+        "Organization",
+        "Patient",
+        "Practitioner",
+        "PractitionerRole"
       ],
-      "usedExtensions": [],
+      "extensionsOnProfile": [],
       "template": {
         "title": "Minimal Task",
         "description": "A generated starter skeleton showing the required and must-support top-level elements of this profile. Fill in real values; nested constraints and slices are described in the Explorer tab.",
         "json": {
           "resourceType": "Task",
-          "meta": "<value>",
+          "meta": {
+            "profile": [
+              "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Task"
+            ]
+          },
           "basedOn": {
             "reference": "Appointment/example"
           },
-          "status": "<value>",
-          "businessStatus": "<value>"
+          "status": "…",
+          "businessStatus": "…"
         },
         "annotations": [
-          {
-            "path": "meta",
-            "note": ""
-          },
           {
             "path": "basedOn",
             "note": ""
@@ -5082,7 +5323,13 @@ export const SPEC: SerisSpec = {
             {
               "code": "string"
             }
-          ]
+          ],
+          "slicing": {
+            "discriminator": [
+              "type @ $this"
+            ],
+            "rules": "closed"
+          }
         },
         {
           "id": "Extension.value[x]:valueString",
@@ -7133,6 +7380,13 @@ export const SPEC: SerisSpec = {
             "strength": "extensible",
             "valueSetUrl": "http://ontariohealth.ca/fhir/ValueSet/SETP-encounter-class",
             "valueSetName": "SETP-encounter-class"
+          },
+          "slicing": {
+            "discriminator": [
+              "type @ $this"
+            ],
+            "rules": "open",
+            "ordered": false
           }
         }
       ]
@@ -7174,6 +7428,13 @@ export const SPEC: SerisSpec = {
             "strength": "required",
             "valueSetUrl": "http://ontariohealth.ca/fhir/ValueSet/AnaesthesiaType",
             "valueSetName": "AnaesthesiaType"
+          },
+          "slicing": {
+            "discriminator": [
+              "type @ $this"
+            ],
+            "rules": "open",
+            "ordered": false
           }
         }
       ]
@@ -7408,7 +7669,14 @@ export const SPEC: SerisSpec = {
             {
               "code": "date"
             }
-          ]
+          ],
+          "slicing": {
+            "discriminator": [
+              "type @ $this"
+            ],
+            "rules": "open",
+            "ordered": false
+          }
         }
       ]
     },
@@ -7445,7 +7713,14 @@ export const SPEC: SerisSpec = {
             {
               "code": "dateTime"
             }
-          ]
+          ],
+          "slicing": {
+            "discriminator": [
+              "type @ $this"
+            ],
+            "rules": "open",
+            "ordered": false
+          }
         }
       ]
     },
@@ -7519,7 +7794,14 @@ export const SPEC: SerisSpec = {
             {
               "code": "CodeableConcept"
             }
-          ]
+          ],
+          "slicing": {
+            "discriminator": [
+              "type @ $this"
+            ],
+            "rules": "open",
+            "ordered": false
+          }
         }
       ]
     },
@@ -7555,7 +7837,14 @@ export const SPEC: SerisSpec = {
             {
               "code": "Period"
             }
-          ]
+          ],
+          "slicing": {
+            "discriminator": [
+              "type @ $this"
+            ],
+            "rules": "open",
+            "ordered": false
+          }
         }
       ]
     },
@@ -7574,7 +7863,13 @@ export const SPEC: SerisSpec = {
           "min": 2,
           "max": "3",
           "mustSupport": false,
-          "types": []
+          "types": [],
+          "slicing": {
+            "discriminator": [
+              "value @ url"
+            ],
+            "rules": "open"
+          }
         },
         {
           "id": "Extension.extension:adjustmentPeriod",
@@ -7727,7 +8022,13 @@ export const SPEC: SerisSpec = {
           "min": 0,
           "max": "4",
           "mustSupport": false,
-          "types": []
+          "types": [],
+          "slicing": {
+            "discriminator": [
+              "value @ url"
+            ],
+            "rules": "open"
+          }
         },
         {
           "id": "Extension.extension:secondShiftPeriod",
@@ -7978,6 +8279,13 @@ export const SPEC: SerisSpec = {
             "strength": "required",
             "valueSetUrl": "http://ontariohealth.ca/fhir/ValueSet/surgical-priority-classification",
             "valueSetName": "SurgicalPriorityClassification"
+          },
+          "slicing": {
+            "discriminator": [
+              "type @ $this"
+            ],
+            "rules": "open",
+            "ordered": false
           }
         }
       ]
@@ -7997,7 +8305,13 @@ export const SPEC: SerisSpec = {
           "min": 0,
           "max": "2",
           "mustSupport": false,
-          "types": []
+          "types": [],
+          "slicing": {
+            "discriminator": [
+              "value @ url"
+            ],
+            "rules": "open"
+          }
         },
         {
           "id": "Extension.extension:unplannedIndicator",
@@ -14893,72 +15207,362 @@ export const SPEC: SerisSpec = {
     {
       "from": "Appointment",
       "to": "Procedure",
-      "via": "Appointment.reasonReference"
+      "via": "Appointment.reasonReference",
+      "kind": "profiled"
     },
     {
       "from": "Appointment",
       "to": "Patient",
-      "via": "Appointment.participant.actor"
+      "via": "Appointment.participant.actor",
+      "kind": "profiled"
     },
     {
       "from": "Encounter",
       "to": "Patient",
-      "via": "Encounter.subject"
+      "via": "Encounter.subject",
+      "kind": "profiled"
     },
     {
       "from": "Encounter",
       "to": "Appointment",
-      "via": "Encounter.appointment"
+      "via": "Encounter.appointment",
+      "kind": "profiled"
     },
     {
       "from": "Encounter",
       "to": "Procedure",
-      "via": "Encounter.reasonReference"
+      "via": "Encounter.reasonReference",
+      "kind": "profiled"
     },
     {
       "from": "MedicationAdministration",
       "to": "Procedure",
-      "via": "MedicationAdministration.partOf"
+      "via": "MedicationAdministration.partOf",
+      "kind": "profiled"
     },
     {
       "from": "MedicationAdministration",
       "to": "Patient",
-      "via": "MedicationAdministration.subject"
+      "via": "MedicationAdministration.subject",
+      "kind": "profiled"
     },
     {
       "from": "Observation",
       "to": "Procedure",
-      "via": "Observation.partOf"
+      "via": "Observation.partOf",
+      "kind": "profiled"
     },
     {
       "from": "PractitionerRole",
       "to": "Practitioner",
-      "via": "PractitionerRole.practitioner"
+      "via": "PractitionerRole.practitioner",
+      "kind": "profiled"
     },
     {
       "from": "Procedure",
       "to": "Patient",
-      "via": "Procedure.subject"
+      "via": "Procedure.subject",
+      "kind": "profiled"
     },
     {
       "from": "Procedure",
       "to": "PractitionerRole",
-      "via": "Procedure.performer.actor"
+      "via": "Procedure.performer.actor",
+      "kind": "profiled"
     },
     {
       "from": "Schedule",
       "to": "Location",
-      "via": "Schedule.actor"
+      "via": "Schedule.actor",
+      "kind": "profiled"
     },
     {
       "from": "Task",
       "to": "Appointment",
-      "via": "Task.basedOn"
+      "via": "Task.basedOn",
+      "kind": "profiled"
     },
     {
       "from": "Task",
       "to": "Encounter",
-      "via": "Task.basedOn"
+      "via": "Task.basedOn",
+      "kind": "profiled"
+    },
+    {
+      "from": "Appointment",
+      "to": "Observation",
+      "via": "Appointment.reasonReference",
+      "kind": "inherited"
+    },
+    {
+      "from": "Appointment",
+      "to": "Slot",
+      "via": "Appointment.slot",
+      "kind": "inherited"
+    },
+    {
+      "from": "Appointment",
+      "to": "Practitioner",
+      "via": "Appointment.participant.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "Appointment",
+      "to": "PractitionerRole",
+      "via": "Appointment.participant.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "Appointment",
+      "to": "Location",
+      "via": "Appointment.participant.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "Encounter",
+      "to": "Practitioner",
+      "via": "Encounter.participant.individual",
+      "kind": "inherited"
+    },
+    {
+      "from": "Encounter",
+      "to": "PractitionerRole",
+      "via": "Encounter.participant.individual",
+      "kind": "inherited"
+    },
+    {
+      "from": "Encounter",
+      "to": "Observation",
+      "via": "Encounter.reasonReference",
+      "kind": "inherited"
+    },
+    {
+      "from": "Encounter",
+      "to": "Location",
+      "via": "Encounter.hospitalization.origin",
+      "kind": "inherited"
+    },
+    {
+      "from": "Encounter",
+      "to": "Organization",
+      "via": "Encounter.hospitalization.origin",
+      "kind": "inherited"
+    },
+    {
+      "from": "Location",
+      "to": "Organization",
+      "via": "Location.managingOrganization",
+      "kind": "inherited"
+    },
+    {
+      "from": "MedicationAdministration",
+      "to": "Encounter",
+      "via": "MedicationAdministration.context",
+      "kind": "inherited"
+    },
+    {
+      "from": "MedicationAdministration",
+      "to": "Practitioner",
+      "via": "MedicationAdministration.performer.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "MedicationAdministration",
+      "to": "PractitionerRole",
+      "via": "MedicationAdministration.performer.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "MedicationAdministration",
+      "to": "Observation",
+      "via": "MedicationAdministration.reasonReference",
+      "kind": "inherited"
+    },
+    {
+      "from": "MessageHeader",
+      "to": "Practitioner",
+      "via": "MessageHeader.destination.receiver",
+      "kind": "inherited"
+    },
+    {
+      "from": "MessageHeader",
+      "to": "PractitionerRole",
+      "via": "MessageHeader.destination.receiver",
+      "kind": "inherited"
+    },
+    {
+      "from": "MessageHeader",
+      "to": "Organization",
+      "via": "MessageHeader.destination.receiver",
+      "kind": "inherited"
+    },
+    {
+      "from": "Observation",
+      "to": "MedicationAdministration",
+      "via": "Observation.partOf",
+      "kind": "inherited"
+    },
+    {
+      "from": "Observation",
+      "to": "Patient",
+      "via": "Observation.subject",
+      "kind": "inherited"
+    },
+    {
+      "from": "Observation",
+      "to": "Location",
+      "via": "Observation.subject",
+      "kind": "inherited"
+    },
+    {
+      "from": "Observation",
+      "to": "Encounter",
+      "via": "Observation.encounter",
+      "kind": "inherited"
+    },
+    {
+      "from": "Observation",
+      "to": "Practitioner",
+      "via": "Observation.performer",
+      "kind": "inherited"
+    },
+    {
+      "from": "Observation",
+      "to": "PractitionerRole",
+      "via": "Observation.performer",
+      "kind": "inherited"
+    },
+    {
+      "from": "Observation",
+      "to": "Organization",
+      "via": "Observation.performer",
+      "kind": "inherited"
+    },
+    {
+      "from": "Patient",
+      "to": "Organization",
+      "via": "Patient.contact.organization",
+      "kind": "inherited"
+    },
+    {
+      "from": "Patient",
+      "to": "Practitioner",
+      "via": "Patient.generalPractitioner",
+      "kind": "inherited"
+    },
+    {
+      "from": "Patient",
+      "to": "PractitionerRole",
+      "via": "Patient.generalPractitioner",
+      "kind": "inherited"
+    },
+    {
+      "from": "Practitioner",
+      "to": "Organization",
+      "via": "Practitioner.qualification.issuer",
+      "kind": "inherited"
+    },
+    {
+      "from": "PractitionerRole",
+      "to": "Organization",
+      "via": "PractitionerRole.organization",
+      "kind": "inherited"
+    },
+    {
+      "from": "PractitionerRole",
+      "to": "Location",
+      "via": "PractitionerRole.location",
+      "kind": "inherited"
+    },
+    {
+      "from": "Procedure",
+      "to": "Observation",
+      "via": "Procedure.partOf",
+      "kind": "inherited"
+    },
+    {
+      "from": "Procedure",
+      "to": "MedicationAdministration",
+      "via": "Procedure.partOf",
+      "kind": "inherited"
+    },
+    {
+      "from": "Procedure",
+      "to": "Encounter",
+      "via": "Procedure.encounter",
+      "kind": "inherited"
+    },
+    {
+      "from": "Procedure",
+      "to": "Practitioner",
+      "via": "Procedure.recorder",
+      "kind": "inherited"
+    },
+    {
+      "from": "Procedure",
+      "to": "Organization",
+      "via": "Procedure.performer.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "Procedure",
+      "to": "Location",
+      "via": "Procedure.location",
+      "kind": "inherited"
+    },
+    {
+      "from": "Schedule",
+      "to": "Patient",
+      "via": "Schedule.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "Schedule",
+      "to": "Practitioner",
+      "via": "Schedule.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "Schedule",
+      "to": "PractitionerRole",
+      "via": "Schedule.actor",
+      "kind": "inherited"
+    },
+    {
+      "from": "Slot",
+      "to": "Schedule",
+      "via": "Slot.schedule",
+      "kind": "inherited"
+    },
+    {
+      "from": "Task",
+      "to": "Organization",
+      "via": "Task.requester",
+      "kind": "inherited"
+    },
+    {
+      "from": "Task",
+      "to": "Patient",
+      "via": "Task.requester",
+      "kind": "inherited"
+    },
+    {
+      "from": "Task",
+      "to": "Practitioner",
+      "via": "Task.requester",
+      "kind": "inherited"
+    },
+    {
+      "from": "Task",
+      "to": "PractitionerRole",
+      "via": "Task.requester",
+      "kind": "inherited"
+    },
+    {
+      "from": "Task",
+      "to": "Location",
+      "via": "Task.location",
+      "kind": "inherited"
     }
   ]
 };

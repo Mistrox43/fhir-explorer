@@ -307,6 +307,16 @@
   color: var(--accent-2);
   font-weight: 600;
 }
+.badge--modifier {
+  background: var(--required);
+  color: #fff;
+  font-weight: 700;
+}
+.badge--slice-def {
+  background: var(--code-bg);
+  color: var(--text);
+  border: 1px dashed var(--border);
+}
 .element-row__name--slice {
   color: var(--accent-2);
 }
@@ -402,6 +412,14 @@
   stroke: var(--border);
   stroke-width: 1.5;
 }
+.graph__edge--profiled {
+  stroke: var(--accent);
+  stroke-width: 1.8;
+}
+.graph__edge--inherited {
+  stroke: var(--border);
+  stroke-dasharray: 4 3;
+}
 .graph__arrow {
   fill: var(--text);
   opacity: 0.5;
@@ -438,6 +456,26 @@
   font-size: 13px;
   margin-top: 12px;
   text-align: center;
+}
+.graph__legend p {
+  margin: 2px 0;
+}
+.graph__legend-edges {
+  opacity: 0.85;
+}
+.graph__legend-line {
+  display: inline-block;
+  width: 22px;
+  height: 0;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.graph__legend-line--profiled {
+  border-top: 2px solid var(--accent);
+}
+.graph__legend-line--inherited {
+  border-top: 2px dashed var(--text);
+  opacity: 0.5;
 }
 .graph__legend-item {
   font-weight: 600;
@@ -513,4 +551,51 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+}
+
+/* ---- Element detail extras ---- */
+.element-row__comment {
+  font-style: italic;
+  opacity: 0.85;
+}
+.element-row__detail dd code {
+  margin-right: 4px;
+}
+.element-row__slice-rules {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* ---- Extensions-on-profile panel ---- */
+.profile-extensions {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  background: var(--panel);
+}
+.profile-extensions > summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+.profile-extensions__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 10px;
+}
+.profile-extensions__context {
+  font-size: 12px;
+  min-width: 140px;
+  color: var(--accent-2);
+  background: none;
+  padding: 0;
+}
+.profile-extensions__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }

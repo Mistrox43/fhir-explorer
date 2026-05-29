@@ -38,8 +38,14 @@ function ElementRow({
 }) {
   const [open, setOpen] = useState(false);
   const card = cardinality(element);
-  const hasDetail =
-    element.definition || element.fixed || element.binding || element.types.some((t) => t.targets);
+  const hasDetail = Boolean(
+    element.definition ||
+      element.comment ||
+      element.fixed ||
+      element.binding ||
+      element.slicing ||
+      element.types.some((t) => t.targets),
+  );
 
   return (
     <li className="element-row" style={{ marginLeft: (element.depth - 1) * 18 }}>
@@ -61,6 +67,16 @@ function ElementRow({
             S
           </span>
         )}
+        {element.isModifier && (
+          <span className="badge badge--modifier" title="Modifier element">
+            ?!
+          </span>
+        )}
+        {element.slicing && (
+          <span className="badge badge--slice-def" title="This element is sliced">
+            sliced
+          </span>
+        )}
         {element.types.map((t, i) => (
           <span key={`${t.code}-${i}`} className="badge badge--type">
             {t.code}
@@ -78,7 +94,21 @@ function ElementRow({
       {open && hasDetail && (
         <div className="element-row__detail">
           {element.definition && <p>{element.definition}</p>}
+          {element.comment && <p className="element-row__comment">{element.comment}</p>}
           <dl>
+            {element.slicing && (
+              <>
+                <dt>Sliced by</dt>
+                <dd>
+                  {element.slicing.discriminator.map((d) => (
+                    <code key={d}>{d}</code>
+                  ))}
+                  {element.slicing.rules && (
+                    <span className="element-row__slice-rules"> ({element.slicing.rules})</span>
+                  )}
+                </dd>
+              </>
+            )}
             <dt>Path</dt>
             <dd>
               <code>{element.id}</code>

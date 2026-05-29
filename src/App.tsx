@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import './App.css';
 import { ResourceList } from './components/ResourceList';
 import { ElementTree } from './components/ElementTree';
+import { ProfileExtensions } from './components/ProfileExtensions';
 import { ExampleViewer } from './components/ExampleViewer';
 import { RelationshipGraph } from './components/RelationshipGraph';
 import { CodeSystemView, ValueSetView } from './components/TerminologyView';
@@ -118,7 +119,10 @@ function Detail({
           </nav>
           <section className="view">
             {tab === 'explorer' && (
-              <ElementTree elements={profile.elements} onNavigate={navigate} />
+              <>
+                <ProfileExtensions uses={profile.extensionsOnProfile} onNavigate={navigate} />
+                <ElementTree elements={profile.elements} onNavigate={navigate} />
+              </>
             )}
             {tab === 'relationships' && (
               <RelationshipGraph focus={profile.name} onNavigate={navigate} />

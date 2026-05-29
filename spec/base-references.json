@@ -1,0 +1,628 @@
+{
+  "Patient": [
+    {
+      "path": "contact.organization",
+      "targets": [
+        "Organization"
+      ]
+    },
+    {
+      "path": "generalPractitioner",
+      "targets": [
+        "Organization",
+        "Practitioner",
+        "PractitionerRole"
+      ]
+    },
+    {
+      "path": "managingOrganization",
+      "targets": [
+        "Organization"
+      ]
+    },
+    {
+      "path": "link.other",
+      "targets": [
+        "Patient",
+        "RelatedPerson"
+      ]
+    }
+  ],
+  "Practitioner": [
+    {
+      "path": "qualification.issuer",
+      "targets": [
+        "Organization"
+      ]
+    }
+  ],
+  "PractitionerRole": [
+    {
+      "path": "practitioner",
+      "targets": [
+        "Practitioner"
+      ]
+    },
+    {
+      "path": "organization",
+      "targets": [
+        "Organization"
+      ]
+    },
+    {
+      "path": "location",
+      "targets": [
+        "Location"
+      ]
+    },
+    {
+      "path": "healthcareService",
+      "targets": [
+        "HealthcareService"
+      ]
+    },
+    {
+      "path": "endpoint",
+      "targets": [
+        "Endpoint"
+      ]
+    }
+  ],
+  "Organization": [
+    {
+      "path": "partOf",
+      "targets": [
+        "Organization"
+      ]
+    },
+    {
+      "path": "endpoint",
+      "targets": [
+        "Endpoint"
+      ]
+    }
+  ],
+  "Location": [
+    {
+      "path": "managingOrganization",
+      "targets": [
+        "Organization"
+      ]
+    },
+    {
+      "path": "partOf",
+      "targets": [
+        "Location"
+      ]
+    },
+    {
+      "path": "endpoint",
+      "targets": [
+        "Endpoint"
+      ]
+    }
+  ],
+  "Appointment": [
+    {
+      "path": "reasonReference",
+      "targets": [
+        "Condition",
+        "Procedure",
+        "Observation",
+        "ImmunizationRecommendation"
+      ]
+    },
+    {
+      "path": "slot",
+      "targets": [
+        "Slot"
+      ]
+    },
+    {
+      "path": "basedOn",
+      "targets": [
+        "ServiceRequest"
+      ]
+    },
+    {
+      "path": "participant.actor",
+      "targets": [
+        "Patient",
+        "Practitioner",
+        "PractitionerRole",
+        "RelatedPerson",
+        "Device",
+        "HealthcareService",
+        "Location"
+      ]
+    }
+  ],
+  "Schedule": [
+    {
+      "path": "actor",
+      "targets": [
+        "Patient",
+        "Practitioner",
+        "PractitionerRole",
+        "RelatedPerson",
+        "Device",
+        "HealthcareService",
+        "Location"
+      ]
+    }
+  ],
+  "Slot": [
+    {
+      "path": "schedule",
+      "targets": [
+        "Schedule"
+      ]
+    }
+  ],
+  "Encounter": [
+    {
+      "path": "subject",
+      "targets": [
+        "Patient",
+        "Group"
+      ]
+    },
+    {
+      "path": "episodeOfCare",
+      "targets": [
+        "EpisodeOfCare"
+      ]
+    },
+    {
+      "path": "basedOn",
+      "targets": [
+        "ServiceRequest"
+      ]
+    },
+    {
+      "path": "participant.individual",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole",
+        "RelatedPerson"
+      ]
+    },
+    {
+      "path": "appointment",
+      "targets": [
+        "Appointment"
+      ]
+    },
+    {
+      "path": "reasonReference",
+      "targets": [
+        "Condition",
+        "Procedure",
+        "Observation",
+        "ImmunizationRecommendation"
+      ]
+    },
+    {
+      "path": "diagnosis.condition",
+      "targets": [
+        "Condition",
+        "Procedure"
+      ]
+    },
+    {
+      "path": "account",
+      "targets": [
+        "Account"
+      ]
+    },
+    {
+      "path": "hospitalization.origin",
+      "targets": [
+        "Location",
+        "Organization"
+      ]
+    },
+    {
+      "path": "hospitalization.destination",
+      "targets": [
+        "Location",
+        "Organization"
+      ]
+    },
+    {
+      "path": "location.location",
+      "targets": [
+        "Location"
+      ]
+    },
+    {
+      "path": "serviceProvider",
+      "targets": [
+        "Organization"
+      ]
+    },
+    {
+      "path": "partOf",
+      "targets": [
+        "Encounter"
+      ]
+    }
+  ],
+  "Procedure": [
+    {
+      "path": "basedOn",
+      "targets": [
+        "CarePlan",
+        "ServiceRequest"
+      ]
+    },
+    {
+      "path": "partOf",
+      "targets": [
+        "Procedure",
+        "Observation",
+        "MedicationAdministration"
+      ]
+    },
+    {
+      "path": "subject",
+      "targets": [
+        "Patient",
+        "Group"
+      ]
+    },
+    {
+      "path": "encounter",
+      "targets": [
+        "Encounter"
+      ]
+    },
+    {
+      "path": "recorder",
+      "targets": [
+        "Patient",
+        "RelatedPerson",
+        "Practitioner",
+        "PractitionerRole"
+      ]
+    },
+    {
+      "path": "asserter",
+      "targets": [
+        "Patient",
+        "RelatedPerson",
+        "Practitioner",
+        "PractitionerRole"
+      ]
+    },
+    {
+      "path": "performer.actor",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole",
+        "Organization",
+        "Patient",
+        "RelatedPerson",
+        "Device"
+      ]
+    },
+    {
+      "path": "performer.onBehalfOf",
+      "targets": [
+        "Organization"
+      ]
+    },
+    {
+      "path": "location",
+      "targets": [
+        "Location"
+      ]
+    },
+    {
+      "path": "reasonReference",
+      "targets": [
+        "Condition",
+        "Observation",
+        "Procedure",
+        "DiagnosticReport",
+        "DocumentReference"
+      ]
+    },
+    {
+      "path": "report",
+      "targets": [
+        "DiagnosticReport",
+        "DocumentReference",
+        "Composition"
+      ]
+    },
+    {
+      "path": "complicationDetail",
+      "targets": [
+        "Condition"
+      ]
+    },
+    {
+      "path": "focalDevice.manipulated",
+      "targets": [
+        "Device"
+      ]
+    },
+    {
+      "path": "usedReference",
+      "targets": [
+        "Device",
+        "Medication",
+        "Substance"
+      ]
+    }
+  ],
+  "Observation": [
+    {
+      "path": "basedOn",
+      "targets": [
+        "CarePlan",
+        "DeviceRequest",
+        "ImmunizationRecommendation",
+        "MedicationRequest",
+        "NutritionOrder",
+        "ServiceRequest"
+      ]
+    },
+    {
+      "path": "partOf",
+      "targets": [
+        "MedicationAdministration",
+        "MedicationDispense",
+        "MedicationStatement",
+        "Procedure",
+        "Immunization",
+        "ImagingStudy"
+      ]
+    },
+    {
+      "path": "subject",
+      "targets": [
+        "Patient",
+        "Group",
+        "Device",
+        "Location"
+      ]
+    },
+    {
+      "path": "encounter",
+      "targets": [
+        "Encounter"
+      ]
+    },
+    {
+      "path": "performer",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole",
+        "Organization",
+        "CareTeam",
+        "Patient",
+        "RelatedPerson"
+      ]
+    },
+    {
+      "path": "specimen",
+      "targets": [
+        "Specimen"
+      ]
+    },
+    {
+      "path": "device",
+      "targets": [
+        "Device",
+        "DeviceMetric"
+      ]
+    },
+    {
+      "path": "hasMember",
+      "targets": [
+        "Observation",
+        "QuestionnaireResponse",
+        "MolecularSequence"
+      ]
+    },
+    {
+      "path": "derivedFrom",
+      "targets": [
+        "DocumentReference",
+        "ImagingStudy",
+        "Media",
+        "QuestionnaireResponse",
+        "Observation",
+        "MolecularSequence"
+      ]
+    }
+  ],
+  "MedicationAdministration": [
+    {
+      "path": "partOf",
+      "targets": [
+        "MedicationAdministration",
+        "Procedure"
+      ]
+    },
+    {
+      "path": "medication[x]",
+      "targets": [
+        "Medication"
+      ]
+    },
+    {
+      "path": "subject",
+      "targets": [
+        "Patient",
+        "Group"
+      ]
+    },
+    {
+      "path": "context",
+      "targets": [
+        "Encounter",
+        "EpisodeOfCare"
+      ]
+    },
+    {
+      "path": "performer.actor",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole",
+        "Patient",
+        "RelatedPerson",
+        "Device"
+      ]
+    },
+    {
+      "path": "reasonReference",
+      "targets": [
+        "Condition",
+        "Observation",
+        "DiagnosticReport"
+      ]
+    },
+    {
+      "path": "request",
+      "targets": [
+        "MedicationRequest"
+      ]
+    },
+    {
+      "path": "device",
+      "targets": [
+        "Device"
+      ]
+    },
+    {
+      "path": "eventHistory",
+      "targets": [
+        "Provenance"
+      ]
+    }
+  ],
+  "Task": [
+    {
+      "path": "partOf",
+      "targets": [
+        "Task"
+      ]
+    },
+    {
+      "path": "encounter",
+      "targets": [
+        "Encounter"
+      ]
+    },
+    {
+      "path": "requester",
+      "targets": [
+        "Device",
+        "Organization",
+        "Patient",
+        "Practitioner",
+        "PractitionerRole",
+        "RelatedPerson"
+      ]
+    },
+    {
+      "path": "owner",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole",
+        "Organization",
+        "CareTeam",
+        "HealthcareService",
+        "Patient",
+        "Device",
+        "RelatedPerson"
+      ]
+    },
+    {
+      "path": "location",
+      "targets": [
+        "Location"
+      ]
+    },
+    {
+      "path": "insurance",
+      "targets": [
+        "Coverage",
+        "ClaimResponse"
+      ]
+    },
+    {
+      "path": "relevantHistory",
+      "targets": [
+        "Provenance"
+      ]
+    },
+    {
+      "path": "restriction.recipient",
+      "targets": [
+        "Patient",
+        "Practitioner",
+        "PractitionerRole",
+        "RelatedPerson",
+        "Group",
+        "Organization"
+      ]
+    }
+  ],
+  "MessageHeader": [
+    {
+      "path": "destination.target",
+      "targets": [
+        "Device"
+      ]
+    },
+    {
+      "path": "destination.receiver",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole",
+        "Organization"
+      ]
+    },
+    {
+      "path": "sender",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole",
+        "Organization"
+      ]
+    },
+    {
+      "path": "enterer",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole"
+      ]
+    },
+    {
+      "path": "author",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole"
+      ]
+    },
+    {
+      "path": "responsible",
+      "targets": [
+        "Practitioner",
+        "PractitionerRole",
+        "Organization"
+      ]
+    },
+    {
+      "path": "response.details",
+      "targets": [
+        "OperationOutcome"
+      ]
+    }
+  ],
+  "Bundle": []
+}
