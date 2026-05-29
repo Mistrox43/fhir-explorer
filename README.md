@@ -9,8 +9,19 @@ are learning the spec.
 The content is **generated directly from the published FHIR package** (`ca.on.oh-seris`), so
 it stays faithful to the spec and can be regenerated whenever the IG is updated.
 
+The app has two modes: **Orientation** (a guided, business-first walkthrough) and **Reference**
+(the full artifact browser). It opens in Orientation by default.
+
 ## Features
 
+- **Orientation** — A guided walkthrough grounded in the IG's surgical business workflow. It
+  opens on a curated **Key Journey** (open an OR → schedule → block → book → perform → cancel →
+  report) and offers two full tracks — **OR Schedule** (16 use cases) and **OR Case** (8 use
+  cases, modelled as `Encounter` state transitions). Each business event shows the FHIR artifacts
+  it produces (clickable chips that jump into the Reference explorer), an illustrative example
+  payload, and the relevant profile's generated template. Business descriptions are summarised
+  from the IG's [Business Context · Use Cases](https://simplifier.net/guide/ca-on-seris-r4-iguide/Table-of-Contents/BusinessContext/Use-Cases?version=1.1.0)
+  page; every artifact link is validated against the loaded package data.
 - **Explorer** — Browse the 15 resource profiles and drill into each constrained element:
   cardinality, **must-support** (`S`), data type(s), value-set bindings, fixed/pattern values,
   and slicing. Reference elements and extensions link straight to their definitions.

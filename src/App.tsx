@@ -7,6 +7,7 @@ import { ExampleViewer } from './components/ExampleViewer';
 import { RelationshipGraph } from './components/RelationshipGraph';
 import { CodeSystemView, ValueSetView } from './components/TerminologyView';
 import { CapabilityView } from './components/CapabilityView';
+import { Orientation } from './components/Orientation';
 import {
   SPEC,
   capabilityByName,
@@ -18,8 +19,10 @@ import {
 import type { Selection } from './fhir/spec';
 
 type ProfileTab = 'explorer' | 'relationships' | 'template';
+type Mode = 'orientation' | 'reference';
 
 export default function App() {
+  const [mode, setMode] = useState<Mode>('orientation');
   const [selected, setSelected] = useState<Selection>({
     kind: 'profile',
     name: SPEC.profiles[0].name,
@@ -29,6 +32,12 @@ export default function App() {
   function navigate(sel: Selection) {
     setSelected(sel);
     if (sel.kind === 'profile') setTab('explorer');
+  }
+
+  // Jump from a business event in Orientation to its artifact in Reference mode.
+  function openArtifact(sel: Selection) {
+    setMode('reference');
+    navigate(sel);
   }
 
   return (
@@ -45,21 +54,47 @@ export default function App() {
             </p>
           </div>
         </div>
-        <a className="app__version" href={SPEC.meta.guideUrl} target="_blank" rel="noreferrer">
-          guide v{SPEC.meta.guideVersion} · pkg {SPEC.meta.packageVersion} · FHIR{' '}
-          {SPEC.meta.fhirVersion} ↗
-        </a>
+        <div className="app__headtools">
+          <div className="mode-toggle" role="tablist" aria-label="Mode">
+            {(
+              [
+                ['orientation', 'Orientation'],
+                ['reference', 'Reference'],
+              ] as [Mode, string][]
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                className={`mode-toggle__btn${mode === id ? ' mode-toggle__btn--active' : ''}`}
+                onClick={() => setMode(id)}
+                aria-selected={mode === id}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <a className="app__version" href={SPEC.meta.guideUrl} target="_blank" rel="noreferrer">
+            guide v{SPEC.meta.guideVersion} · pkg {SPEC.meta.packageVersion} · FHIR{' '}
+            {SPEC.meta.fhirVersion} ↗
+          </a>
+        </div>
       </header>
 
-      <div className="app__body">
-        <aside className="app__sidebar">
-          <ResourceList selected={selected} onSelect={navigate} />
-        </aside>
-
-        <main className="app__main">
-          <Detail selected={selected} tab={tab} setTab={setTab} navigate={navigate} />
+      {mode === 'orientation' ? (
+        <main className="app__main app__main--full">
+          <Orientation onOpenArtifact={openArtifact} />
         </main>
-      </div>
+      ) : (
+        <div className="app__body">
+          <aside className="app__sidebar">
+            <ResourceList selected={selected} onSelect={navigate} />
+          </aside>
+          <main className="app__main">
+            <Detail selected={selected} tab={tab} setTab={setTab} navigate={navigate} />
+          </main>
+        </div>
+      )}
     </div>
   );
 }
