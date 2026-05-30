@@ -10,6 +10,7 @@ import { CodeSystemView, ValueSetView } from './components/TerminologyView';
 import { CapabilityView } from './components/CapabilityView';
 import { Orientation } from './components/Orientation';
 import { ConformanceChecker } from './components/ConformanceChecker';
+import { MessageAssembler } from './components/MessageAssembler';
 import { CommandPalette } from './components/CommandPalette';
 import { CodeDecoder } from './components/CodeDecoder';
 import {
@@ -91,6 +92,7 @@ export default function App() {
     ['orientation', 'Orientation'],
     ['reference', 'Reference'],
     ['validate', 'Validate'],
+    ['build', 'Build'],
   ];
 
   return (
@@ -141,7 +143,14 @@ export default function App() {
       {mode === 'validate' && (
         <main className="app__main app__main--full">
           <h2 className="view-title">Conformance checker</h2>
-          <ConformanceChecker key={seed?.nonce ?? 'blank'} seed={seed} />
+          <ConformanceChecker key={seed?.nonce ?? 'blank'} seed={seed} onOpen={openArtifact} />
+        </main>
+      )}
+
+      {mode === 'build' && (
+        <main className="app__main app__main--full">
+          <h2 className="view-title">Message builder</h2>
+          <MessageAssembler onValidate={openValidator} />
         </main>
       )}
 

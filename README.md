@@ -57,6 +57,22 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
   shared links are stamped with the IG package version); the URL hash encodes mode + artifact + tab
   + element/code, so a refresh restores the exact view and links are shareable.
 
+### Advanced tools
+
+- **Build** — Assemble a ready-to-send SERIS message Bundle for a case event (scheduled / performed /
+  cancelled). The envelope is locked conformant (`type = "message"`, leading MessageHeader with the
+  fixed event system, a Task with `businessStatus`, `urn:uuid` fullUrls, wired focus, facility tag);
+  the case resource is seeded from the validated example. Includes a value-set **code picker**.
+- **Bundle Inspector** — Paste a whole message Bundle into Validate and it resolves the
+  MessageHeader → focus → Task → case structure, decodes the event (+ originating use case), validates
+  every entry with the same checker, flags unresolved references, and deep-links each entry.
+- **Scenario Player & Lifecycle** — Walk a case end-to-end (booked → performed / cancelled) with a
+  running state, plus an interactive Encounter business-status state-machine diagram.
+- **Troubleshooting playbooks** — Symptom → cause → fix entries, surfaced as "how to fix" on matching
+  findings and as a browsable list; transport/auth issues are flagged out-of-scope.
+- **Connectivity guide** — The CapabilityStatement view explains the create-only, message-Bundle-over-
+  REST contract with copy-paste curl / Postman / JSON skeletons and a minimal valid envelope.
+
 ### Privacy, offline & trust
 
 - **PHIPA / privacy** — The validator runs entirely in the browser; nothing is uploaded, the input

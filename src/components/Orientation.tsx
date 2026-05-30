@@ -3,18 +3,22 @@ import { ORIENTATION, keyJourneySteps, stepById } from '../orientation';
 import type { OrientationTrack } from '../orientation/types';
 import type { Selection } from '../fhir/spec';
 import { OrientationStepCard } from './OrientationStepCard';
+import { ScenarioPlayer } from './ScenarioPlayer';
+import { LifecycleMap } from './LifecycleMap';
 
 interface Props {
   onOpenArtifact: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
 }
 
-type SubView = 'journey' | 'schedule' | 'case';
+type SubView = 'journey' | 'schedule' | 'case' | 'scenario' | 'lifecycle';
 
 const SUBVIEWS: { id: SubView; label: string }[] = [
   { id: 'journey', label: 'Key Journey' },
   { id: 'schedule', label: 'OR Schedule' },
   { id: 'case', label: 'OR Case' },
+  { id: 'scenario', label: 'Scenario Player' },
+  { id: 'lifecycle', label: 'Lifecycle' },
 ];
 
 export function Orientation({ onOpenArtifact, onValidate }: Props) {
@@ -81,6 +85,10 @@ export function Orientation({ onOpenArtifact, onValidate }: Props) {
             />
           ))}
         </section>
+      ) : view === 'scenario' ? (
+        <ScenarioPlayer onOpen={onOpenArtifact} onValidate={onValidate} />
+      ) : view === 'lifecycle' ? (
+        <LifecycleMap />
       ) : (
         <TrackView
           track={tracks.find((t) => t.id === view) as OrientationTrack}

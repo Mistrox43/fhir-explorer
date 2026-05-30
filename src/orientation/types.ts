@@ -49,6 +49,15 @@ export interface OrientationTrack {
   steps: OrientationStep[];
 }
 
+/** A curated end-to-end scenario the player walks through, step by step. */
+export interface Scenario {
+  id: string;
+  title: string;
+  summary: string;
+  /** Ordered step ids (from the tracks) the player walks. */
+  stepIds: string[];
+}
+
 /** The whole orientation content set. */
 export interface OrientationContent {
   intro: {
@@ -60,6 +69,8 @@ export interface OrientationContent {
   };
   /** Ordered step ids forming the curated end-to-end story. */
   keyJourneyStepIds: string[];
+  /** Curated end-to-end scenarios for the player. */
+  scenarios: Scenario[];
   tracks: OrientationTrack[];
   /** Link to the IG page the narrative is summarised from. */
   sourceUrl: string;

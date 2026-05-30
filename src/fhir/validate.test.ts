@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { ORIENTATION } from '../orientation';
 import { SPEC } from './spec';
 import { validateResource } from './validate';
+import { inspectBundle } from './bundle';
+import { assembleMessage, MESSAGE_EVENTS } from './assemble';
 
 // Trust guardrail: every hand-authored example payload the app tells users to
 // copy must conform (no ERROR findings) to its SERIS profile, using the same
@@ -19,6 +21,26 @@ describe('bundled orientation examples conform to their SERIS profile', () => {
       const errors = r.findings.filter((f) => f.severity === 'error');
       const detail = errors.map((e) => `${e.path}: ${e.message}`).join('\n  ');
       expect(errors, `unexpected conformance errors:\n  ${detail}`).toHaveLength(0);
+    });
+  }
+});
+
+describe('assembled message Bundles pass the inspector with no errors', () => {
+  for (const ev of MESSAGE_EVENTS) {
+    it(`${ev.code} message`, () => {
+      const bundle = assembleMessage(ev.code);
+      expect(bundle, 'assembler should produce a bundle').toBeTruthy();
+      const r = inspectBundle(bundle);
+      const errs = [
+        ...r.structural.filter((f) => f.severity === 'error').map((f) => `${f.path}: ${f.message}`),
+        ...r.entries.flatMap((e) =>
+          e.validation.findings
+            .filter((f) => f.severity === 'error')
+            .map((f) => `entry ${e.index} (${e.resourceType}) ${f.path}: ${f.message}`),
+        ),
+      ];
+      expect(errs, `inspector errors:\n  ${errs.join('\n  ')}`).toHaveLength(0);
+      expect(r.danglingRefs, 'no dangling references').toHaveLength(0);
     });
   }
 });

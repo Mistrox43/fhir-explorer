@@ -2,7 +2,13 @@ import { useMemo, useState } from 'react';
 import { validateResource } from '../fhir/validate';
 import type { Finding, Severity, ValidationResult } from '../fhir/validate';
 import { SPEC } from '../fhir/spec';
+import type { Selection } from '../fhir/spec';
 import { redact } from '../fhir/redact';
+import { inspectBundle } from '../fhir/bundle';
+import type { BundleReport } from '../fhir/bundle';
+import { BundleInspector } from './BundleInspector';
+import { FindingItem } from './FindingItem';
+import { Playbooks } from './Playbooks';
 
 interface Props {
   /**
@@ -11,6 +17,8 @@ interface Props {
    * picked up as fresh initial state — no syncing effect needed.
    */
   seed?: { json: unknown; title?: string; nonce: number };
+  /** Deep-link from an inspected Bundle entry into Reference mode. */
+  onOpen?: (sel: Selection, at?: string) => void;
 }
 
 const SEVERITY_ORDER: Severity[] = ['error', 'warning', 'info', 'pass'];
@@ -21,22 +29,28 @@ const SEVERITY_LABEL: Record<Severity, string> = {
   pass: 'Passed',
 };
 
-export function ConformanceChecker({ seed }: Props) {
+export function ConformanceChecker({ seed, onOpen }: Props) {
   const [text, setText] = useState(() => (seed ? JSON.stringify(seed.json, null, 2) : ''));
   const [forced, setForced] = useState('');
   const [ran, setRan] = useState(!!seed);
   const [showPass, setShowPass] = useState(false);
 
-  const { result, parseError } = useMemo<{
+  const { result, bundle, parseError } = useMemo<{
     result: ValidationResult | null;
+    bundle: BundleReport | null;
     parseError: string | null;
   }>(() => {
-    if (!ran) return { result: null, parseError: null };
+    if (!ran) return { result: null, bundle: null, parseError: null };
+    let parsed: unknown;
     try {
-      return { result: validateResource(JSON.parse(text), forced || undefined), parseError: null };
+      parsed = JSON.parse(text);
     } catch (e) {
-      return { result: null, parseError: e instanceof Error ? e.message : 'Invalid JSON' };
+      return { result: null, bundle: null, parseError: e instanceof Error ? e.message : 'Invalid JSON' };
     }
+    if (parsed && typeof parsed === 'object' && (parsed as { resourceType?: string }).resourceType === 'Bundle') {
+      return { result: null, bundle: inspectBundle(parsed), parseError: null };
+    }
+    return { result: validateResource(parsed, forced || undefined), bundle: null, parseError: null };
   }, [text, forced, ran]);
 
   const grouped = useMemo(() => {
@@ -114,6 +128,8 @@ export function ConformanceChecker({ seed }: Props) {
 
       {parseError && <p className="checker__error">JSON parse error: {parseError}</p>}
 
+      {bundle && <BundleInspector report={bundle} onOpen={onOpen ?? (() => {})} />}
+
       {result && (
         <div className="checker__results" aria-live="polite">
           <div className="checker__summary">
@@ -145,11 +161,7 @@ export function ConformanceChecker({ seed }: Props) {
                 <h4 className={`checker__grouptitle checker__grouptitle--${sev}`}>{SEVERITY_LABEL[sev]}</h4>
                 <ul>
                   {items.map((f, i) => (
-                    <li key={`${sev}-${i}`} className={`finding finding--${sev}`}>
-                      <code className="finding__path">{f.path}</code>
-                      <span className="finding__msg">{f.message}</span>
-                      {f.provenance === 'not-checked' && <span className="finding__prov">not checked</span>}
-                    </li>
+                    <FindingItem key={`${sev}-${i}`} finding={f} />
                   ))}
                 </ul>
               </section>
@@ -157,6 +169,8 @@ export function ConformanceChecker({ seed }: Props) {
           })}
         </div>
       )}
+
+      <Playbooks />
     </div>
   );
 }

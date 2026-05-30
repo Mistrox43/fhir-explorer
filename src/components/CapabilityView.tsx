@@ -1,6 +1,7 @@
 import type { CapabilityStatementDef } from '../fhir/types';
 import type { Selection } from '../fhir/spec';
 import { profileNames } from '../fhir/spec';
+import { ConnectivityGuide } from './ConnectivityGuide';
 
 interface Props {
   capability: CapabilityStatementDef;
@@ -58,6 +59,8 @@ export function CapabilityView({ capability, onNavigate }: Props) {
           </tbody>
         </table>
       )}
+
+      <ConnectivityGuide />
     </div>
   );
 }

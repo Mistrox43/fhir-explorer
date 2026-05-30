@@ -48,6 +48,30 @@ export const ORIENTATION: OrientationContent = {
     'case-submit',
   ],
 
+  scenarios: [
+    {
+      id: 'elective-completed',
+      title: 'Elective case — booked → performed',
+      summary:
+        'The happy path: an elective case is booked, the surgery is performed and documented, then the case is published to the repository.',
+      stepIds: ['case-book', 'case-perform', 'case-submit'],
+    },
+    {
+      id: 'elective-cancelled',
+      title: 'Elective case — booked → cancelled',
+      summary:
+        'A booked case is cancelled (with reason and a rescheduled date), then the cancellation is published.',
+      stepIds: ['case-book', 'case-cancel', 'case-submit'],
+    },
+    {
+      id: 'or-setup',
+      title: 'Stand up an OR for the day',
+      summary:
+        'The schedule side: create the room, open a schedule for the shift, add a surgical block, then add slots.',
+      stepIds: ['sched-room', 'sched-create', 'sched-add-block', 'sched-create-slot'],
+    },
+  ],
+
   tracks: [
     // ----------------------------------------------------------------- OR SCHEDULE
     {
