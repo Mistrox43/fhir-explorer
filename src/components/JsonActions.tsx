@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
+import { SPEC } from '../fhir/spec';
 
 interface Props {
   /** A JSON value or a pre-stringified payload. */
@@ -30,7 +31,9 @@ export function JsonActions({ json, filename, extra }: Props) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename;
+    // Stamp the IG package version into the filename so a saved payload
+    // declares which SERIS build it reflects.
+    a.download = filename.replace(/\.json$/i, `.${SPEC.meta.packageVersion}.json`);
     a.click();
     URL.revokeObjectURL(url);
   }

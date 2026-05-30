@@ -1,8 +1,13 @@
+import { SPEC } from './spec';
 import type { ArtifactKind, Selection } from './spec';
 
 // Serializes the app's view into the URL hash so a refresh restores it and a
 // link can be shared to an exact profile / element / code. State carried:
 // mode + selection(kind,name) + tab + an optional anchor (element id or code).
+//
+// PRIVACY INVARIANT: the route encodes only artifact *selection* — never any
+// instance data pasted into the conformance checker. A shared link can reveal
+// which profile/element/code someone was looking at, never a patient payload.
 
 export type AppMode = 'orientation' | 'reference' | 'validate';
 
@@ -25,6 +30,8 @@ export function encodeRoute(r: AppRoute): string {
   }
   if (r.tab) p.set('tab', r.tab);
   if (r.anchor) p.set('at', r.anchor);
+  // Stamp the IG package version so a shared link declares the build it reflects.
+  p.set('v', SPEC.meta.packageVersion);
   return p.toString();
 }
 

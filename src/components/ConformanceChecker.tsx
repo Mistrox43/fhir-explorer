@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { validateResource } from '../fhir/validate';
 import type { Finding, Severity, ValidationResult } from '../fhir/validate';
 import { SPEC } from '../fhir/spec';
+import { redact } from '../fhir/redact';
 
 interface Props {
   /**
@@ -52,8 +53,10 @@ export function ConformanceChecker({ seed }: Props) {
         and is explicit about what it can&rsquo;t see.
       </div>
       <p className="checker__privacy">
-        🔒 Everything runs in your browser — nothing is uploaded and the input is cleared when you
-        leave. Please paste de-identified (HTEST) data.
+        🔒 Everything runs in your browser — nothing is uploaded, the input is cleared when you leave,
+        and shareable links never include it. Prefer de-identified (HTEST) data; use{' '}
+        <strong>Redact PHI</strong> to mask names, identifiers, dates and addresses before sharing a
+        screenshot.
       </p>
 
       <div className="checker__input">
@@ -72,6 +75,20 @@ export function ConformanceChecker({ seed }: Props) {
           <div className="checker__buttons">
             <button type="button" className="json-action json-action--accent" onClick={() => setRan(true)}>
               Validate
+            </button>
+            <button
+              type="button"
+              className="json-action"
+              title="Mask names, identifiers, birth date, addresses and contact details"
+              onClick={() => {
+                try {
+                  setText(JSON.stringify(redact(JSON.parse(text)), null, 2));
+                } catch {
+                  // not valid JSON yet — nothing to redact
+                }
+              }}
+            >
+              Redact PHI
             </button>
             <button
               type="button"

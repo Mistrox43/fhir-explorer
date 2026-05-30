@@ -53,9 +53,21 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
   the reverse "where is this used" lookup support teams need.
 - **Build & Review checklist** — A per-profile tab listing just the required + must-support elements
   (with bindings, fixed values, and cleaned SERIS guidance) and a "copy as list" for tickets/specs.
-- **Copy / download + shareable deep links** — Copy or download any JSON payload; the URL hash
-  encodes mode + artifact + tab + element/code, so a refresh restores the exact view and links are
-  shareable.
+- **Copy / download + shareable deep links** — Copy or download any JSON payload (downloads and
+  shared links are stamped with the IG package version); the URL hash encodes mode + artifact + tab
+  + element/code, so a refresh restores the exact view and links are shareable.
+
+### Privacy, offline & trust
+
+- **PHIPA / privacy** — The validator runs entirely in the browser; nothing is uploaded, the input
+  is cleared when you leave, and shared links **never** contain pasted instance data (only artifact
+  selection). A **Redact PHI** button masks names, identifiers, dates, addresses and contact details.
+- **Offline** — The app makes no runtime network calls (the whole IG is bundled; fonts are
+  system fonts; external links only open on click), so it works fully offline from a static host or
+  saved files.
+- **Trust** — A test suite ([`src/fhir/validate.test.ts`](src/fhir/validate.test.ts), `npm test`,
+  enforced in CI) runs every bundled example through the same conformance checker the UI exposes, so
+  the payloads users are told to copy are proven against the spec.
 
 ## How the data is built
 

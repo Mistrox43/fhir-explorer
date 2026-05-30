@@ -10,6 +10,16 @@ const SD = 'http://ontariohealth.ca/fhir/StructureDefinition';
 const CS = 'http://ontariohealth.ca/fhir/CodeSystem';
 const profileUrl = (n: string) => `${SD}/ca-on-seris-profile-${n}`;
 
+// SERIS sends references by business identifier (it is message-based, not a
+// shared FHIR server) and tags resources with the submitting facility id +
+// an HTEST security label. These are required on Schedule/Slot/Location.
+const FACILITY = 'https://fhir.infoway-inforoute.ca/NamingSystem/ca-on-health-care-facility-id';
+const envMeta = (name: string) => ({
+  profile: [profileUrl(name)],
+  security: [{ system: 'http://terminology.hl7.org/CodeSystem/v3-ActReason', code: 'HTEST' }],
+  tag: [{ system: FACILITY, code: '4001' }],
+});
+
 export const ORIENTATION: OrientationContent = {
   sourceUrl:
     'https://simplifier.net/guide/ca-on-seris-r4-iguide/Table-of-Contents/BusinessContext/Use-Cases?version=1.1.0',
@@ -79,19 +89,19 @@ export const ORIENTATION: OrientationContent = {
             description: 'A worked Location instance: the same must-support elements as the profile template, filled in, plus the OR Unit extension.',
             json: {
               resourceType: 'Location',
-              meta: { profile: [profileUrl('Location')] },
+              meta: envMeta('Location'),
               extension: [{ url: `${SD}/ca-on-seris-ext-or-unit`, valueString: 'Main OR Suite' }],
               identifier: [{ system: 'http://hospital.example/locations', value: 'OR-3' }],
               status: 'active',
               name: 'OR-3',
-              type: [{ coding: [{ system: `${CS}/location-functional-centre`, code: '71350', display: 'Specialty Clinic' }] }],
-              partOf: { reference: 'Organization/site-hospital' },
+              type: [{ coding: [{ system: 'http://terminology.hl7.org/CodeSystem/v3-RoleCode', code: 'OR', display: 'Operating Room' }] }],
+              partOf: { identifier: { system: FACILITY, value: '4000' } },
             },
             annotations: [
-              { path: 'extension', note: 'ORUnit extension — the OR unit this room belongs to.' },
+              { path: 'meta', note: 'meta.tag carries the facility id; meta.security = HTEST (test) — both required by SERIS.' },
+              { path: 'type', note: 'Location.type is fixed to the v3-RoleCode system; "OR" = Operating Room. (Functional centre goes in an extension.)' },
+              { path: 'partOf', note: 'References the parent site by identifier (facility id) — SERIS references by identifier, not literal URLs.' },
               { path: 'status', note: 'active = the room is in use; set to inactive to decommission it (UC12).' },
-              { path: 'type', note: 'Functional centre code from LocationFunctionalCentre.' },
-              { path: 'partOf', note: 'Links the room to its site (Organization).' },
             ],
           },
         },
@@ -114,7 +124,7 @@ export const ORIENTATION: OrientationContent = {
             description: 'The must-support Schedule elements filled in, plus the shift-type and hours-of-operation extensions.',
             json: {
               resourceType: 'Schedule',
-              meta: { profile: [profileUrl('Schedule')] },
+              meta: envMeta('Schedule'),
               extension: [
                 { url: `${SD}/ca-on-seris-ext-shift-type`, valueString: 'Day' },
                 {
@@ -128,12 +138,12 @@ export const ORIENTATION: OrientationContent = {
               ],
               identifier: [{ system: 'http://hospital.example/schedules', value: 'SCH-OR3-2025-06-02' }],
               active: true,
-              actor: [{ reference: 'Location/or-3' }],
+              actor: [{ identifier: { system: FACILITY, value: '4001' } }],
               planningHorizon: { start: '2025-06-02T07:30:00-04:00', end: '2025-06-02T15:30:00-04:00' },
             },
             annotations: [
-              { path: 'extension', note: 'ShiftType + HoursOfOperation (start/stop/days) extensions.' },
-              { path: 'actor', note: 'References the OR room (Location) this schedule is for.' },
+              { path: 'meta', note: 'Required facility tag + HTEST security label.' },
+              { path: 'actor', note: 'The OR room (Location) this schedule is for, referenced by identifier.' },
               { path: 'planningHorizon', note: 'The shift window; closing a schedule (UC7) shortens this.' },
             ],
           },
@@ -172,7 +182,7 @@ export const ORIENTATION: OrientationContent = {
             description: 'The must-support Slot elements filled in, plus the SERIS Block extension naming the service and surgeon(s).',
             json: {
               resourceType: 'Slot',
-              meta: { profile: [profileUrl('Slot')] },
+              meta: envMeta('Slot'),
               extension: [
                 {
                   url: `${SD}/ca-on-seris-ext-block`,
@@ -184,7 +194,7 @@ export const ORIENTATION: OrientationContent = {
               ],
               identifier: [{ system: 'http://hospital.example/slots', value: 'SLOT-1' }],
               serviceType: [{ coding: [{ system: 'http://snomed.info/sct', code: '310142007', display: 'Cardiac surgery service' }] }],
-              schedule: { reference: 'Schedule/sch-or3-2025-06-02' },
+              schedule: { identifier: { system: 'http://hospital.example/schedules', value: 'SCH-OR3-2025-06-02' } },
               status: 'busy-unavailable',
               start: '2025-06-02T07:30:00-04:00',
               end: '2025-06-02T11:30:00-04:00',
@@ -243,7 +253,7 @@ export const ORIENTATION: OrientationContent = {
             description: 'The same Slot, now free, carrying the SERIS Block Release extension (a complex extension with reason and date sub-extensions).',
             json: {
               resourceType: 'Slot',
-              meta: { profile: [profileUrl('Slot')] },
+              meta: envMeta('Slot'),
               extension: [
                 {
                   url: `${SD}/ca-on-seris-ext-block-release`,
@@ -255,7 +265,7 @@ export const ORIENTATION: OrientationContent = {
               ],
               identifier: [{ system: 'http://hospital.example/slots', value: 'SLOT-1' }],
               serviceType: [{ coding: [{ system: 'http://snomed.info/sct', code: '310142007', display: 'Cardiac surgery service' }] }],
-              schedule: { reference: 'Schedule/sch-or3-2025-06-02' },
+              schedule: { identifier: { system: 'http://hospital.example/schedules', value: 'SCH-OR3-2025-06-02' } },
               status: 'free',
               start: '2025-06-02T07:30:00-04:00',
               end: '2025-06-02T11:30:00-04:00',
@@ -349,7 +359,7 @@ export const ORIENTATION: OrientationContent = {
             description: 'Each affected Slot is made unavailable, carrying the closure reason via the SETP Closure extension.',
             json: {
               resourceType: 'Slot',
-              meta: { profile: [profileUrl('Slot')] },
+              meta: envMeta('Slot'),
               extension: [
                 {
                   url: `${SD}/ca-on-setp-ext-closures`,
@@ -358,7 +368,7 @@ export const ORIENTATION: OrientationContent = {
               ],
               identifier: [{ system: 'http://hospital.example/slots', value: 'SLOT-7' }],
               serviceType: [{ coding: [{ system: 'http://snomed.info/sct', code: '310142007', display: 'Cardiac surgery service' }] }],
-              schedule: { reference: 'Schedule/sch-or3-2025-07-01' },
+              schedule: { identifier: { system: 'http://hospital.example/schedules', value: 'SCH-OR3-2025-07-01' } },
               status: 'busy-unavailable',
               start: '2025-07-01T07:30:00-04:00',
               end: '2025-07-01T15:30:00-04:00',
@@ -516,18 +526,18 @@ export const ORIENTATION: OrientationContent = {
               ],
               status: 'completed',
               category: [{ coding: [{ system: 'http://snomed.info/sct', code: '310142007', display: 'Cardiac surgery service' }] }],
-              code: { coding: [{ system: 'http://snomed.info/sct', code: '179342005', display: 'Total knee replacement' }] },
+              code: { coding: [{ system: `${CS}/WTIS-procedure-code`, code: 'W.CRD.ABL', display: 'Cardiac - Ablation' }] },
               subject: { reference: 'Patient/example' },
               performedPeriod: { start: '2025-06-02T08:20:00-04:00', end: '2025-06-02T09:25:00-04:00' },
               performer: [{ actor: { reference: 'PractitionerRole/surgeon-1' } }],
-              location: { reference: 'Location/or-3' },
+              location: { identifier: { system: FACILITY, value: '4001' } },
               complication: [{ coding: [{ system: 'http://snomed.info/sct', code: '131148009', display: 'Bleeding' }] }],
             },
             annotations: [
+              { path: 'code', note: 'Procedure.code is fixed to the WTIS procedure-code system — surgeries use WTIS codes, not SNOMED.' },
               { path: 'extension', note: 'InRoom (wheels-in to wheels-out — central to OR efficiency), surgical checklist, and anaesthesia type.' },
-              { path: 'performedPeriod', note: 'When the surgery actually happened (the performed[x] choice element).' },
-              { path: 'performer', note: 'The operating surgeon (PractitionerRole).' },
-              { path: 'complication', note: 'Any intra-operative complication, from ProcedureComplication.' },
+              { path: 'performer', note: 'The operating surgeon (PractitionerRole), referenced literally.' },
+              { path: 'location', note: 'The OR room, referenced by facility identifier.' },
             ],
           },
         },

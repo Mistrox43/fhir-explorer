@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Profile, ProfileElement } from '../fhir/types';
 import type { Selection } from '../fhir/spec';
-import { valueSetByName } from '../fhir/spec';
+import { SPEC, valueSetByName } from '../fhir/spec';
 import { parseComment } from '../fhir/sanitize';
 
 interface Props {
@@ -36,7 +36,8 @@ export function ProfileChecklist({ profile, onNavigate }: Props) {
       return `- [ ] ${el.id} (${card})${el.short ? ` — ${el.short}` : ''}${flags ? `  [${flags}]` : ''}`;
     });
     try {
-      await navigator.clipboard.writeText(`# ${profile.name} — required & must-support\n${lines.join('\n')}`);
+      const header = `# ${profile.name} — required & must-support\n# SERIS ${SPEC.meta.package} ${SPEC.meta.packageVersion} (FHIR ${SPEC.meta.fhirVersion})`;
+      await navigator.clipboard.writeText(`${header}\n${lines.join('\n')}`);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch {

@@ -89,6 +89,19 @@ export function RelationshipGraph({ focus, onNavigate }: Props) {
         </defs>
       </svg>
 
+      <ul className="sr-only">
+        {nodes
+          .filter((n) => n.direction === 'outgoing')
+          .map((n) => (
+            <li key={`o-${n.name}`}>{focus} references {n.name}</li>
+          ))}
+        {nodes
+          .filter((n) => n.direction === 'incoming')
+          .map((n) => (
+            <li key={`i-${n.name}`}>{n.name} references {focus}</li>
+          ))}
+      </ul>
+
       <div className="graph__legend">
         <p>
           <span className="graph__legend-item graph__legend-item--outgoing">outgoing</span>
