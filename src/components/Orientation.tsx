@@ -6,6 +6,7 @@ import { OrientationStepCard } from './OrientationStepCard';
 
 interface Props {
   onOpenArtifact: (sel: Selection) => void;
+  onValidate: (json: unknown, title?: string) => void;
 }
 
 type SubView = 'journey' | 'schedule' | 'case';
@@ -16,7 +17,7 @@ const SUBVIEWS: { id: SubView; label: string }[] = [
   { id: 'case', label: 'OR Case' },
 ];
 
-export function Orientation({ onOpenArtifact }: Props) {
+export function Orientation({ onOpenArtifact, onValidate }: Props) {
   const [view, setView] = useState<SubView>('journey');
   const { intro, sourceUrl, tracks } = ORIENTATION;
 
@@ -71,20 +72,35 @@ export function Orientation({ onOpenArtifact }: Props) {
             Schedule and OR Case tracks above for every use case in detail.
           </p>
           {keyJourneySteps.map((step, i) => (
-            <OrientationStepCard key={step.id} step={step} index={i + 1} onOpen={onOpenArtifact} />
+            <OrientationStepCard
+              key={step.id}
+              step={step}
+              index={i + 1}
+              onOpen={onOpenArtifact}
+              onValidate={onValidate}
+            />
           ))}
         </section>
       ) : (
         <TrackView
           track={tracks.find((t) => t.id === view) as OrientationTrack}
           onOpen={onOpenArtifact}
+          onValidate={onValidate}
         />
       )}
     </div>
   );
 }
 
-function TrackView({ track, onOpen }: { track: OrientationTrack; onOpen: (sel: Selection) => void }) {
+function TrackView({
+  track,
+  onOpen,
+  onValidate,
+}: {
+  track: OrientationTrack;
+  onOpen: (sel: Selection) => void;
+  onValidate: (json: unknown, title?: string) => void;
+}) {
   return (
     <section className="orientation-steps">
       <p className="orientation-steps__lead">{track.summary}</p>
@@ -95,7 +111,7 @@ function TrackView({ track, onOpen }: { track: OrientationTrack; onOpen: (sel: S
             .map((id) => stepById.get(id))
             .filter((s) => s)
             .map((step) => (
-              <OrientationStepCard key={step!.id} step={step!} onOpen={onOpen} />
+              <OrientationStepCard key={step!.id} step={step!} onOpen={onOpen} onValidate={onValidate} />
             ))}
         </div>
       ))}

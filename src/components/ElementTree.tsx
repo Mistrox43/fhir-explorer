@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ProfileElement } from '../fhir/types';
 import type { Selection } from '../fhir/spec';
 import { profileNames, valueSetByName } from '../fhir/spec';
+import { parseComment } from '../fhir/sanitize';
 
 interface Props {
   elements: ProfileElement[];
-  onNavigate: (sel: Selection) => void;
+  onNavigate: (sel: Selection, at?: string) => void;
+  /** Element id to scroll to and highlight (from a deep link / search). */
+  anchor?: string;
 }
 
 /** Renders a profile/extension differential as an indented, expandable list. */
-export function ElementTree({ elements, onNavigate }: Props) {
+export function ElementTree({ elements, onNavigate, anchor }: Props) {
   if (elements.length === 0) {
     return <p className="empty">This profile applies no element-level constraints.</p>;
   }
@@ -17,7 +20,12 @@ export function ElementTree({ elements, onNavigate }: Props) {
     <div className="element-tree">
       <ul>
         {elements.map((el) => (
-          <ElementRow key={el.id} element={el} onNavigate={onNavigate} />
+          <ElementRow
+            key={el.id}
+            element={el}
+            onNavigate={onNavigate}
+            highlight={!!anchor && el.id === anchor}
+          />
         ))}
       </ul>
     </div>
@@ -32,15 +40,29 @@ function cardinality(el: ProfileElement): string | null {
 function ElementRow({
   element,
   onNavigate,
+  highlight,
 }: {
   element: ProfileElement;
-  onNavigate: (sel: Selection) => void;
+  onNavigate: (sel: Selection, at?: string) => void;
+  highlight?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [flash, setFlash] = useState(false);
+  const ref = useRef<HTMLLIElement>(null);
   const card = cardinality(element);
+  const comment = parseComment(element.comment);
+
+  useEffect(() => {
+    if (!highlight || !ref.current) return;
+    setOpen(true);
+    setFlash(true);
+    ref.current.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    const t = window.setTimeout(() => setFlash(false), 1600);
+    return () => window.clearTimeout(t);
+  }, [highlight]);
   const hasDetail = Boolean(
     element.definition ||
-      element.comment ||
+      comment?.base ||
       element.fixed ||
       element.binding ||
       element.slicing ||
@@ -48,7 +70,11 @@ function ElementRow({
   );
 
   return (
-    <li className="element-row" style={{ marginLeft: (element.depth - 1) * 18 }}>
+    <li
+      ref={ref}
+      className={`element-row${flash ? ' element-row--flash' : ''}`}
+      style={{ marginLeft: (element.depth - 1) * 18 }}
+    >
       <button
         type="button"
         className="element-row__header"
@@ -90,11 +116,17 @@ function ElementRow({
         )}
       </button>
       {element.short && <p className="element-row__short">{element.short}</p>}
+      {comment?.seris && (
+        <p className="element-row__seris">
+          <span className="element-row__seris-tag">SERIS</span>
+          {comment.seris}
+        </p>
+      )}
 
       {open && hasDetail && (
         <div className="element-row__detail">
           {element.definition && <p>{element.definition}</p>}
-          {element.comment && <p className="element-row__comment">{element.comment}</p>}
+          {comment?.base && <p className="element-row__comment">{comment.base}</p>}
           <dl>
             {element.slicing && (
               <>

@@ -38,6 +38,25 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
 - **Terminology** — Browse the 22 value sets and 16 code systems with their concepts.
 - **Capabilities** — The IG's CapabilityStatements and their REST interactions.
 
+### Onboarding & developer tools (all client-side, no backend)
+
+- **Validate** — Paste a FHIR resource (or Bundle) and check it against its SERIS profile:
+  required/cardinality/fixed-value/value-set-binding/must-support, with plain-language
+  PASS/ERROR/WARN findings. It is a *structural SERIS-profile* check (not full FHIR R4) and is
+  explicit, per finding, about what it can't see. Nothing is uploaded. Every example and template
+  has a **"Validate this"** button that runs it inline.
+- **Search (⌘/Ctrl-K)** — A command palette over the whole IG: profiles, every element, extensions,
+  value sets, code systems, and all ~1,540 enumerated concepts. Enter jumps straight to the artifact
+  (and scrolls/flashes the exact element or code).
+- **Code decoder** — Pick a code in search (or type one) to get its meaning, the value set + code
+  system it lives in, every profile element that binds it, and the business events that emit it —
+  the reverse "where is this used" lookup support teams need.
+- **Build & Review checklist** — A per-profile tab listing just the required + must-support elements
+  (with bindings, fixed values, and cleaned SERIS guidance) and a "copy as list" for tickets/specs.
+- **Copy / download + shareable deep links** — Copy or download any JSON payload; the URL hash
+  encodes mode + artifact + tab + element/code, so a refresh restores the exact view and links are
+  shareable.
+
 ## How the data is built
 
 The IG's FHIR package is vendored into [`spec/ca.on.oh-seris/`](spec/ca.on.oh-seris). A

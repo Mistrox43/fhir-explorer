@@ -1,13 +1,17 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import { ResourceList } from './components/ResourceList';
 import { ElementTree } from './components/ElementTree';
 import { ProfileExtensions } from './components/ProfileExtensions';
+import { ProfileChecklist } from './components/ProfileChecklist';
 import { ExampleViewer } from './components/ExampleViewer';
 import { RelationshipGraph } from './components/RelationshipGraph';
 import { CodeSystemView, ValueSetView } from './components/TerminologyView';
 import { CapabilityView } from './components/CapabilityView';
 import { Orientation } from './components/Orientation';
+import { ConformanceChecker } from './components/ConformanceChecker';
+import { CommandPalette } from './components/CommandPalette';
+import { CodeDecoder } from './components/CodeDecoder';
 import {
   SPEC,
   capabilityByName,
@@ -17,28 +21,77 @@ import {
   valueSetByName,
 } from './fhir/spec';
 import type { Selection } from './fhir/spec';
+import { artifactExists } from './orientation';
+import { encodeRoute, parseRoute } from './fhir/route';
+import type { AppMode } from './fhir/route';
 
-type ProfileTab = 'explorer' | 'relationships' | 'template';
-type Mode = 'orientation' | 'reference';
+type ProfileTab = 'explorer' | 'checklist' | 'relationships' | 'template';
+
+interface ValidateSeed {
+  json: unknown;
+  title?: string;
+  nonce: number;
+}
+
+const initialRoute = parseRoute(typeof window !== 'undefined' ? window.location.hash : '');
+const validSelection = (sel?: Selection): Selection | undefined =>
+  sel && artifactExists(sel) ? sel : undefined;
 
 export default function App() {
-  const [mode, setMode] = useState<Mode>('orientation');
-  const [selected, setSelected] = useState<Selection>({
-    kind: 'profile',
-    name: SPEC.profiles[0].name,
-  });
-  const [tab, setTab] = useState<ProfileTab>('explorer');
+  const [mode, setMode] = useState<AppMode>(initialRoute.mode ?? 'orientation');
+  const [selected, setSelected] = useState<Selection>(
+    validSelection(initialRoute.selection) ?? { kind: 'profile', name: SPEC.profiles[0].name },
+  );
+  const [tab, setTab] = useState<ProfileTab>((initialRoute.tab as ProfileTab) ?? 'explorer');
+  const [anchor, setAnchor] = useState<string | undefined>(initialRoute.anchor);
+  const [seed, setSeed] = useState<ValidateSeed | undefined>();
+  const nonce = useRef(0);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [decode, setDecode] = useState<string | null>(null);
 
-  function navigate(sel: Selection) {
+  // Cmd/Ctrl-K opens the global search palette.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  // Keep the URL hash in sync so refresh restores the view and links are shareable.
+  useEffect(() => {
+    const want = encodeRoute({ mode, selection: selected, tab, anchor });
+    if (window.location.hash.replace(/^#/, '') !== want) {
+      window.history.replaceState(null, '', `#${want}`);
+    }
+  }, [mode, selected, tab, anchor]);
+
+  function navigate(sel: Selection, at?: string) {
     setSelected(sel);
+    setAnchor(at);
     if (sel.kind === 'profile') setTab('explorer');
   }
 
-  // Jump from a business event in Orientation to its artifact in Reference mode.
-  function openArtifact(sel: Selection) {
+  // Jump from a business event / search result to its artifact in Reference mode.
+  function openArtifact(sel: Selection, at?: string) {
     setMode('reference');
-    navigate(sel);
+    navigate(sel, at);
   }
+
+  function openValidator(json: unknown, title?: string) {
+    nonce.current += 1;
+    setSeed({ json, title, nonce: nonce.current });
+    setMode('validate');
+  }
+
+  const MODES: [AppMode, string][] = [
+    ['orientation', 'Orientation'],
+    ['reference', 'Reference'],
+    ['validate', 'Validate'],
+  ];
 
   return (
     <div className="app">
@@ -55,13 +108,11 @@ export default function App() {
           </div>
         </div>
         <div className="app__headtools">
+          <button type="button" className="app__search" onClick={() => setPaletteOpen(true)}>
+            <span aria-hidden>🔍</span> Search <kbd>⌘K</kbd>
+          </button>
           <div className="mode-toggle" role="tablist" aria-label="Mode">
-            {(
-              [
-                ['orientation', 'Orientation'],
-                ['reference', 'Reference'],
-              ] as [Mode, string][]
-            ).map(([id, label]) => (
+            {MODES.map(([id, label]) => (
               <button
                 key={id}
                 type="button"
@@ -81,20 +132,45 @@ export default function App() {
         </div>
       </header>
 
-      {mode === 'orientation' ? (
+      {mode === 'orientation' && (
         <main className="app__main app__main--full">
-          <Orientation onOpenArtifact={openArtifact} />
+          <Orientation onOpenArtifact={openArtifact} onValidate={openValidator} />
         </main>
-      ) : (
+      )}
+
+      {mode === 'validate' && (
+        <main className="app__main app__main--full">
+          <h2 className="view-title">Conformance checker</h2>
+          <ConformanceChecker key={seed?.nonce ?? 'blank'} seed={seed} />
+        </main>
+      )}
+
+      {mode === 'reference' && (
         <div className="app__body">
           <aside className="app__sidebar">
             <ResourceList selected={selected} onSelect={navigate} />
           </aside>
           <main className="app__main">
-            <Detail selected={selected} tab={tab} setTab={setTab} navigate={navigate} />
+            <Detail
+              selected={selected}
+              tab={tab}
+              setTab={setTab}
+              navigate={navigate}
+              anchor={anchor}
+              onValidate={openValidator}
+            />
           </main>
         </div>
       )}
+
+      {paletteOpen && (
+        <CommandPalette
+          onClose={() => setPaletteOpen(false)}
+          onOpen={openArtifact}
+          onDecode={(c) => setDecode(c)}
+        />
+      )}
+      {decode && <CodeDecoder code={decode} onClose={() => setDecode(null)} onOpen={openArtifact} />}
     </div>
   );
 }
@@ -104,15 +180,17 @@ function Detail({
   tab,
   setTab,
   navigate,
+  anchor,
+  onValidate,
 }: {
   selected: Selection;
   tab: ProfileTab;
   setTab: (t: ProfileTab) => void;
-  navigate: (sel: Selection) => void;
+  navigate: (sel: Selection, at?: string) => void;
+  anchor?: string;
+  onValidate: (json: unknown, title?: string) => void;
 }) {
   const profile = selected.kind === 'profile' ? profileByName.get(selected.name) : undefined;
-
-  // Header bits depend on the selected artifact kind.
   const header = useMemo(() => headerFor(selected), [selected]);
 
   return (
@@ -137,6 +215,7 @@ function Detail({
             {(
               [
                 ['explorer', 'Explorer'],
+                ['checklist', 'Checklist'],
                 ['relationships', 'Relationships'],
                 ['template', 'Template'],
               ] as [ProfileTab, string][]
@@ -156,18 +235,21 @@ function Detail({
             {tab === 'explorer' && (
               <>
                 <ProfileExtensions uses={profile.extensionsOnProfile} onNavigate={navigate} />
-                <ElementTree elements={profile.elements} onNavigate={navigate} />
+                <ElementTree elements={profile.elements} onNavigate={navigate} anchor={anchor} />
               </>
             )}
+            {tab === 'checklist' && <ProfileChecklist profile={profile} onNavigate={navigate} />}
             {tab === 'relationships' && (
               <RelationshipGraph focus={profile.name} onNavigate={navigate} />
             )}
-            {tab === 'template' && <ExampleViewer example={profile.template} />}
+            {tab === 'template' && (
+              <ExampleViewer example={profile.template} onValidate={onValidate} />
+            )}
           </section>
         </>
       ) : (
         <section className="view">
-          <ArtifactBody selected={selected} navigate={navigate} />
+          <ArtifactBody selected={selected} navigate={navigate} anchor={anchor} />
         </section>
       )}
     </>
@@ -177,22 +259,24 @@ function Detail({
 function ArtifactBody({
   selected,
   navigate,
+  anchor,
 }: {
   selected: Selection;
-  navigate: (sel: Selection) => void;
+  navigate: (sel: Selection, at?: string) => void;
+  anchor?: string;
 }) {
   switch (selected.kind) {
     case 'extension': {
       const ext = extensionByName.get(selected.name);
-      return ext ? <ElementTree elements={ext.elements} onNavigate={navigate} /> : null;
+      return ext ? <ElementTree elements={ext.elements} onNavigate={navigate} anchor={anchor} /> : null;
     }
     case 'valueSet': {
       const vs = valueSetByName.get(selected.name);
-      return vs ? <ValueSetView valueSet={vs} /> : null;
+      return vs ? <ValueSetView valueSet={vs} anchor={anchor} /> : null;
     }
     case 'codeSystem': {
       const cs = codeSystemByName.get(selected.name);
-      return cs ? <CodeSystemView codeSystem={cs} /> : null;
+      return cs ? <CodeSystemView codeSystem={cs} anchor={anchor} /> : null;
     }
     case 'capability': {
       const cap = capabilityByName.get(selected.name);

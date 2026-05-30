@@ -10,6 +10,7 @@ interface Props {
   /** Optional ordinal shown as a step number. */
   index?: number;
   onOpen: (sel: Selection) => void;
+  onValidate: (json: unknown, title?: string) => void;
 }
 
 const GROUP_LABELS: Record<string, string> = {
@@ -20,7 +21,7 @@ const GROUP_LABELS: Record<string, string> = {
 const GROUP_ORDER = ['produces', 'extends', 'codes'] as const;
 
 /** A single business-event card: narrative, FHIR artifacts, example, template. */
-export function OrientationStepCard({ step, index, onOpen }: Props) {
+export function OrientationStepCard({ step, index, onOpen, onValidate }: Props) {
   const [showFhir, setShowFhir] = useState(false);
   const template = step.primaryProfile ? profileByName.get(step.primaryProfile)?.template : undefined;
 
@@ -75,13 +76,13 @@ export function OrientationStepCard({ step, index, onOpen }: Props) {
               {step.example && (
                 <div className="ostep__fhir-block">
                   <h4>Example for this event</h4>
-                  <ExampleViewer example={step.example} />
+                  <ExampleViewer example={step.example} onValidate={onValidate} />
                 </div>
               )}
               {template && (
                 <div className="ostep__fhir-block">
                   <h4>{step.primaryProfile} profile template</h4>
-                  <ExampleViewer example={template} />
+                  <ExampleViewer example={template} onValidate={onValidate} />
                 </div>
               )}
             </div>
