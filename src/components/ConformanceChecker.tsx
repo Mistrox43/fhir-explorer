@@ -9,6 +9,8 @@ import type { BundleReport } from '../fhir/bundle';
 import { BundleInspector } from './BundleInspector';
 import { FindingItem } from './FindingItem';
 import { Playbooks } from './Playbooks';
+import { DiagnosisPanel } from './DiagnosisPanel';
+import { diagnose } from '../fhir/diagnose';
 
 interface Props {
   /**
@@ -145,6 +147,8 @@ export function ConformanceChecker({ seed, onOpen }: Props) {
               {result.counts.warning} warning · {result.counts.info} note · {result.counts.pass} passed
             </span>
           </div>
+
+          <DiagnosisPanel diagnoses={diagnose(result.findings)} />
 
           {SEVERITY_ORDER.map((sev) => {
             const items = grouped[sev];

@@ -1136,6 +1136,60 @@
   background: rgba(220, 38, 38, 0.14);
   color: var(--required);
 }
+.chip--warn {
+  background: rgba(217, 119, 6, 0.16);
+  color: #b45309;
+}
+
+/* ---- Diagnosis & next steps ---- */
+.diagnosis {
+  border: 1px solid var(--accent-border);
+  background: var(--accent-bg);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.diagnosis__title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.diagnosis__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.diagnosis__item {
+  border-left: 3px solid var(--required);
+  background: var(--panel);
+  border-radius: 0 8px 8px 0;
+  padding: 8px 12px;
+}
+.diagnosis__item--warning {
+  border-left-color: #d97706;
+}
+.diagnosis__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.diagnosis__head strong {
+  font-size: 14px;
+}
+.diagnosis__advice {
+  font-size: 13px;
+  margin-top: 4px;
+}
+.diagnosis__cause {
+  font-size: 12.5px;
+  margin-top: 6px;
+  opacity: 0.9;
+}
 .checker__matched {
   color: var(--text-h);
 }

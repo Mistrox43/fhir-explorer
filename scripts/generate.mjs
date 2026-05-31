@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SPEC_DIR = join(__dirname, '..', 'spec', 'ca.on.oh-seris');
 const BASE_REFS_FILE = join(__dirname, '..', 'spec', 'base-references.json');
+const BASE_ELEMENTS_FILE = join(__dirname, '..', 'spec', 'base-elements.json');
 const OUT_FILE = join(__dirname, '..', 'src', 'generated', 'seris.ts');
 
 const GUIDE_URL =
@@ -40,6 +41,12 @@ const baseRefs = existsSync(BASE_REFS_FILE)
   : {};
 if (!existsSync(BASE_REFS_FILE)) {
   console.warn('spec/base-references.json missing — inherited references will be omitted.');
+}
+const baseElements = existsSync(BASE_ELEMENTS_FILE)
+  ? JSON.parse(readFileSync(BASE_ELEMENTS_FILE, 'utf-8'))
+  : {};
+if (!existsSync(BASE_ELEMENTS_FILE)) {
+  console.warn('spec/base-elements.json missing — unknown-element detection will be disabled.');
 }
 
 const bare = (url) => (url ? String(url).split('|')[0] : url);
@@ -203,12 +210,17 @@ const profiles = profileSDs
     const referenced = new Set(
       referenceEdges.filter((e) => e.from === sd.name).map((e) => e.to),
     );
+    // Allowed top-level element names = base FHIR R4 ∪ differential depth-1 leaves
+    // (slice names stripped) — used by the validator to flag unknown/misspelled elements.
+    const diffTop = elements.filter((e) => e.depth === 1 && !e.leaf.includes(':')).map((e) => e.leaf);
+    const allowedTopLevel = [...new Set([...(baseElements[sd.type] ?? []), ...diffTop])].sort();
     return {
       name: sd.name,
       baseType: sd.type,
       url: bare(sd.url),
       description: sd.description || undefined,
       elements,
+      allowedTopLevel,
       referencedProfiles: [...referenced].sort(),
       extensionsOnProfile: (extensionUsesByProfile.get(sd.name) ?? []).sort((a, b) =>
         a.name.localeCompare(b.name),

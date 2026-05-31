@@ -42,9 +42,14 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
 
 - **Validate** — Paste a FHIR resource (or Bundle) and check it against its SERIS profile:
   required/cardinality/fixed-value/value-set-binding/must-support, with plain-language
-  PASS/ERROR/WARN findings. It is a *structural SERIS-profile* check (not full FHIR R4) and is
-  explicit, per finding, about what it can't see. Nothing is uploaded. Every example and template
-  has a **"Validate this"** button that runs it inline.
+  PASS/ERROR/WARN findings. It explicitly catches **typos** — a misspelled `resourceType`
+  (`Bundel` → "did you mean Bundle?") or an unknown/misspelled top-level element (`stauts` →
+  `status`), using base-FHIR element names derived from the R4 core package. A **"Diagnosis & next
+  steps"** panel aggregates the actual findings into prioritized, specific advice (real paths +
+  expected values), and each finding has an inline **"how to fix"** drawn from the troubleshooting
+  playbooks. It is a *structural SERIS-profile* check (not full FHIR R4) and is explicit, per
+  finding, about what it can't see. Nothing is uploaded. Every example/template has a **"Validate
+  this"** button.
 - **Search (⌘/Ctrl-K)** — A command palette over the whole IG: profiles, every element, extensions,
   value sets, code systems, and all ~1,540 enumerated concepts. Enter jumps straight to the artifact
   (and scrolls/flashes the exact element or code).

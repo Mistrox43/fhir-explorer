@@ -73,6 +73,8 @@ export interface Profile {
   url: string;
   description?: string;
   elements: ProfileElement[];
+  /** Allowed top-level element names (base FHIR R4 ∪ differential) for typo/unknown-element checks. */
+  allowedTopLevel?: string[];
   /** Names of other profiles this one references (for the relationship graph). */
   referencedProfiles: string[];
   /** Extensions that target this profile, via their declared context. */

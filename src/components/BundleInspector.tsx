@@ -2,6 +2,9 @@ import { useState } from 'react';
 import type { BundleReport, InspectedEntry } from '../fhir/bundle';
 import type { Selection } from '../fhir/spec';
 import { profileByName } from '../fhir/spec';
+import type { Finding } from '../fhir/validate';
+import { diagnose } from '../fhir/diagnose';
+import { DiagnosisPanel } from './DiagnosisPanel';
 
 interface Props {
   report: BundleReport;
@@ -10,6 +13,18 @@ interface Props {
 
 /** Renders an inspected SERIS message Bundle: event, structure, per-entry checks. */
 export function BundleInspector({ report, onOpen }: Props) {
+  const aggregate: Finding[] = [
+    ...report.structural,
+    ...report.entries.flatMap((e) => e.validation.findings),
+    ...report.danglingRefs.map((d) => ({
+      severity: 'warning' as const,
+      code: 'unresolved-reference',
+      path: d.from,
+      message: `points to ${d.reference}, which is not an entry in this Bundle.`,
+      provenance: 'seris' as const,
+    })),
+  ];
+
   return (
     <div className="inspector">
       <div className="checker__summary">
@@ -21,6 +36,8 @@ export function BundleInspector({ report, onOpen }: Props) {
         </span>
         <span className="checker__tallies">{report.counts.warning} warning(s)</span>
       </div>
+
+      <DiagnosisPanel diagnoses={diagnose(aggregate)} />
 
       {report.event && (
         <section className="inspector__event">

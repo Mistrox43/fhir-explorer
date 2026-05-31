@@ -4,6 +4,10 @@
 // validator: the package carries no FHIRPath invariants, no maxLength/min-max
 // value, and only differentials — so this checks what SERIS asserts and is
 // explicit (provenance = 'not-checked') about what it cannot see.
+//
+// It also catches obvious mistakes: a misspelled resourceType (Bundel) or an
+// unknown/misspelled top-level element (stauts) get an explicit "did you mean…"
+// finding, using the base-FHIR element names vendored in the generated profile.
 
 import { SPEC, profileByName, valueSetByName, valueSetByUrl } from './spec';
 import type { Profile, ProfileElement, ValueSetDef } from './types';
@@ -12,8 +16,12 @@ export type Severity = 'error' | 'warning' | 'info' | 'pass';
 
 export interface Finding {
   severity: Severity;
+  /** Stable category for grouping / playbook matching, e.g. 'unknown-resource-type'. */
+  code: string;
   path: string;
   message: string;
+  /** A did-you-mean target or the expected value, for specific advice. */
+  suggestion?: string;
   /** 'seris' = asserted by the SERIS profile; 'not-checked' = boundary note. */
   provenance: 'seris' | 'not-checked';
 }
@@ -33,6 +41,42 @@ const profileByBaseType = new Map<string, Profile>(SPEC.profiles.map((p) => [p.b
 const allExtensionUrls = new Set<string>(SPEC.extensions.map((e) => e.url));
 const bare = (u: string) => u.split('|')[0];
 
+// The FHIR R4 resource type names, for did-you-mean on a misspelled resourceType.
+const FHIR_R4_RESOURCE_TYPES = [
+  'Account', 'ActivityDefinition', 'AdverseEvent', 'AllergyIntolerance', 'Appointment',
+  'AppointmentResponse', 'AuditEvent', 'Basic', 'Binary', 'BiologicallyDerivedProduct',
+  'BodyStructure', 'Bundle', 'CapabilityStatement', 'CarePlan', 'CareTeam', 'CatalogEntry',
+  'ChargeItem', 'ChargeItemDefinition', 'Claim', 'ClaimResponse', 'ClinicalImpression',
+  'CodeSystem', 'Communication', 'CommunicationRequest', 'CompartmentDefinition', 'Composition',
+  'ConceptMap', 'Condition', 'Consent', 'Contract', 'Coverage', 'CoverageEligibilityRequest',
+  'CoverageEligibilityResponse', 'DetectedIssue', 'Device', 'DeviceDefinition', 'DeviceMetric',
+  'DeviceRequest', 'DeviceUseStatement', 'DiagnosticReport', 'DocumentManifest', 'DocumentReference',
+  'EffectEvidenceSynthesis', 'Encounter', 'Endpoint', 'EnrollmentRequest', 'EnrollmentResponse',
+  'EpisodeOfCare', 'EventDefinition', 'Evidence', 'EvidenceVariable', 'ExampleScenario',
+  'ExplanationOfBenefit', 'FamilyMemberHistory', 'Flag', 'Goal', 'GraphDefinition', 'Group',
+  'GuidanceResponse', 'HealthcareService', 'ImagingStudy', 'Immunization', 'ImmunizationEvaluation',
+  'ImmunizationRecommendation', 'ImplementationGuide', 'InsurancePlan', 'Invoice', 'Library',
+  'Linkage', 'List', 'Location', 'Measure', 'MeasureReport', 'Media', 'Medication',
+  'MedicationAdministration', 'MedicationDispense', 'MedicationKnowledge', 'MedicationRequest',
+  'MedicationStatement', 'MedicinalProduct', 'MedicinalProductAuthorization',
+  'MedicinalProductContraindication', 'MedicinalProductIndication', 'MedicinalProductIngredient',
+  'MedicinalProductInteraction', 'MedicinalProductManufactured', 'MedicinalProductPackaged',
+  'MedicinalProductPharmaceutical', 'MedicinalProductUndesirableEffect', 'MessageDefinition',
+  'MessageHeader', 'MolecularSequence', 'NamingSystem', 'NutritionOrder', 'Observation',
+  'ObservationDefinition', 'OperationDefinition', 'OperationOutcome', 'Organization',
+  'OrganizationAffiliation', 'Parameters', 'Patient', 'PaymentNotice', 'PaymentReconciliation',
+  'Person', 'PlanDefinition', 'Practitioner', 'PractitionerRole', 'Procedure', 'Provenance',
+  'Questionnaire', 'QuestionnaireResponse', 'RelatedPerson', 'RequestGroup', 'ResearchDefinition',
+  'ResearchElementDefinition', 'ResearchStudy', 'ResearchSubject', 'RiskAssessment',
+  'RiskEvidenceSynthesis', 'Schedule', 'SearchParameter', 'ServiceRequest', 'Slot', 'Specimen',
+  'SpecimenDefinition', 'StructureDefinition', 'StructureMap', 'Subscription', 'Substance',
+  'SubstanceNucleicAcid', 'SubstancePolymer', 'SubstanceProtein', 'SubstanceReferenceInformation',
+  'SubstanceSourceMaterial', 'SubstanceSpecification', 'SupplyDelivery', 'SupplyRequest', 'Task',
+  'TerminologyCapabilities', 'TestReport', 'TestScript', 'ValueSet', 'VerificationResult',
+  'VisionPrescription',
+];
+const FHIR_TYPE_SET = new Set(FHIR_R4_RESOURCE_TYPES);
+
 type Obj = Record<string, unknown>;
 const isObj = (v: unknown): v is Obj => typeof v === 'object' && v !== null && !Array.isArray(v);
 
@@ -46,12 +90,12 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
   };
 
   if (!isObj(input)) {
-    add({ severity: 'error', path: '(root)', message: 'Not a JSON object.', provenance: 'seris' });
+    add({ severity: 'error', code: 'not-json', path: '(root)', message: 'Not a JSON object.', provenance: 'seris' });
     return { ok: false, matchedBy: 'none', findings, counts };
   }
   const resourceType = typeof input.resourceType === 'string' ? input.resourceType : undefined;
   if (!resourceType) {
-    add({ severity: 'error', path: 'resourceType', message: 'Missing resourceType.', provenance: 'seris' });
+    add({ severity: 'error', code: 'missing-resource-type', path: 'resourceType', message: 'Missing resourceType — every FHIR resource must declare one.', provenance: 'seris' });
     return { ok: false, matchedBy: 'none', findings, counts };
   }
 
@@ -63,8 +107,7 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
     matchedBy = profile ? 'meta.profile' : 'none';
   }
   if (!profile) {
-    const declared = readProfileUrls(input);
-    for (const url of declared) {
+    for (const url of readProfileUrls(input)) {
       const hit = profileByUrl.get(bare(url));
       if (hit) {
         profile = hit;
@@ -79,23 +122,51 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
   }
 
   if (!profile) {
-    add({
-      severity: 'info',
-      path: 'meta.profile',
-      message: `No SERIS profile matches resourceType "${resourceType}". Nothing to check against.`,
-      provenance: 'not-checked',
-    });
-    return { ok: true, resourceType, matchedBy, findings, counts };
+    // No SERIS profile — is the resourceType even a real FHIR type? Catch typos.
+    if (FHIR_TYPE_SET.has(resourceType)) {
+      add({
+        severity: 'info',
+        code: 'no-profile',
+        path: 'resourceType',
+        message: `"${resourceType}" is a valid FHIR R4 resource but is not profiled by SERIS — nothing to check against.`,
+        provenance: 'not-checked',
+      });
+    } else {
+      const guess = closest(resourceType, FHIR_R4_RESOURCE_TYPES);
+      if (guess) {
+        add({
+          severity: 'error',
+          code: 'unknown-resource-type',
+          path: 'resourceType',
+          message: `"${resourceType}" is not a FHIR R4 resource type — did you mean "${guess}"?`,
+          suggestion: guess,
+          provenance: 'seris',
+        });
+      } else {
+        add({
+          severity: 'warning',
+          code: 'unknown-resource-type',
+          path: 'resourceType',
+          message: `"${resourceType}" is not a recognized FHIR R4 resource type.`,
+          provenance: 'seris',
+        });
+      }
+    }
+    return { ok: counts.error === 0, resourceType, matchedBy, findings, counts };
   }
 
   if (matchedBy === 'resourceType') {
     add({
       severity: 'info',
+      code: 'boundary',
       path: 'meta.profile',
       message: `No meta.profile matched; checking against the SERIS ${profile.name} profile by resourceType.`,
       provenance: 'not-checked',
     });
   }
+
+  // Unknown / misspelled top-level elements (did-you-mean).
+  checkUnknownElements(input, profile, add);
 
   // Walk the differential. Skip sliced and extension elements (handled
   // separately / not generically checkable without false positives).
@@ -119,6 +190,7 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
       if (url && !allExtensionUrls.has(bare(url))) {
         add({
           severity: 'warning',
+          code: 'unknown-extension',
           path: `extension[${i}].url`,
           message: `Extension URL is not defined in this IG: ${url}`,
           provenance: 'seris',
@@ -131,6 +203,7 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
   if (skippedSliced > 0) {
     add({
       severity: 'info',
+      code: 'boundary',
       path: '(boundary)',
       message: `${skippedSliced} sliced/extension constraint(s) (e.g. identifier slices) are shown in the Explorer but not auto-checked here.`,
       provenance: 'not-checked',
@@ -138,6 +211,7 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
   }
   add({
     severity: 'info',
+    code: 'boundary',
     path: '(boundary)',
     message:
       'Structural SERIS-profile check only — not full FHIR R4. FHIRPath invariants, maxLength/value ranges, and base-FHIR mandatory datatype rules are not evaluated.',
@@ -147,24 +221,73 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
   return { ok: counts.error === 0, resourceType, profileName: profile.name, matchedBy, findings, counts };
 }
 
-function checkElement(
-  root: Obj,
-  el: ProfileElement,
-  segs: string[],
-  add: (f: Finding) => void,
-) {
+/** Flag top-level instance keys that aren't valid elements of the resource. */
+function checkUnknownElements(input: Obj, profile: Profile, add: (f: Finding) => void) {
+  const allowed = profile.allowedTopLevel;
+  if (!allowed || allowed.length === 0) return; // data not available — skip
+
+  const plain = new Set<string>();
+  const choiceBases: string[] = [];
+  const display: string[] = [];
+  for (const a of allowed) {
+    if (a.endsWith('[x]')) {
+      const b = a.slice(0, -3);
+      choiceBases.push(b);
+      display.push(b);
+    } else {
+      plain.add(a);
+      display.push(a);
+    }
+  }
+  const isAllowed = (key: string) =>
+    key === 'resourceType' ||
+    plain.has(key) ||
+    choiceBases.some((b) => key === b || (key.startsWith(b) && key.length > b.length && /[A-Z]/.test(key[b.length])));
+
+  for (const key of Object.keys(input)) {
+    if (isAllowed(key)) continue;
+    const guess = closest(key, display);
+    if (guess) {
+      add({
+        severity: 'warning',
+        code: 'unknown-element',
+        path: key,
+        message: `Unknown element "${key}" — did you mean "${guess}"?`,
+        suggestion: guess,
+        provenance: 'seris',
+      });
+    } else {
+      add({
+        severity: 'info',
+        code: 'unknown-element',
+        path: key,
+        message: `"${key}" is not a recognized element of ${profile.baseType} (it will be ignored).`,
+        provenance: 'seris',
+      });
+    }
+  }
+}
+
+function checkElement(root: Obj, el: ProfileElement, segs: string[], add: (f: Finding) => void) {
   const path = el.id;
   const parentNodes = traverse([root], segs.slice(0, -1));
   const parentPresent = parentNodes.length > 0;
   const leafVals = collect(parentNodes, segs[segs.length - 1]);
   const present = leafVals.some(nonEmpty);
+  const isIdentifierRef = /\.identifier(\.(system|value))?$/.test(path);
 
   // Required
   if (el.min != null && el.min >= 1) {
     if (parentPresent && !present) {
-      add({ severity: 'error', path, message: `Required element is missing.`, provenance: 'seris' });
+      add({
+        severity: 'error',
+        code: isIdentifierRef ? 'reference-identifier-missing' : 'required-missing',
+        path,
+        message: 'Required element is missing.',
+        provenance: 'seris',
+      });
     } else if (present) {
-      add({ severity: 'pass', path, message: 'Required element present.', provenance: 'seris' });
+      add({ severity: 'pass', code: 'pass', path, message: 'Required element present.', provenance: 'seris' });
     }
   }
 
@@ -176,6 +299,7 @@ function checkElement(
         if (Array.isArray(v) && v.length > maxN) {
           add({
             severity: 'error',
+            code: 'cardinality',
             path,
             message: `Cardinality exceeded: max is ${maxN} but found ${v.length}.`,
             provenance: 'seris',
@@ -189,6 +313,7 @@ function checkElement(
   if (el.mustSupport && segs.length === 1 && !present) {
     add({
       severity: 'info',
+      code: 'must-support-absent',
       path,
       message: 'Must-support element not present (allowed only if the data is genuinely absent).',
       provenance: 'seris',
@@ -199,16 +324,19 @@ function checkElement(
 
   // Fixed / pattern
   if (el.fixed) {
+    const expected = summarize(el.fixed.value);
     for (const v of leafVals) {
       if (!matchesFixed(v, el.fixed.value)) {
         add({
           severity: 'error',
+          code: 'fixed-mismatch',
           path,
-          message: `${el.fixed.kind === 'fixed' ? 'Fixed' : 'Pattern'} value not met. Expected ${summarize(el.fixed.value)}.`,
+          message: `${el.fixed.kind === 'fixed' ? 'Fixed' : 'Pattern'} value not met. Expected ${expected}.`,
+          suggestion: expected,
           provenance: 'seris',
         });
       } else {
-        add({ severity: 'pass', path, message: `Fixed value matches (${summarize(el.fixed.value)}).`, provenance: 'seris' });
+        add({ severity: 'pass', code: 'pass', path, message: `Fixed value matches (${expected}).`, provenance: 'seris' });
       }
     }
   }
@@ -220,35 +348,70 @@ function checkElement(
     if (!codeSet) {
       add({
         severity: 'info',
+        code: 'boundary',
         path,
         message: `Bound to ${el.binding.valueSetName ?? 'a value set'} (${el.binding.strength}) — membership not checkable client-side.`,
         provenance: 'not-checked',
       });
     } else {
-      const codes = leafVals.flatMap(extractCodes);
-      for (const c of codes) {
+      for (const c of leafVals.flatMap(extractCodes)) {
         if (c.code && !codeSet.has(c.code)) {
           add({
             severity: el.binding.strength === 'required' ? 'error' : 'warning',
+            code: 'unbound-code',
             path,
             message: `Code "${c.code}" is not in the ${el.binding.strength} value set ${el.binding.valueSetName ?? ''}.`,
+            suggestion: el.binding.valueSetName,
             provenance: 'seris',
           });
         } else if (c.code) {
-          add({ severity: 'pass', path, message: `Code "${c.code}" is valid for ${el.binding.valueSetName ?? 'the bound value set'}.`, provenance: 'seris' });
+          add({ severity: 'pass', code: 'pass', path, message: `Code "${c.code}" is valid for ${el.binding.valueSetName ?? 'the bound value set'}.`, provenance: 'seris' });
         }
       }
     }
   }
 }
 
+// ---- did-you-mean ----
+/** Closest candidate within a small edit distance, or undefined. */
+function closest(word: string, candidates: string[]): string | undefined {
+  const w = word.toLowerCase();
+  let best: string | undefined;
+  let bestD = Infinity;
+  for (const c of candidates) {
+    const d = levenshtein(w, c.toLowerCase());
+    if (d < bestD) {
+      bestD = d;
+      best = c;
+    }
+  }
+  // Tolerance scales a little with length; cap at 2 for short names.
+  const tol = Math.min(2, Math.floor(word.length / 4) + 1);
+  return best && bestD > 0 && bestD <= tol ? best : undefined;
+}
+
+function levenshtein(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  if (m === 0) return n;
+  if (n === 0) return m;
+  let prev = Array.from({ length: n + 1 }, (_, i) => i);
+  let cur = new Array<number>(n + 1);
+  for (let i = 1; i <= m; i++) {
+    cur[0] = i;
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+    }
+    [prev, cur] = [cur, prev];
+  }
+  return prev[n];
+}
+
 // ---- traversal helpers ----
 function traverse(nodes: unknown[], segs: string[]): unknown[] {
   let cur = nodes;
-  for (const seg of segs) {
-    const vals = collect(cur, seg);
-    cur = expand(vals);
-  }
+  for (const seg of segs) cur = expand(collect(cur, seg));
   return cur;
 }
 

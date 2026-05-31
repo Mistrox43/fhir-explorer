@@ -7,7 +7,7 @@ export function FindingItem({ finding }: { finding: Finding }) {
   const [open, setOpen] = useState(false);
   const pb =
     finding.severity === 'error' || finding.severity === 'warning'
-      ? matchPlaybook(finding.message)
+      ? matchPlaybook(finding)
       : undefined;
 
   return (

@@ -36,11 +36,11 @@ export interface BundleReport {
 
 export function inspectBundle(input: unknown): BundleReport {
   const structural: Finding[] = [];
-  const add = (severity: Finding['severity'], path: string, message: string, provenance: Finding['provenance'] = 'seris') =>
-    structural.push({ severity, path, message, provenance });
+  const add = (severity: Finding['severity'], code: string, path: string, message: string, provenance: Finding['provenance'] = 'seris') =>
+    structural.push({ severity, code, path, message, provenance });
 
   if (!isObj(input) || input.resourceType !== 'Bundle') {
-    add('error', '(root)', 'Not a Bundle resource.');
+    add('error', 'message-not-bundle', '(root)', 'Not a Bundle resource.');
     return { isBundle: false, structural, entries: [], danglingRefs: [], counts: { error: 1, warning: 0, entries: 0 } };
   }
 
@@ -49,7 +49,7 @@ export function inspectBundle(input: unknown): BundleReport {
   structural.push(...bundleVal.findings.filter((f) => f.severity === 'error' || f.severity === 'warning'));
 
   if (input.type !== 'message') {
-    add('error', 'Bundle.type', `Expected a message Bundle (type = "message"), found "${String(input.type)}".`);
+    add('error', 'message-type', 'Bundle.type', `Expected a message Bundle (type = "message"), found "${String(input.type)}".`);
   }
 
   const rawEntries = Array.isArray(input.entry) ? input.entry : [];
@@ -60,7 +60,7 @@ export function inspectBundle(input: unknown): BundleReport {
   const first = rawEntries[0];
   const firstRes = isObj(first) ? (first.resource as Obj | undefined) : undefined;
   if (!firstRes || firstRes.resourceType !== 'MessageHeader') {
-    add('error', 'Bundle.entry[0]', 'A message Bundle must lead with a MessageHeader resource.');
+    add('error', 'message-no-header', 'Bundle.entry[0]', 'A message Bundle must lead with a MessageHeader resource.');
   }
 
   // Decode the event.
