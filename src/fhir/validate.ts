@@ -11,6 +11,7 @@
 
 import { SPEC, profileByName, valueSetByName, valueSetByUrl } from './spec';
 import type { Profile, ProfileElement, ValueSetDef } from './types';
+import { ELEMENT_SHAPES } from '../generated/shapes';
 
 export type Severity = 'error' | 'warning' | 'info' | 'pass';
 
@@ -165,7 +166,22 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
     });
   }
 
-  // Unknown / misspelled top-level elements (did-you-mean).
+  // The resourceType must match the profile's base resource type. This catches a
+  // misspelled resourceType (e.g. "Bndle") even when meta.profile resolved.
+  if (resourceType !== profile.baseType) {
+    add({
+      severity: 'error',
+      code: 'unknown-resource-type',
+      path: 'resourceType',
+      message: `resourceType is "${resourceType}" but ${
+        matchedBy === 'meta.profile' ? 'meta.profile is' : 'this profile is'
+      } for "${profile.baseType}". Set resourceType to "${profile.baseType}".`,
+      suggestion: profile.baseType,
+      provenance: 'seris',
+    });
+  }
+
+  // Unknown / misspelled elements (did-you-mean), recursively.
   checkUnknownElements(input, profile, add);
 
   // Walk the differential. Skip sliced and extension elements (handled
@@ -221,49 +237,66 @@ export function validateResource(input: unknown, forcedProfile?: string): Valida
   return { ok: counts.error === 0, resourceType, profileName: profile.name, matchedBy, findings, counts };
 }
 
-/** Flag top-level instance keys that aren't valid elements of the resource. */
-function checkUnknownElements(input: Obj, profile: Profile, add: (f: Finding) => void) {
-  const allowed = profile.allowedTopLevel;
-  if (!allowed || allowed.length === 0) return; // data not available — skip
+const STOP_TYPES = new Set(['Resource', 'DomainResource']);
 
+/** Recursively flag instance keys that aren't valid elements (at any depth). */
+function checkUnknownElements(input: Obj, profile: Profile, add: (f: Finding) => void) {
+  if (!ELEMENT_SHAPES[profile.baseType]) return; // shapes not available — skip
+  walkShape(input, profile.baseType, '', add, 0);
+}
+
+function walkShape(node: unknown, shapeKey: string, prefix: string, add: (f: Finding) => void, depth: number) {
+  if (depth > 8 || !isObj(node)) return;
+  const shape = ELEMENT_SHAPES[shapeKey];
+  if (!shape) return;
+
+  const names = Object.keys(shape);
   const plain = new Set<string>();
   const choiceBases: string[] = [];
-  const display: string[] = [];
-  for (const a of allowed) {
-    if (a.endsWith('[x]')) {
-      const b = a.slice(0, -3);
-      choiceBases.push(b);
-      display.push(b);
-    } else {
-      plain.add(a);
-      display.push(a);
-    }
+  for (const n of names) {
+    if (n.endsWith('[x]')) choiceBases.push(n.slice(0, -3));
+    else plain.add(n);
   }
-  const isAllowed = (key: string) =>
-    key === 'resourceType' ||
-    plain.has(key) ||
-    choiceBases.some((b) => key === b || (key.startsWith(b) && key.length > b.length && /[A-Z]/.test(key[b.length])));
+  const display = names.map((n) => (n.endsWith('[x]') ? n.slice(0, -3) : n));
+  const typeLabel = shapeKey.split('.').pop();
 
-  for (const key of Object.keys(input)) {
-    if (isAllowed(key)) continue;
-    const guess = closest(key, display);
-    if (guess) {
+  for (const key of Object.keys(node)) {
+    if (key === 'resourceType' || key.startsWith('_')) continue; // root marker / primitive extension
+
+    let matched: string | undefined;
+    if (plain.has(key)) matched = key;
+    else {
+      const cb = choiceBases.find((b) => key === b || (key.startsWith(b) && key.length > b.length && /[A-Z]/.test(key[b.length])));
+      if (cb) matched = `${cb}[x]`;
+    }
+
+    const fullPath = prefix ? `${prefix}.${key}` : key;
+    if (!matched) {
+      const guess = closest(key, display);
       add({
         severity: 'warning',
         code: 'unknown-element',
-        path: key,
-        message: `Unknown element "${key}" — did you mean "${guess}"?`,
+        path: fullPath,
+        message: guess
+          ? `Unknown element "${fullPath}" — did you mean "${guess}"?`
+          : `"${fullPath}" is not a recognized element of ${typeLabel}.`,
         suggestion: guess,
         provenance: 'seris',
       });
-    } else {
-      add({
-        severity: 'info',
-        code: 'unknown-element',
-        path: key,
-        message: `"${key}" is not a recognized element of ${profile.baseType} (it will be ignored).`,
-        provenance: 'seris',
-      });
+      continue;
+    }
+
+    // Recurse into complex children (skip ambiguous choices and stop-types).
+    if (matched.endsWith('[x]')) continue;
+    const childType = shape[matched];
+    let childShape: string | undefined;
+    if (childType === 'BackboneElement' || childType === 'Element') childShape = `${shapeKey}.${matched}`;
+    else if (ELEMENT_SHAPES[childType] && !STOP_TYPES.has(childType)) childShape = childType;
+    if (!childShape || !ELEMENT_SHAPES[childShape]) continue;
+
+    const val = node[key];
+    for (const item of Array.isArray(val) ? val : [val]) {
+      if (isObj(item)) walkShape(item, childShape, fullPath, add, depth + 1);
     }
   }
 }

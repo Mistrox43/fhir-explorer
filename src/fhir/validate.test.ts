@@ -80,6 +80,27 @@ describe('explicit catches for common mistakes', () => {
     expect(f?.suggestion).toBe('status');
   });
 
+  it('a misspelled resourceType is caught even when meta.profile resolves', () => {
+    const r = validateResource({
+      resourceType: 'Bndle',
+      meta: { profile: ['http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Bundle'] },
+    });
+    const f = r.findings.find((x) => x.code === 'unknown-resource-type');
+    expect(f, 'should flag the resourceType / profile mismatch').toBeTruthy();
+    expect(f?.severity).toBe('error');
+    expect(f?.suggestion).toBe('Bundle');
+  });
+
+  it('a misspelled NESTED element is caught (meta.securty)', () => {
+    const r = validateResource({
+      resourceType: 'Encounter',
+      meta: { profile: [ENCOUNTER_PROFILE], securty: [] },
+    });
+    const f = r.findings.find((x) => x.code === 'unknown-element' && x.path === 'meta.securty');
+    expect(f, 'should flag the nested typo').toBeTruthy();
+    expect(f?.suggestion).toBe('security');
+  });
+
   it('diagnose() aggregates findings into specific advice', () => {
     const d = diagnose(validateResource({ resourceType: 'Bundel' }).findings);
     expect(d.length).toBeGreaterThan(0);

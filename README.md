@@ -43,8 +43,10 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
 - **Validate** — Paste a FHIR resource (or Bundle) and check it against its SERIS profile:
   required/cardinality/fixed-value/value-set-binding/must-support, with plain-language
   PASS/ERROR/WARN findings. It explicitly catches **typos** — a misspelled `resourceType`
-  (`Bundel` → "did you mean Bundle?") or an unknown/misspelled top-level element (`stauts` →
-  `status`), using base-FHIR element names derived from the R4 core package. A **"Diagnosis & next
+  (`Bundel` → "did you mean Bundle?", and even `Bndle` when `meta.profile` resolves, by checking it
+  against the profile's resource type) and unknown/misspelled elements at **any depth** (`stauts` →
+  `status`, `meta.sec` → not a Meta element), by recursively walking the instance against the FHIR R4
+  element shapes derived from the core package. A **"Diagnosis & next
   steps"** panel aggregates the actual findings into prioritized, specific advice (real paths +
   expected values), and each finding has an inline **"how to fix"** drawn from the troubleshooting
   playbooks. It is a *structural SERIS-profile* check (not full FHIR R4) and is explicit, per

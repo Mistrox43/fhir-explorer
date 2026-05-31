@@ -13,8 +13,9 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SPEC_DIR = join(__dirname, '..', 'spec', 'ca.on.oh-seris');
 const BASE_REFS_FILE = join(__dirname, '..', 'spec', 'base-references.json');
-const BASE_ELEMENTS_FILE = join(__dirname, '..', 'spec', 'base-elements.json');
+const SHAPES_FILE = join(__dirname, '..', 'spec', 'element-shapes.json');
 const OUT_FILE = join(__dirname, '..', 'src', 'generated', 'seris.ts');
+const SHAPES_OUT = join(__dirname, '..', 'src', 'generated', 'shapes.ts');
 
 const GUIDE_URL =
   'https://simplifier.net/guide/ca-on-seris-r4-iguide/Table-of-Contents/Home?version=1.1.0';
@@ -42,11 +43,9 @@ const baseRefs = existsSync(BASE_REFS_FILE)
 if (!existsSync(BASE_REFS_FILE)) {
   console.warn('spec/base-references.json missing — inherited references will be omitted.');
 }
-const baseElements = existsSync(BASE_ELEMENTS_FILE)
-  ? JSON.parse(readFileSync(BASE_ELEMENTS_FILE, 'utf-8'))
-  : {};
-if (!existsSync(BASE_ELEMENTS_FILE)) {
-  console.warn('spec/base-elements.json missing — unknown-element detection will be disabled.');
+const elementShapes = existsSync(SHAPES_FILE) ? JSON.parse(readFileSync(SHAPES_FILE, 'utf-8')) : {};
+if (!existsSync(SHAPES_FILE)) {
+  console.warn('spec/element-shapes.json missing — unknown-element detection will be disabled.');
 }
 
 const bare = (url) => (url ? String(url).split('|')[0] : url);
@@ -213,7 +212,7 @@ const profiles = profileSDs
     // Allowed top-level element names = base FHIR R4 ∪ differential depth-1 leaves
     // (slice names stripped) — used by the validator to flag unknown/misspelled elements.
     const diffTop = elements.filter((e) => e.depth === 1 && !e.leaf.includes(':')).map((e) => e.leaf);
-    const allowedTopLevel = [...new Set([...(baseElements[sd.type] ?? []), ...diffTop])].sort();
+    const allowedTopLevel = [...new Set([...Object.keys(elementShapes[sd.type] ?? {}), ...diffTop])].sort();
     return {
       name: sd.name,
       baseType: sd.type,
@@ -394,6 +393,14 @@ writeFileSync(
     null,
     2,
   )};\n`,
+);
+
+// Element shapes power the validator's recursive unknown-element detection.
+writeFileSync(
+  SHAPES_OUT,
+  `${banner}\n// Map of FHIR type / resource-path -> { childElementName: childTypeCode },\n` +
+    `// derived from hl7.fhir.r4.core (see scripts/extract-base-references.mjs).\n` +
+    `export const ELEMENT_SHAPES: Record<string, Record<string, string>> = ${JSON.stringify(elementShapes, null, 2)};\n`,
 );
 
 const profiledEdges = referenceEdges.filter((e) => e.kind === 'profiled').length;
