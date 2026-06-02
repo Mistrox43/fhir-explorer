@@ -4,6 +4,7 @@ import { SPEC } from './spec';
 import { validateResource } from './validate';
 import { inspectBundle } from './bundle';
 import { assembleMessage, MESSAGE_EVENTS } from './assemble';
+import { SCHEDULE_CREATES } from './scheduleRest';
 import { diagnose } from './diagnose';
 
 const ENCOUNTER_PROFILE = 'http://ontariohealth.ca/fhir/StructureDefinition/ca-on-seris-profile-Encounter';
@@ -44,6 +45,18 @@ describe('assembled message Bundles pass the inspector with no errors', () => {
       ];
       expect(errs, `inspector errors:\n  ${errs.join('\n  ')}`).toHaveLength(0);
       expect(r.danglingRefs, 'no dangling references').toHaveLength(0);
+    });
+  }
+});
+
+describe('OR Schedule REST-create resources conform to their SERIS profile', () => {
+  for (const c of SCHEDULE_CREATES) {
+    it(`${c.id} — ${c.method} ${c.endpoint}`, () => {
+      const r = validateResource(c.resource);
+      expect(r.matchedBy, 'create should match a SERIS profile').not.toBe('none');
+      const errors = r.findings.filter((f) => f.severity === 'error');
+      const detail = errors.map((e) => `${e.path}: ${e.message}`).join('\n  ');
+      expect(errors, `unexpected conformance errors:\n  ${detail}`).toHaveLength(0);
     });
   }
 });
@@ -127,6 +140,14 @@ describe('valid content produces no typo false positives', () => {
       const r = inspectBundle(assembleMessage(ev.code));
       const all = [...r.structural, ...r.entries.flatMap((e) => e.validation.findings)];
       for (const f of noTypos(all)) bad.push(`${ev.code} ${f.path}: ${f.message}`);
+    }
+    expect(bad, bad.join('\n  ')).toHaveLength(0);
+  });
+
+  it('OR Schedule REST creates', () => {
+    const bad: string[] = [];
+    for (const c of SCHEDULE_CREATES) {
+      for (const f of noTypos(validateResource(c.resource).findings)) bad.push(`${c.id} ${f.path}: ${f.message}`);
     }
     expect(bad, bad.join('\n  ')).toHaveLength(0);
   });

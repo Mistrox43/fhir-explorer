@@ -9,7 +9,7 @@ import { LifecycleMap } from './LifecycleMap';
 interface Props {
   onOpenArtifact: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
-  onOpenBuild: (eventCode?: string) => void;
+  onOpenBuild: (eventCode?: string, kind?: 'message' | 'schedule') => void;
 }
 
 type SubView = 'journey' | 'schedule' | 'case' | 'scenario' | 'lifecycle';
@@ -113,7 +113,7 @@ function TrackView({
   track: OrientationTrack;
   onOpen: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
-  onOpenBuild: (eventCode?: string) => void;
+  onOpenBuild: (eventCode?: string, kind?: 'message' | 'schedule') => void;
 }) {
   return (
     <section className="orientation-steps">
@@ -123,9 +123,20 @@ function TrackView({
           <span className="orientation-note__icon" aria-hidden="true">
             📤
           </span>
-          <p>
-            <strong>How this reaches SERIS.</strong> {track.note}
-          </p>
+          <div className="orientation-note__body">
+            <p>
+              <strong>How this reaches SERIS.</strong> {track.note}
+            </p>
+            {track.id === 'schedule' && (
+              <button
+                type="button"
+                className="ostep__buildlink"
+                onClick={() => onOpenBuild(undefined, 'schedule')}
+              >
+                See the full REST create sequence in Build →
+              </button>
+            )}
+          </div>
         </aside>
       )}
       {track.stages.map((stage) => (

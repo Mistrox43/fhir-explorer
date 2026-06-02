@@ -11,6 +11,7 @@ import { CapabilityView } from './components/CapabilityView';
 import { Orientation } from './components/Orientation';
 import { ConformanceChecker } from './components/ConformanceChecker';
 import { MessageAssembler } from './components/MessageAssembler';
+import { ScheduleAssembler } from './components/ScheduleAssembler';
 import { CommandPalette } from './components/CommandPalette';
 import { CodeDecoder } from './components/CodeDecoder';
 import {
@@ -50,6 +51,7 @@ export default function App() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [decode, setDecode] = useState<string | null>(null);
   const [buildEvent, setBuildEvent] = useState<string | undefined>();
+  const [buildKind, setBuildKind] = useState<'message' | 'schedule'>('message');
 
   // Cmd/Ctrl-K opens the global search palette.
   useEffect(() => {
@@ -89,8 +91,10 @@ export default function App() {
     setMode('validate');
   }
 
-  // Jump to Build mode, optionally pre-selecting the message event for a step.
-  function openBuild(eventCode?: string) {
+  // Jump to Build mode. Case steps pass a message event code; the OR Schedule
+  // track passes kind='schedule' to land on the REST-creates sub-mode.
+  function openBuild(eventCode?: string, kind: 'message' | 'schedule' = 'message') {
+    setBuildKind(kind);
     setBuildEvent(eventCode);
     setMode('build');
   }
@@ -160,8 +164,34 @@ export default function App() {
 
       {mode === 'build' && (
         <main className="app__main app__main--full">
-          <h2 className="view-title">Message builder</h2>
-          <MessageAssembler key={buildEvent ?? 'def'} initialEvent={buildEvent} onValidate={openValidator} />
+          <h2 className="view-title">Build a SERIS submission</h2>
+          <nav className="tabs build-subnav" aria-label="Submission type">
+            {(
+              [
+                ['message', 'OR Case · Messages'],
+                ['schedule', 'OR Schedule · REST creates'],
+              ] as ['message' | 'schedule', string][]
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                className={`tab${buildKind === id ? ' tab--active' : ''}`}
+                onClick={() => setBuildKind(id)}
+                aria-current={buildKind === id}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
+          {buildKind === 'message' ? (
+            <MessageAssembler
+              key={buildEvent ?? 'def'}
+              initialEvent={buildEvent}
+              onValidate={openValidator}
+            />
+          ) : (
+            <ScheduleAssembler onValidate={openValidator} />
+          )}
         </main>
       )}
 

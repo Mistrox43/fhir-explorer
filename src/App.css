@@ -315,6 +315,11 @@
 .orientation-note strong {
   color: var(--accent-2);
 }
+.orientation-note__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 .orientation-stage {
   margin-bottom: 22px;
 }
@@ -1545,6 +1550,64 @@
 }
 .builder__picked {
   margin-top: 12px;
+}
+.build-subnav {
+  margin-bottom: 18px;
+}
+.builder__footnote {
+  margin-top: 22px;
+  font-size: 12.5px;
+  opacity: 0.85;
+  max-width: 80ch;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+/* ---- OR Schedule REST-create sequence ---- */
+.rest-seq {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.rest-step {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.rest-step__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.rest-step__num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+}
+.rest-step__verb {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-2);
+  background: rgba(14, 165, 164, 0.12);
+  border: 1px solid var(--accent-2);
+  border-radius: 5px;
+  padding: 2px 8px;
+}
+.rest-step__title {
+  font-weight: 600;
+  font-size: 15px;
 }
 
 /* ---- Bundle inspector ---- */
