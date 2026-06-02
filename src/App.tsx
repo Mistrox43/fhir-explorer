@@ -12,6 +12,8 @@ import { Orientation } from './components/Orientation';
 import { ConformanceChecker } from './components/ConformanceChecker';
 import { MessageAssembler } from './components/MessageAssembler';
 import { ScheduleAssembler } from './components/ScheduleAssembler';
+import { Simulator } from './components/Simulator';
+import { SimProvider } from './sim/SimProvider';
 import { CommandPalette } from './components/CommandPalette';
 import { CodeDecoder } from './components/CodeDecoder';
 import {
@@ -104,6 +106,7 @@ export default function App() {
     ['reference', 'Reference'],
     ['validate', 'Validate'],
     ['build', 'Build'],
+    ['simulate', 'Simulate'],
   ];
 
   return (
@@ -192,6 +195,15 @@ export default function App() {
           ) : (
             <ScheduleAssembler onValidate={openValidator} />
           )}
+        </main>
+      )}
+
+      {mode === 'simulate' && (
+        <main className="app__main app__main--full">
+          <h2 className="view-title">Hospital system simulator</h2>
+          <SimProvider>
+            <Simulator onValidate={openValidator} />
+          </SimProvider>
         </main>
       )}
 

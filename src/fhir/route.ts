@@ -9,7 +9,7 @@ import type { ArtifactKind, Selection } from './spec';
 // instance data pasted into the conformance checker. A shared link can reveal
 // which profile/element/code someone was looking at, never a patient payload.
 
-export type AppMode = 'orientation' | 'reference' | 'validate' | 'build';
+export type AppMode = 'orientation' | 'reference' | 'validate' | 'build' | 'simulate';
 
 export interface AppRoute {
   mode: AppMode;
@@ -19,7 +19,7 @@ export interface AppRoute {
 }
 
 const KINDS: ArtifactKind[] = ['profile', 'extension', 'valueSet', 'codeSystem', 'capability'];
-const MODES: AppMode[] = ['orientation', 'reference', 'validate', 'build'];
+const MODES: AppMode[] = ['orientation', 'reference', 'validate', 'build', 'simulate'];
 
 export function encodeRoute(r: AppRoute): string {
   const p = new URLSearchParams();
