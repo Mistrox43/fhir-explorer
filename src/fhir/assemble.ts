@@ -25,6 +25,18 @@ export const MESSAGE_EVENTS: MessageEvent[] = [
   { code: 'case-cancelled', display: 'Case cancelled', business: 'cancelled', codePickVs: 'SurgeryCancellationReason' },
 ];
 
+// Stable per-event UUIDs (deterministic so the output and tests don't churn):
+//   .id         = the Bundle's logical id (on a REST create the server assigns
+//                 this; shown here so the message looks like a real example)
+//   .identifier = the message's globally-unique business identifier, the FHIR-
+//                 messaging-idiomatic urn:uuid — this is what identifies the
+//                 message, and SERIS makes Bundle.identifier must-support.
+const MESSAGE_IDS: Record<string, { id: string; identifier: string }> = {
+  'case-scheduled': { id: 'b063045d-8a25-43f0-aa9f-b10eb13b3e76', identifier: '5f1a2e80-3c4b-4d6e-9a1f-2b7c8d9e0a11' },
+  'case-performed': { id: '7c2d9e14-6a3b-44f2-8e5c-1d0a9b8c7e62', identifier: '9a8b7c6d-5e4f-4a3b-bc1d-0e9f8a7b6c5d' },
+  'case-cancelled': { id: '3e5f7a91-2b4c-4d8e-9f0a-1c2d3e4f5a6b', identifier: 'c4d5e6f7-8a9b-4c1d-9e2f-3a4b5c6d7e8f' },
+};
+
 const uid = (n: number) => `urn:uuid:11111111-1111-1111-1111-${String(n).padStart(12, '0')}`;
 const ID = {
   mh: uid(1), task: uid(2), patient: uid(3), practitioner: uid(4), role: uid(5),
@@ -223,10 +235,12 @@ export function assembleMessage(code: string): Record<string, unknown> | null {
     entries.push(medicationAdministration(), observation());
   }
 
+  const ids = MESSAGE_IDS[ev.code];
   return {
     resourceType: 'Bundle',
+    id: ids.id,
     meta: envMeta('Bundle'),
-    identifier: { system: 'http://hospital.example/messages', value: `MSG-${ev.code}-0001` },
+    identifier: { system: 'urn:ietf:rfc:3986', value: `urn:uuid:${ids.identifier}` },
     type: 'message',
     timestamp: '2025-06-02T10:00:00-04:00',
     entry: entries,
