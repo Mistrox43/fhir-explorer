@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { buildJsonLines } from './jsonLines';
-import { assembleMessage } from './assemble';
+import { assembleMessage, messageAnnotations, MESSAGE_EVENTS } from './assemble';
 
 describe('buildJsonLines', () => {
   const samples: { name: string; value: unknown }[] = [
@@ -36,4 +36,24 @@ describe('buildJsonLines', () => {
     const proc = ranges.get('entry[7]');
     expect(lines.slice(proc![0], proc![1] + 1).join('\n')).toContain('Procedure');
   });
+});
+
+describe('message descriptor cards leave no gaps', () => {
+  for (const ev of MESSAGE_EVENTS) {
+    it(`${ev.code}: every top-level section has a resolvable card`, () => {
+      const bundle = assembleMessage(ev.code) as Record<string, unknown>;
+      const { ranges } = buildJsonLines(bundle);
+      const cards = messageAnnotations(ev.code);
+      const cardPaths = new Set(cards.map((c) => c.path));
+
+      // Every top-level key of the message has a card pointing at it.
+      for (const key of Object.keys(bundle)) {
+        expect(cardPaths.has(key), `no card for top-level "${key}"`).toBe(true);
+      }
+      // Every card resolves to a real slice of the JSON (no dead cards).
+      for (const c of cards) {
+        expect(ranges.has(c.path), `card "${c.path}" does not resolve`).toBe(true);
+      }
+    });
+  }
 });

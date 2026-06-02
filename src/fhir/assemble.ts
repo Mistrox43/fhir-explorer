@@ -238,13 +238,19 @@ const RESOURCE_ROLE: Record<string, string> = {
 export function messageAnnotations(code: string): { path: string; note: string }[] {
   const ev = MESSAGE_EVENTS.find((e) => e.code === code);
   if (!ev) return [];
+  const contents = messageContents(code);
+  // Ordered to follow the Bundle's top-level keys top-to-bottom, so every
+  // section of the JSON has a card (no gaps).
   const envelope = [
+    { path: 'resourceType', note: 'The whole message is a single FHIR Bundle resource.' },
     { path: 'id', note: "The Bundle's logical id. On a REST create (POST) the receiving server assigns/confirms this — the submitter's own handle is the identifier below." },
+    { path: 'meta', note: 'Bundle.meta — the SERIS envelope every resource carries: the profile claim, the HTEST security label, and the facility-id tag (meta.tag).' },
     { path: 'identifier', note: "The message's globally-unique business identifier, as a urn:uuid. SERIS makes Bundle.identifier must-support — this is what identifies the message." },
     { path: 'type', note: 'Fixed to "message" — a SERIS submission is always a message Bundle.' },
     { path: 'timestamp', note: 'When the message was assembled/sent.' },
+    { path: 'entry', note: `The resources that travel in the message — ${contents.length} entries, each wrapped in a urn:uuid fullUrl so references resolve inside the Bundle.` },
   ];
-  const entries = messageContents(code).map((type, i) => ({
+  const entries = contents.map((type, i) => ({
     path: `entry[${i}]`,
     note: `${type} — ${RESOURCE_ROLE[type] ?? 'a resource carried in the message.'}`,
   }));
