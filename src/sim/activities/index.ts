@@ -4,8 +4,9 @@
 
 import type { ActivityDef } from '../types';
 import { SCHEDULE_ACTIVITIES } from './schedule';
+import { CASE_ACTIVITIES } from './case';
 
-export const ACTIVITIES: ActivityDef[] = [...SCHEDULE_ACTIVITIES];
+export const ACTIVITIES: ActivityDef[] = [...SCHEDULE_ACTIVITIES, ...CASE_ACTIVITIES];
 
 export const activitiesByTrack = (track: 'schedule' | 'case'): ActivityDef[] =>
   ACTIVITIES.filter((a) => a.track === track);

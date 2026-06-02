@@ -117,3 +117,32 @@ describe('OR Schedule surfaces every coded input as a dropdown (no gaps)', () =>
     expect(missing, `value sets not surfaced as dropdowns: ${missing.join(', ')}`).toHaveLength(0);
   });
 });
+
+// MessageEventCode + BusinessStatus are set by the activity (not user input);
+// ObservationTypes is fixed to the ASA observation; demographics + category
+// service are auto-applied or deferred.
+const AUTO_VALUE_SETS_CASE = new Set([
+  'MessageEventCode',
+  'BusinessStatus',
+  'ObservationTypes',
+  'GenderIdentity',
+  'Race',
+  'IndigenousIdentity',
+  'HospitalService',
+]);
+
+describe('OR Case surfaces every coded input as a dropdown (no gaps)', () => {
+  it('every bound, enumerated value set on the case profiles/extensions has a select field', () => {
+    const surfaced = new Set(
+      activitiesByTrack('case')
+        .flatMap((a) => a.fields)
+        .filter((f) => f.valueSet)
+        .map((f) => f.valueSet as string),
+    );
+    const required = [...valueSetsToSurface('case', ['Encounter', 'Procedure', 'Observation', 'Patient'])].filter(
+      (vs) => !AUTO_VALUE_SETS_CASE.has(vs),
+    );
+    const missing = required.filter((vs) => !surfaced.has(vs));
+    expect(missing, `value sets not surfaced as dropdowns: ${missing.join(', ')}`).toHaveLength(0);
+  });
+});

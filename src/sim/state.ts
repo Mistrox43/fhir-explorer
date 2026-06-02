@@ -147,6 +147,14 @@ export function sampleFacility(): FacilityState {
           'identifier.value': 'ROLE-1',
         }, { refs: { practitioner: '12345' } }),
       ],
+      case: [
+        entity('case', 'CASE-0001', 'Case CASE-0001', {
+          caseId: 'CASE-0001',
+          patient: 'MRN-0001',
+          surgeon: '12345',
+          location: 'OR-3',
+        }, { state: 'booked', refs: { patient: 'MRN-0001', practitioner: '12345', location: 'OR-3' } }),
+      ],
     },
   };
 }
