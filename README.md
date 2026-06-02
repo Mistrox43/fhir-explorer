@@ -9,8 +9,10 @@ are learning the spec.
 The content is **generated directly from the published FHIR package** (`ca.on.oh-seris`), so
 it stays faithful to the spec and can be regenerated whenever the IG is updated.
 
-The app has two modes: **Orientation** (a guided, business-first walkthrough) and **Reference**
-(the full artifact browser). It opens in Orientation by default.
+The app has five modes: **Orientation** (a guided, business-first walkthrough), **Reference** (the
+full artifact browser), **Validate** (a conformance checker), **Build** (assemble sample payloads),
+and **Simulate** (act as the hospital system and generate the FHIR each activity transmits). It opens
+in Orientation by default.
 
 ## Features
 
@@ -73,6 +75,16 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
 
 ### Advanced tools
 
+- **Simulate** — Act as the hospital system: a **stateful simulator** where you drive the real OR
+  activities and the tool generates the exact SERIS FHIR each one transmits. Two tracks mirror the IG's
+  use cases — **OR Schedule** (16 activities: open a room → schedule → slot → blocks, plus closures and
+  corrections) emits individual **REST creates**; **OR Case** (8 activities: book → perform → cancel /
+  entered-in-error, plus add-ons) emits the wired **message Bundle**. Every input is available, with
+  coded values surfaced as **dropdowns** from their value sets; entities you create (rooms, schedules,
+  slots, patients, cases) **persist** and become selectable in later activities, so references resolve
+  to real created things. Each generated payload is auto-checked with the same engine as Validate, and a
+  coverage test fails if any bound coded element lacks a dropdown. (Synthetic data only — the facility
+  state stays on your device and is never put in shared links.)
 - **Build** — Two sibling sub-modes that mirror SERIS's two submission styles:
   - **OR Case · Messages** — Assemble the **complete** SERIS message Bundle for a case event
     (scheduled / performed / cancelled): **every resource that travels in the message** —
