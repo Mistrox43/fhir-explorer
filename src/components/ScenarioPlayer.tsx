@@ -7,7 +7,7 @@ import { OrientationStepCard } from './OrientationStepCard';
 interface Props {
   onOpen: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
-  onOpenBuild: () => void;
+  onOpenBuild: (eventCode?: string) => void;
 }
 
 /** Walks a curated case scenario step by step, tracking the case state so far. */

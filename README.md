@@ -15,11 +15,15 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
 ## Features
 
 - **Orientation** — A guided walkthrough grounded in the IG's surgical business workflow. It
-  opens on a curated **Key Journey** (open an OR → schedule → block → book → perform → cancel →
-  report) and offers two full tracks — **OR Schedule** (16 use cases) and **OR Case** (8 use
-  cases, modelled as `Encounter` state transitions). Each business event shows the FHIR artifacts
-  it produces (clickable chips that jump into the Reference explorer), an illustrative example
-  payload, and the relevant profile's generated template. Business descriptions are summarised
+  opens on a curated **Key Journey** (open an OR → schedule → block → book → perform) and offers
+  two full tracks — **OR Schedule** (16 use cases) and **OR Case** (8 use cases, modelled as
+  `Encounter` state transitions). SERIS is **event-driven**: each case state change is reported as
+  it happens as its own FHIR message, so every case step is marked with the message it transmits
+  (`case-scheduled` / `case-performed` / `case-cancelled`) and links straight to that complete
+  message in **Build** — there's no single "submit at the end" step. (OR Schedule changes are
+  likewise sent incrementally, but as plain REST creates.) Each business event shows the FHIR
+  artifacts it produces (clickable chips that jump into the Reference explorer), an illustrative
+  example payload, and the relevant profile's generated template. Business descriptions are summarised
   from the IG's [Business Context · Use Cases](https://simplifier.net/guide/ca-on-seris-r4-iguide/Table-of-Contents/BusinessContext/Use-Cases?version=1.1.0)
   page; every artifact link is validated against the loaded package data.
 - **Explorer** — Browse the 15 resource profiles and drill into each constrained element:

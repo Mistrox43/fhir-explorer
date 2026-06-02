@@ -9,7 +9,7 @@ import { LifecycleMap } from './LifecycleMap';
 interface Props {
   onOpenArtifact: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
-  onOpenBuild: () => void;
+  onOpenBuild: (eventCode?: string) => void;
 }
 
 type SubView = 'journey' | 'schedule' | 'case' | 'scenario' | 'lifecycle';
@@ -73,8 +73,9 @@ export function Orientation({ onOpenArtifact, onValidate, onOpenBuild }: Props) 
       {view === 'journey' ? (
         <section className="orientation-steps">
           <p className="orientation-steps__lead">
-            The end-to-end story — from opening an OR to reporting a completed case. Open the OR
-            Schedule and OR Case tracks above for every use case in detail.
+            The end-to-end story — from opening an OR to performing a completed case, with each
+            state change reported to SERIS as it happens. Open the OR Schedule and OR Case tracks
+            above for every use case in detail.
           </p>
           {keyJourneySteps.map((step, i) => (
             <OrientationStepCard
@@ -112,11 +113,21 @@ function TrackView({
   track: OrientationTrack;
   onOpen: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
-  onOpenBuild: () => void;
+  onOpenBuild: (eventCode?: string) => void;
 }) {
   return (
     <section className="orientation-steps">
       <p className="orientation-steps__lead">{track.summary}</p>
+      {track.note && (
+        <aside className="orientation-note" role="note">
+          <span className="orientation-note__icon" aria-hidden="true">
+            📤
+          </span>
+          <p>
+            <strong>How this reaches SERIS.</strong> {track.note}
+          </p>
+        </aside>
+      )}
       {track.stages.map((stage) => (
         <div key={stage.title} className="orientation-stage">
           <h3 className="orientation-stage__title">{stage.title}</h3>

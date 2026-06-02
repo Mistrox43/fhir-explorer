@@ -7,11 +7,15 @@ import { JsonActions } from './JsonActions';
 
 interface Props {
   onValidate: (json: unknown, title?: string) => void;
+  /** Pre-select a message event by code (e.g. when arriving from an Orientation step). */
+  initialEvent?: string;
 }
 
 /** "Build" mode: assemble a conformant SERIS message Bundle per case event. */
-export function MessageAssembler({ onValidate }: Props) {
-  const [code, setCode] = useState(MESSAGE_EVENTS[1].code);
+export function MessageAssembler({ onValidate, initialEvent }: Props) {
+  const [code, setCode] = useState(
+    () => MESSAGE_EVENTS.find((e) => e.code === initialEvent)?.code ?? MESSAGE_EVENTS[1].code,
+  );
   const [picked, setPicked] = useState<unknown>(null);
   const ev = MESSAGE_EVENTS.find((e) => e.code === code)!;
   const bundle = useMemo(() => assembleMessage(code), [code]);

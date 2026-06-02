@@ -49,6 +49,7 @@ export default function App() {
   const nonce = useRef(0);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [decode, setDecode] = useState<string | null>(null);
+  const [buildEvent, setBuildEvent] = useState<string | undefined>();
 
   // Cmd/Ctrl-K opens the global search palette.
   useEffect(() => {
@@ -86,6 +87,12 @@ export default function App() {
     nonce.current += 1;
     setSeed({ json, title, nonce: nonce.current });
     setMode('validate');
+  }
+
+  // Jump to Build mode, optionally pre-selecting the message event for a step.
+  function openBuild(eventCode?: string) {
+    setBuildEvent(eventCode);
+    setMode('build');
   }
 
   const MODES: [AppMode, string][] = [
@@ -139,7 +146,7 @@ export default function App() {
           <Orientation
             onOpenArtifact={openArtifact}
             onValidate={openValidator}
-            onOpenBuild={() => setMode('build')}
+            onOpenBuild={openBuild}
           />
         </main>
       )}
@@ -154,7 +161,7 @@ export default function App() {
       {mode === 'build' && (
         <main className="app__main app__main--full">
           <h2 className="view-title">Message builder</h2>
-          <MessageAssembler onValidate={openValidator} />
+          <MessageAssembler key={buildEvent ?? 'def'} initialEvent={buildEvent} onValidate={openValidator} />
         </main>
       )}
 

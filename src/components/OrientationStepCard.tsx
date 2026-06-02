@@ -11,8 +11,8 @@ interface Props {
   index?: number;
   onOpen: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
-  /** Switch to Build mode (to see the full message a case event produces). */
-  onOpenBuild?: () => void;
+  /** Switch to Build mode (optionally at a specific message event) to see the full message. */
+  onOpenBuild?: (eventCode?: string) => void;
 }
 
 const GROUP_LABELS: Record<string, string> = {
@@ -50,6 +50,26 @@ export function OrientationStepCard({ step, index, onOpen, onValidate, onOpenBui
         </div>
       </div>
 
+      {step.transmits && (
+        <div className="ostep__transmit">
+          <span className="ostep__transmit-label">📤 Reports to SERIS</span>
+          <span className="ostep__transmit-body">
+            sent now, as its own <code>{step.transmits.eventCode}</code> message
+            {' '}— a Bundle whose Task carries businessStatus{' '}
+            <code>{step.transmits.businessStatus}</code>
+          </span>
+          {onOpenBuild && (
+            <button
+              type="button"
+              className="ostep__buildlink"
+              onClick={() => onOpenBuild(step.transmits!.eventCode)}
+            >
+              See this message in Build →
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="ostep__artifacts">
         {grouped.map(({ group, items }) => (
           <div key={group} className="ostep__group">
@@ -78,10 +98,14 @@ export function OrientationStepCard({ step, index, onOpen, onValidate, onOpenBui
               📦 This shows the <strong>main resource</strong> this event produces. The actual
               submission also carries the resources it references (Patient, Encounter, …) — references
               to things like the OR Location use a business identifier instead.
-              {step.caseState && onOpenBuild && (
+              {step.transmits && onOpenBuild && (
                 <>
                   {' '}
-                  <button type="button" className="ostep__buildlink" onClick={onOpenBuild}>
+                  <button
+                    type="button"
+                    className="ostep__buildlink"
+                    onClick={() => onOpenBuild(step.transmits!.eventCode)}
+                  >
                     See the complete message in Build →
                   </button>
                 </>

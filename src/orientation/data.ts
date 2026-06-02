@@ -44,8 +44,6 @@ export const ORIENTATION: OrientationContent = {
     'sched-add-block',
     'case-book',
     'case-perform',
-    'case-cancel',
-    'case-submit',
   ],
 
   scenarios: [
@@ -53,15 +51,15 @@ export const ORIENTATION: OrientationContent = {
       id: 'elective-completed',
       title: 'Elective case — booked → performed',
       summary:
-        'The happy path: an elective case is booked, the surgery is performed and documented, then the case is published to the repository.',
-      stepIds: ['case-book', 'case-perform', 'case-submit'],
+        'The happy path: an elective case is booked, then the surgery is performed and documented. Each step is reported to SERIS as it happens — as its own message.',
+      stepIds: ['case-book', 'case-perform'],
     },
     {
       id: 'elective-cancelled',
       title: 'Elective case — booked → cancelled',
       summary:
-        'A booked case is cancelled (with reason and a rescheduled date), then the cancellation is published.',
-      stepIds: ['case-book', 'case-cancel', 'case-submit'],
+        'A booked case is later cancelled (with reason and a rescheduled date). The booking and the cancellation are each reported to SERIS as their own message.',
+      stepIds: ['case-book', 'case-cancel'],
     },
     {
       id: 'or-setup',
@@ -79,6 +77,7 @@ export const ORIENTATION: OrientationContent = {
       title: 'OR Schedule lifecycle',
       summary:
         'Setting up and maintaining operating-room capacity: rooms, schedules, surgical blocks, and slots. Driven by the Location, Schedule, and Slot profiles and their block/shift/hours extensions.',
+      note: 'Schedule changes are reported incrementally too, but via plain FHIR REST rather than messages: each create/update is its own POST or PUT of the Location, Schedule, or Slot resource to SERIS (per the client CapabilityStatement). Like the case track, there is no batched end-of-day submit — each change below is sent as it happens.',
       stages: [
         { title: 'Set up capacity', stepIds: ['sched-room', 'sched-create', 'sched-create-slot'] },
         {
@@ -452,17 +451,18 @@ export const ORIENTATION: OrientationContent = {
       id: 'case',
       title: 'OR Case lifecycle',
       summary:
-        'The surgical case from booking to outcome, modelled as Encounter state transitions (booked → performed / cancelled / entered-in-error), with Procedure, MedicationAdministration, and Observation capturing what happened. Cases are published to the repository in a message Bundle.',
+        'The surgical case from booking to outcome, modelled as Encounter state transitions (booked → performed / cancelled / entered-in-error), with Procedure, MedicationAdministration, and Observation capturing what happened.',
+      note: 'SERIS is event-driven: every state change is reported as it happens, as its own FHIR message — a Bundle led by a MessageHeader, with a Task carrying the case business status. Booking sends a case-scheduled message, performing sends case-performed, cancelling sends case-cancelled. There is no single submit at the end — each step below transmits its own message, shown by the 📤 marker.',
       stages: [
         { title: 'Book', stepIds: ['case-book', 'case-update-booked'] },
         { title: 'Perform', stepIds: ['case-perform', 'case-update-performed', 'case-addon'] },
         { title: 'Cancel', stepIds: ['case-cancel', 'case-cancel-addon'] },
         { title: 'Corrections', stepIds: ['case-eie'] },
-        { title: 'Report', stepIds: ['case-submit'] },
       ],
       steps: [
         {
           id: 'case-book',
+          transmits: { eventCode: 'case-scheduled', businessStatus: 'booked' },
           ucRef: 'OR Case · UC1',
           title: 'Book elective surgery',
           event: 'An OR is booked for a new elective case and the case details are entered. The case enters the "booked" state.',
@@ -475,6 +475,7 @@ export const ORIENTATION: OrientationContent = {
             { kind: 'profile', name: 'Patient', group: 'produces' },
             { kind: 'extension', name: 'SETPSurgicalPriority', group: 'extends' },
             { kind: 'extension', name: 'SETPBookingDate', group: 'extends' },
+            { kind: 'valueSet', name: 'MessageEventCode', group: 'codes' },
             { kind: 'valueSet', name: 'BusinessStatus', group: 'codes' },
             { kind: 'valueSet', name: 'SurgicalPriorityClassification', group: 'codes' },
             { kind: 'valueSet', name: 'EncounterClass', group: 'codes' },
@@ -504,6 +505,7 @@ export const ORIENTATION: OrientationContent = {
         },
         {
           id: 'case-update-booked',
+          transmits: { eventCode: 'case-scheduled', businessStatus: 'booked' },
           ucRef: 'OR Case · UC2',
           title: 'Update a booked case',
           event: 'Pre-operative details of a scheduled case are changed — e.g. its OR/location assignment.',
@@ -518,6 +520,7 @@ export const ORIENTATION: OrientationContent = {
         },
         {
           id: 'case-perform',
+          transmits: { eventCode: 'case-performed', businessStatus: 'performed' },
           ucRef: 'OR Case · UC3',
           title: 'Record a performed case',
           event: 'After surgery, the performed procedure is documented for a booked case — including anaesthesia, the surgical-safety checklist, and observations. The case moves to "performed".',
@@ -530,6 +533,8 @@ export const ORIENTATION: OrientationContent = {
             { kind: 'profile', name: 'Procedure', group: 'produces' },
             { kind: 'profile', name: 'MedicationAdministration', group: 'produces' },
             { kind: 'profile', name: 'Observation', group: 'produces' },
+            { kind: 'valueSet', name: 'MessageEventCode', group: 'codes' },
+            { kind: 'valueSet', name: 'BusinessStatus', group: 'codes' },
             { kind: 'extension', name: 'InRoom', group: 'extends' },
             { kind: 'extension', name: 'SERISSurgicalChecklist', group: 'extends' },
             { kind: 'extension', name: 'SETPAnaesthesia Type', group: 'extends' },
@@ -567,6 +572,7 @@ export const ORIENTATION: OrientationContent = {
         },
         {
           id: 'case-update-performed',
+          transmits: { eventCode: 'case-performed', businessStatus: 'performed' },
           ucRef: 'OR Case · UC4',
           title: 'Update a performed case',
           event: 'Procedure information is refined or corrected after the surgery is complete.',
@@ -582,6 +588,7 @@ export const ORIENTATION: OrientationContent = {
         },
         {
           id: 'case-addon',
+          transmits: { eventCode: 'case-performed', businessStatus: 'performed' },
           ucRef: 'OR Case · UC6',
           title: 'Perform an add-on case',
           event: 'An unscheduled urgent/emergency case is performed and documented — there was no prior booking.',
@@ -597,6 +604,7 @@ export const ORIENTATION: OrientationContent = {
         },
         {
           id: 'case-cancel',
+          transmits: { eventCode: 'case-cancelled', businessStatus: 'cancelled' },
           ucRef: 'OR Case · UC5',
           title: 'Cancel an elective case',
           event: 'A scheduled case is cancelled in advance or same-day (including in-room). The cancellation date, reason, and any rescheduled date are recorded; the case moves to "cancelled".',
@@ -609,6 +617,8 @@ export const ORIENTATION: OrientationContent = {
             { kind: 'extension', name: 'SERISCancellation', group: 'extends' },
             { kind: 'extension', name: 'SERISReschedule', group: 'extends' },
             { kind: 'valueSet', name: 'SurgeryCancellationReason', group: 'codes' },
+            { kind: 'valueSet', name: 'MessageEventCode', group: 'codes' },
+            { kind: 'valueSet', name: 'BusinessStatus', group: 'codes' },
           ],
           example: {
             title: 'Encounter — cancelled case',
@@ -649,6 +659,7 @@ export const ORIENTATION: OrientationContent = {
         },
         {
           id: 'case-cancel-addon',
+          transmits: { eventCode: 'case-cancelled', businessStatus: 'cancelled' },
           ucRef: 'OR Case · UC7',
           title: 'Cancel an add-on case',
           event: 'An in-room cancellation of an unscheduled add-on case is captured.',
@@ -664,6 +675,7 @@ export const ORIENTATION: OrientationContent = {
         },
         {
           id: 'case-eie',
+          transmits: { eventCode: 'case-cancelled', businessStatus: 'entered-in-error' },
           ucRef: 'OR Case · UC8',
           title: 'Mark a case entered in error',
           event: 'A case recorded by mistake is cancelled with a reason of entered-in-error.',
@@ -675,37 +687,6 @@ export const ORIENTATION: OrientationContent = {
             { kind: 'profile', name: 'Encounter', group: 'produces' },
             { kind: 'valueSet', name: 'BusinessStatus', group: 'codes' },
           ],
-        },
-        {
-          id: 'case-submit',
-          title: 'Submit to the SERIS repository',
-          event: 'Each case event is published to the Ontario Health provincial repository as a FHIR message — a Bundle led by a MessageHeader — with a Task tracking the case’s business status.',
-          actor: 'OR scheduling / HIS systems',
-          action: 'message',
-          primaryProfile: 'MessageHeader',
-          artifacts: [
-            { kind: 'profile', name: 'Bundle', group: 'produces' },
-            { kind: 'profile', name: 'MessageHeader', group: 'produces' },
-            { kind: 'profile', name: 'Task', group: 'produces' },
-            { kind: 'valueSet', name: 'MessageEventCode', group: 'codes' },
-            { kind: 'valueSet', name: 'BusinessStatus', group: 'codes' },
-            { kind: 'capability', name: 'SERISClientFHIRCapabilityStatement', group: 'produces' },
-          ],
-          example: {
-            title: 'MessageHeader — case event',
-            description: 'The MessageHeader names the business event that triggered the message; it leads a Bundle of the case resources.',
-            json: {
-              resourceType: 'MessageHeader',
-              meta: { profile: [profileUrl('MessageHeader')] },
-              eventCoding: { system: `${CS}/message-event-code`, code: 'case-performed', display: 'Case performed' },
-              source: { endpoint: 'https://his.hospital.example/fhir' },
-              focus: [{ reference: 'Task/case-123' }],
-            },
-            annotations: [
-              { path: 'eventCoding', note: 'MessageEventCode "case-performed" tells the repository what happened.' },
-              { path: 'focus', note: 'Points at the Task carrying the case business status (booked/performed/cancelled).' },
-            ],
-          },
         },
       ],
     },

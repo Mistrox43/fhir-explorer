@@ -32,6 +32,8 @@ export interface OrientationStep {
   primaryProfile?: string;
   /** A hand-authored, grounded example payload for this event. */
   example?: TemplateExample;
+  /** If this event reports to SERIS, the message it sends (event code + Task businessStatus). */
+  transmits?: { eventCode: string; businessStatus: string };
 }
 
 /** A grouping of steps within a track. */
@@ -45,6 +47,8 @@ export interface OrientationTrack {
   id: 'schedule' | 'case';
   title: string;
   summary: string;
+  /** A callout shown at the top of the track (e.g. how submission works). */
+  note?: string;
   stages: OrientationStage[];
   steps: OrientationStep[];
 }
