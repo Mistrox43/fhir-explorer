@@ -11,8 +11,8 @@ interface Props {
   index?: number;
   onOpen: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
-  /** Switch to Build mode (optionally at a specific message event) to see the full message. */
-  onOpenBuild?: (eventCode?: string) => void;
+  /** Switch to Build mode — a message event for case steps, or the REST-creates view for schedule. */
+  onOpenBuild?: (eventCode?: string, kind?: 'message' | 'schedule') => void;
 }
 
 const GROUP_LABELS: Record<string, string> = {
@@ -93,25 +93,44 @@ export function OrientationStepCard({ step, index, onOpen, onValidate, onOpenBui
           >
             {showFhir ? '▾' : '▸'} See the FHIR output
           </button>
-          {showFhir && (
-            <p className="ostep__fhir-note">
-              📦 This shows the <strong>main resource</strong> this event produces. The actual
-              submission also carries the resources it references (Patient, Encounter, …) — references
-              to things like the OR Location use a business identifier instead.
-              {step.transmits && onOpenBuild && (
-                <>
-                  {' '}
-                  <button
-                    type="button"
-                    className="ostep__buildlink"
-                    onClick={() => onOpenBuild(step.transmits!.eventCode)}
-                  >
-                    See the complete message in Build →
-                  </button>
-                </>
-              )}
-            </p>
-          )}
+          {showFhir &&
+            (step.transmits ? (
+              <p className="ostep__fhir-note">
+                📦 This shows the <strong>main resource</strong> this event produces. The actual
+                submission also carries the resources it references (Patient, Encounter, …) —
+                references to things like the OR Location use a business identifier instead.
+                {onOpenBuild && (
+                  <>
+                    {' '}
+                    <button
+                      type="button"
+                      className="ostep__buildlink"
+                      onClick={() => onOpenBuild(step.transmits!.eventCode)}
+                    >
+                      See the complete message in Build →
+                    </button>
+                  </>
+                )}
+              </p>
+            ) : (
+              <p className="ostep__fhir-note">
+                📄 This <strong>is</strong> the resource this event submits — sent on its own over
+                REST, not bundled into a message. References to related resources (e.g. the OR
+                Location or the parent Schedule) use a business identifier instead of embedding them.
+                {onOpenBuild && (
+                  <>
+                    {' '}
+                    <button
+                      type="button"
+                      className="ostep__buildlink"
+                      onClick={() => onOpenBuild(undefined, 'schedule')}
+                    >
+                      See the full create sequence in Build →
+                    </button>
+                  </>
+                )}
+              </p>
+            ))}
           {showFhir && (
             <div className="ostep__fhir">
               {step.example && (
