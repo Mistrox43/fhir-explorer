@@ -111,21 +111,22 @@ export function sampleFacility(): FacilityState {
       site: [entity('site', '4000', 'General Hospital (site 4000)', { facilityId: '4000' })],
       location: [
         entity('location', 'OR-3', 'OR-3 — Operating Room', {
+          facilityId: '4001',
           'identifier.value': 'OR-3',
           name: 'OR-3',
           status: 'active',
-        }),
+        }, { facilityId: '4001' }),
       ],
       schedule: [
         entity('schedule', 'SCH-OR3-2025-06-02', 'OR-3 · Day shift · 2025-06-02', {
           'identifier.value': 'SCH-OR3-2025-06-02',
-        }, { refs: { location: 'OR-3' } }),
+        }, { facilityId: '4001', refs: { location: 'OR-3' } }),
       ],
       slot: [
         entity('slot', 'SLOT-AM-1', 'AM Slot 1 (free) · OR-3', {
           'identifier.value': 'SLOT-AM-1',
           status: 'free',
-        }, { refs: { schedule: 'SCH-OR3-2025-06-02' } }),
+        }, { facilityId: '4001', refs: { schedule: 'SCH-OR3-2025-06-02' } }),
       ],
       patient: [
         entity('patient', 'MRN-0001', 'Peter Chalmers (MRN-0001)', {
