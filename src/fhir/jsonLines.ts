@@ -64,3 +64,63 @@ export function buildJsonLines(value: unknown): JsonLineMap {
   emit(value, 0, '', '', '');
   return { lines, ranges };
 }
+
+export interface Card {
+  path: string;
+  note: string;
+  /** True when synthesized to fill a gap (no hand-authored note for this key). */
+  auto?: boolean;
+}
+
+// "planningHorizon" -> "Planning horizon", "partOf" -> "Part of".
+const humanize = (key: string): string => {
+  const words = key
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
+const autoNote = (key: string, value: unknown): string => {
+  if (key === 'resourceType') return `The FHIR resource type — ${String(value)}.`;
+  if (key === 'meta') return 'Resource metadata: the SERIS profile claim, the HTEST security label, and the facility-id tag.';
+  const label = humanize(key);
+  if (Array.isArray(value)) return `${label} — ${value.length} item${value.length === 1 ? '' : 's'}.`;
+  return `${label}.`;
+};
+
+/**
+ * Merges hand-authored annotations with synthesized ones so EVERY top-level key
+ * of `json` has a card (no gaps), ordered to follow the JSON top-to-bottom.
+ * Hand-authored notes win; nested hand annotations (e.g. "schedule.identifier",
+ * "entry[0]") are kept as finer cards grouped under their top-level key.
+ */
+export function buildCards(json: unknown, annotations: { path: string; note: string }[]): Card[] {
+  if (!json || typeof json !== 'object' || Array.isArray(json)) {
+    return annotations.map((a) => ({ ...a }));
+  }
+  const obj = json as Record<string, unknown>;
+  const exact = new Map(annotations.filter((a) => a.path in obj).map((a) => [a.path, a]));
+  const used = new Set<{ path: string; note: string }>();
+  const cards: Card[] = [];
+
+  for (const key of Object.keys(obj)) {
+    const hand = exact.get(key);
+    if (hand) {
+      cards.push({ ...hand });
+      used.add(hand);
+    } else {
+      cards.push({ path: key, note: autoNote(key, obj[key]), auto: true });
+    }
+    // Finer hand-authored cards nested under this key, in their original order.
+    for (const a of annotations) {
+      if (a.path !== key && (a.path.startsWith(`${key}.`) || a.path.startsWith(`${key}[`))) {
+        cards.push({ ...a });
+        used.add(a);
+      }
+    }
+  }
+  // Defensive: keep any hand annotation that didn't map to a top-level key.
+  for (const a of annotations) if (!used.has(a)) cards.push({ ...a });
+  return cards;
+}

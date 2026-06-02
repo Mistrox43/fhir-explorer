@@ -23,7 +23,10 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
   message in **Build** — there's no single "submit at the end" step. (OR Schedule changes are
   likewise sent incrementally, but as plain REST creates.) Each business event shows the FHIR
   artifacts it produces (clickable chips that jump into the Reference explorer), an illustrative
-  example payload, and the relevant profile's generated template. Business descriptions are summarised
+  example payload, and the relevant profile's generated template. Every example payload pairs the JSON
+  with **descriptor cards** — one for each top-level section (hand-authored where it teaches something,
+  auto-filled otherwise, so there are no gaps) — that you hover or click to highlight and scroll to the
+  exact slice of JSON they describe. Business descriptions are summarised
   from the IG's [Business Context · Use Cases](https://simplifier.net/guide/ca-on-seris-r4-iguide/Table-of-Contents/BusinessContext/Use-Cases?version=1.1.0)
   page; every artifact link is validated against the loaded package data.
 - **Explorer** — Browse the 15 resource profiles and drill into each constrained element:

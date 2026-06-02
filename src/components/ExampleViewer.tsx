@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { TemplateExample } from '../fhir/types';
-import { buildJsonLines } from '../fhir/jsonLines';
+import { buildJsonLines, buildCards } from '../fhir/jsonLines';
 import { JsonActions } from './JsonActions';
 
 interface Props {
@@ -22,6 +22,12 @@ export function ExampleViewer({ example, onValidate }: Props) {
   const preRef = useRef<HTMLPreElement>(null);
 
   const { lines, ranges } = useMemo(() => buildJsonLines(example?.json), [example?.json]);
+  // Merge hand-authored notes with auto-filled cards so every top-level section
+  // of the JSON is clickable (no gaps), consistently across every example.
+  const cards = useMemo(
+    () => buildCards(example?.json, example?.annotations ?? []),
+    [example?.json, example?.annotations],
+  );
 
   // Clear any selection when the example itself changes (adjust state during
   // render, per React guidance, rather than in an effect).
@@ -85,11 +91,11 @@ export function ExampleViewer({ example, onValidate }: Props) {
             );
           })}
         </pre>
-        {example.annotations.length > 0 && (
+        {cards.length > 0 && (
           <div className="example__notescol">
             <p className="example__noteshint">Hover or click a card to highlight it in the JSON.</p>
             <ul className="example__notes" aria-label="Annotations">
-              {example.annotations.map((a) => {
+              {cards.map((a) => {
                 const hasLoc = ranges.has(a.path);
                 const isPinned = pinned === a.path;
                 return (

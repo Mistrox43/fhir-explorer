@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { buildJsonLines } from './jsonLines';
+import { buildJsonLines, buildCards } from './jsonLines';
 import { assembleMessage, messageAnnotations, MESSAGE_EVENTS } from './assemble';
+import { ORIENTATION } from '../orientation';
+import { SCHEDULE_CREATES } from './scheduleRest';
 
 describe('buildJsonLines', () => {
   const samples: { name: string; value: unknown }[] = [
@@ -35,6 +37,63 @@ describe('buildJsonLines', () => {
     // entry[7] is the Procedure in every case message.
     const proc = ranges.get('entry[7]');
     expect(lines.slice(proc![0], proc![1] + 1).join('\n')).toContain('Procedure');
+  });
+});
+
+describe('buildCards fills top-level gaps consistently', () => {
+  it('adds a card for every top-level key, keeps hand notes, follows JSON order', () => {
+    const json = {
+      resourceType: 'Slot',
+      meta: {},
+      extension: [],
+      identifier: [{ value: 'x' }],
+      status: 'free',
+      schedule: { identifier: { value: 'S' } },
+    };
+    const hand = [
+      { path: 'status', note: 'free = bookable' },
+      { path: 'schedule.identifier', note: 'parent schedule' },
+    ];
+    const cards = buildCards(json, hand);
+    const paths = cards.map((c) => c.path);
+
+    for (const k of Object.keys(json)) expect(paths, `missing ${k}`).toContain(k);
+    expect(cards.find((c) => c.path === 'status')?.note).toBe('free = bookable');
+    expect(cards.find((c) => c.path === 'status')?.auto).toBeFalsy();
+    expect(cards.find((c) => c.path === 'meta')?.auto).toBe(true);
+    // nested hand card kept and grouped after its parent key
+    expect(paths.indexOf('schedule')).toBeLessThan(paths.indexOf('schedule.identifier'));
+    // top-level cards follow JSON key order
+    expect(paths.filter((p) => p in json)).toEqual(Object.keys(json));
+  });
+
+  it('is a no-op when annotations already cover every top-level key (message)', () => {
+    const msg = assembleMessage('case-performed');
+    const cards = buildCards(msg, messageAnnotations('case-performed'));
+    expect(cards.map((c) => c.path)).toEqual(messageAnnotations('case-performed').map((a) => a.path));
+    expect(cards.every((c) => !c.auto)).toBe(true);
+  });
+
+  it('makes every OR Schedule REST create and orientation example gap-free', () => {
+    const examples: { id: string; json: unknown; annotations: { path: string; note: string }[] }[] = [
+      ...SCHEDULE_CREATES.map((c) => ({ id: c.id, json: c.resource, annotations: c.annotations })),
+      ...ORIENTATION.tracks
+        .flatMap((t) => t.steps)
+        .filter((s) => s.example)
+        .map((s) => ({ id: s.id, json: s.example!.json, annotations: s.example!.annotations })),
+    ];
+    for (const ex of examples) {
+      const { ranges } = buildJsonLines(ex.json);
+      const cards = buildCards(ex.json, ex.annotations);
+      const cardPaths = new Set(cards.map((c) => c.path));
+      for (const key of Object.keys(ex.json as Record<string, unknown>)) {
+        expect(cardPaths.has(key), `${ex.id}: no card for "${key}"`).toBe(true);
+      }
+      // every card resolves to a real slice of the JSON
+      for (const c of cards) {
+        expect(ranges.has(c.path), `${ex.id}: card "${c.path}" does not resolve`).toBe(true);
+      }
+    }
   });
 });
 
