@@ -217,6 +217,40 @@ export function messageContents(code: string): string[] {
   return code === 'case-performed' ? [...base, 'MedicationAdministration', 'Observation'] : base;
 }
 
+// What each in-bundle resource is for — the "business concept" behind it.
+const RESOURCE_ROLE: Record<string, string> = {
+  MessageHeader: 'leads the message — names the business event (eventCoding) and points at the Task (focus).',
+  Task: 'tracks the case — carries the businessStatus (booked/performed/cancelled); basedOn → the Appointment and Encounter.',
+  Patient: 'the patient; the clinical resources reference it by urn:uuid (subject).',
+  Practitioner: 'the surgeon.',
+  PractitionerRole: 'ties the surgeon to a service/specialty; Procedure.performer → this.',
+  Appointment: 'the booking; reasonReference → the Procedure.',
+  Encounter: 'the surgical encounter; its status reflects the case state.',
+  Procedure: 'what is/was done; subject → Patient, encounter → Encounter, performer → PractitionerRole.',
+  MedicationAdministration: 'anaesthesia administered (performed messages only).',
+  Observation: 'a recorded observation, e.g. ASA status (performed messages only).',
+};
+
+/**
+ * Descriptor cards for the Build message view — one per envelope concept plus one
+ * per in-bundle resource — each keyed by the JSON `path` it highlights.
+ */
+export function messageAnnotations(code: string): { path: string; note: string }[] {
+  const ev = MESSAGE_EVENTS.find((e) => e.code === code);
+  if (!ev) return [];
+  const envelope = [
+    { path: 'id', note: "The Bundle's logical id. On a REST create (POST) the receiving server assigns/confirms this — the submitter's own handle is the identifier below." },
+    { path: 'identifier', note: "The message's globally-unique business identifier, as a urn:uuid. SERIS makes Bundle.identifier must-support — this is what identifies the message." },
+    { path: 'type', note: 'Fixed to "message" — a SERIS submission is always a message Bundle.' },
+    { path: 'timestamp', note: 'When the message was assembled/sent.' },
+  ];
+  const entries = messageContents(code).map((type, i) => ({
+    path: `entry[${i}]`,
+    note: `${type} — ${RESOURCE_ROLE[type] ?? 'a resource carried in the message.'}`,
+  }));
+  return [...envelope, ...entries];
+}
+
 export function assembleMessage(code: string): Record<string, unknown> | null {
   const ev = MESSAGE_EVENTS.find((e) => e.code === code);
   if (!ev) return null;

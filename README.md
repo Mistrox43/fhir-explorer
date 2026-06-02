@@ -77,7 +77,10 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
     (+ MedicationAdministration & Observation for performed) — wired together by `urn:uuid` so every
     reference resolves, and each resource conformant to its profile. References SERIS makes by business
     identifier (e.g. the OR Location) stay inline. Includes a value-set **code picker**. (Orientation
-    case steps show just the *main* resource and link here for the full message.)
+    case steps show just the *main* resource and link here for the full message.) Every resource and
+    envelope field has a **descriptor card** beside the JSON — hover or click one to highlight (and
+    scroll to) the exact slice it maps to, so you can see which part of the message a given resource or
+    business concept is.
   - **OR Schedule · REST creates** — The schedule side isn't a message: per the client
     CapabilityStatement, each change is an **individual REST `create`**. This view lays out the full,
     ordered sequence to stand up an OR's capacity — `POST /Location` → `POST /Schedule` →

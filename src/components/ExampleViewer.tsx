@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { TemplateExample } from '../fhir/types';
+import { buildJsonLines } from '../fhir/jsonLines';
 import { JsonActions } from './JsonActions';
 
 interface Props {
@@ -8,12 +9,46 @@ interface Props {
   onValidate?: (json: unknown, title?: string) => void;
 }
 
-/** Shows a (generated) example payload with toggleable teaching annotations. */
+/**
+ * Shows a (generated) example payload alongside descriptor cards. Each card is
+ * keyed by a JSON path; hovering previews and clicking pins a highlight on the
+ * exact slice of JSON it describes, scrolling it into view — so you can see the
+ * part of the message a given resource or business concept maps to.
+ */
 export function ExampleViewer({ example, onValidate }: Props) {
-  const [active, setActive] = useState<string | null>(null);
+  const [pinned, setPinned] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [prevJson, setPrevJson] = useState(example?.json);
+  const preRef = useRef<HTMLPreElement>(null);
+
+  const { lines, ranges } = useMemo(() => buildJsonLines(example?.json), [example?.json]);
+
+  // Clear any selection when the example itself changes (adjust state during
+  // render, per React guidance, rather than in an effect).
+  if (example?.json !== prevJson) {
+    setPrevJson(example?.json);
+    setPinned(null);
+    setHovered(null);
+  }
+
+  // When a card is pinned, scroll its slice into view inside the code panel only
+  // (so the cards stay put).
+  useEffect(() => {
+    if (!pinned || !preRef.current) return;
+    const range = ranges.get(pinned);
+    if (!range) return;
+    const el = preRef.current.querySelector<HTMLElement>(`[data-line="${range[0]}"]`);
+    if (!el) return;
+    const pre = preRef.current;
+    const target = el.offsetTop - pre.clientHeight / 2 + el.offsetHeight / 2;
+    pre.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+  }, [pinned, ranges]);
+
   if (!example) return <p className="empty">No template available for this profile.</p>;
-  const json = JSON.stringify(example.json, null, 2);
   const filename = `${(example.title || 'example').replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.json`;
+
+  const shownPath = hovered ?? pinned;
+  const shownRange = shownPath ? ranges.get(shownPath) : undefined;
 
   return (
     <article className="example">
@@ -36,25 +71,58 @@ export function ExampleViewer({ example, onValidate }: Props) {
         />
       </div>
       <div className="example__body">
-        <pre className="example__code">
-          <code>{json}</code>
+        <pre className="example__code" ref={preRef}>
+          {lines.map((line, i) => {
+            const hl = shownRange ? i >= shownRange[0] && i <= shownRange[1] : false;
+            return (
+              <span
+                key={i}
+                data-line={i}
+                className={`example__line${hl ? ' example__line--hl' : ''}`}
+              >
+                {line || ' '}
+              </span>
+            );
+          })}
         </pre>
-        <ul className="example__notes" aria-label="Annotations">
-          {example.annotations.map((a) => (
-            <li
-              key={a.path}
-              className={`example__note${active === a.path ? ' example__note--active' : ''}`}
-              onMouseEnter={() => setActive(a.path)}
-              onMouseLeave={() => setActive(null)}
-              onFocus={() => setActive(a.path)}
-              onBlur={() => setActive(null)}
-              tabIndex={0}
-            >
-              <code className="example__note-path">{a.path}</code>
-              {a.note && <span>{a.note}</span>}
-            </li>
-          ))}
-        </ul>
+        {example.annotations.length > 0 && (
+          <div className="example__notescol">
+            <p className="example__noteshint">Hover or click a card to highlight it in the JSON.</p>
+            <ul className="example__notes" aria-label="Annotations">
+              {example.annotations.map((a) => {
+                const hasLoc = ranges.has(a.path);
+                const isPinned = pinned === a.path;
+                return (
+                  <li key={a.path}>
+                    <button
+                      type="button"
+                      className={`example__note${isPinned ? ' example__note--active' : ''}${
+                        hasLoc ? '' : ' example__note--noloc'
+                      }`}
+                      onClick={() => hasLoc && setPinned(isPinned ? null : a.path)}
+                      onMouseEnter={() => setHovered(a.path)}
+                      onMouseLeave={() => setHovered(null)}
+                      onFocus={() => setHovered(a.path)}
+                      onBlur={() => setHovered(null)}
+                      aria-pressed={hasLoc ? isPinned : undefined}
+                    >
+                      <code className="example__note-path">
+                        {a.path}
+                        {hasLoc && (
+                          <span className="example__note-jump" aria-hidden="true">
+                            {' '}
+                            ↦
+                          </span>
+                        )}
+                      </code>
+                      {a.note && <span>{a.note}</span>}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
     </article>
   );

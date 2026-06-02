@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { assembleMessage, messageContents, MESSAGE_EVENTS } from '../fhir/assemble';
+import { assembleMessage, messageAnnotations, messageContents, MESSAGE_EVENTS } from '../fhir/assemble';
 import type { TemplateExample } from '../fhir/types';
 import { ExampleViewer } from './ExampleViewer';
 import { CodePicker } from './CodePicker';
@@ -27,15 +27,7 @@ export function MessageAssembler({ onValidate, initialEvent }: Props) {
       ', ',
     )}. The envelope is locked correct (type = "message", leading MessageHeader, Task businessStatus) and every resource conforms to its SERIS profile. References SERIS makes by business identifier (e.g. the OR Location) stay inline and aren't embedded. Copy, download, or "Validate this" to inspect it.`,
     json: bundle,
-    annotations: [
-      { path: 'id', note: 'The Bundle\'s logical id. On a REST create (POST) the receiving server assigns/confirms this — the submitter\'s own unique handle is the identifier below.' },
-      { path: 'identifier', note: 'The message\'s globally-unique business identifier, as a urn:uuid. This is what identifies the message; SERIS makes Bundle.identifier must-support.' },
-      { path: 'type', note: 'Fixed to "message" — a SERIS submission is always a message Bundle.' },
-      { path: 'entry[0]', note: 'MessageHeader leads; eventCoding names the event; focus → the Task.' },
-      { path: 'entry[1]', note: 'Task: businessStatus + basedOn → the Appointment and Encounter.' },
-      { path: 'entry[2]', note: 'Patient — the case resources reference it by urn:uuid (Procedure.subject, Encounter.subject).' },
-      { path: 'entry[7]', note: 'Procedure references the Patient, Encounter, PractitionerRole — all resolved inside this Bundle.' },
-    ],
+    annotations: messageAnnotations(code),
   };
 
   return (
