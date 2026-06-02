@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { assembleMessage, MESSAGE_EVENTS } from '../fhir/assemble';
+import { assembleMessage, messageContents, MESSAGE_EVENTS } from '../fhir/assemble';
 import type { TemplateExample } from '../fhir/types';
 import { ExampleViewer } from './ExampleViewer';
 import { CodePicker } from './CodePicker';
@@ -16,25 +16,27 @@ export function MessageAssembler({ onValidate }: Props) {
   const ev = MESSAGE_EVENTS.find((e) => e.code === code)!;
   const bundle = useMemo(() => assembleMessage(code), [code]);
 
+  const contents = messageContents(code);
   const example: TemplateExample = {
     title: `${ev.display} message`,
-    description:
-      'A ready-to-send SERIS message Bundle. The envelope is locked correct — type = "message", a leading MessageHeader with the fixed event system, a Task carrying the business status, urn:uuid fullUrls, and the MessageHeader → Task focus wired. The case resource is seeded from the validated orientation example. Copy, download, or "Validate this" to open it in the Bundle Inspector.',
+    description: `The COMPLETE message Bundle that actually gets sent — all ${contents.length} resources wired together by urn:uuid so every reference resolves: ${contents.join(
+      ', ',
+    )}. The envelope is locked correct (type = "message", leading MessageHeader, Task businessStatus) and every resource conforms to its SERIS profile. References SERIS makes by business identifier (e.g. the OR Location) stay inline and aren't embedded. Copy, download, or "Validate this" to inspect it.`,
     json: bundle,
     annotations: [
       { path: 'type', note: 'Fixed to "message" — a SERIS submission is always a message Bundle.' },
-      { path: 'meta.tag', note: 'The submitting facility id (required on the Bundle).' },
-      { path: 'entry[0]', note: 'MessageHeader leads the Bundle; eventCoding names the event; focus → the Task.' },
-      { path: 'entry[1]', note: 'Task carries businessStatus (booked / performed / cancelled).' },
-      { path: 'entry[2]', note: 'The case resource, seeded from the orientation example for this event.' },
+      { path: 'entry[0]', note: 'MessageHeader leads; eventCoding names the event; focus → the Task.' },
+      { path: 'entry[1]', note: 'Task: businessStatus + basedOn → the Appointment and Encounter.' },
+      { path: 'entry[2]', note: 'Patient — the case resources reference it by urn:uuid (Procedure.subject, Encounter.subject).' },
+      { path: 'entry[7]', note: 'Procedure references the Patient, Encounter, PractitionerRole — all resolved inside this Bundle.' },
     ],
   };
 
   return (
     <div className="builder">
       <p className="builder__lead">
-        Assemble a ready-to-send SERIS message for a case event. The scaffolding is locked conformant;
-        swap in your real resources and identifiers.
+        Assemble the <strong>complete</strong> SERIS message for a case event — every resource that
+        travels in the Bundle, wired together and conformant. Swap in your real values and identifiers.
       </p>
 
       <nav className="tabs" aria-label="Message event">

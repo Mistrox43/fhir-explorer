@@ -9,6 +9,7 @@ import { LifecycleMap } from './LifecycleMap';
 interface Props {
   onOpenArtifact: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
+  onOpenBuild: () => void;
 }
 
 type SubView = 'journey' | 'schedule' | 'case' | 'scenario' | 'lifecycle';
@@ -21,7 +22,7 @@ const SUBVIEWS: { id: SubView; label: string }[] = [
   { id: 'lifecycle', label: 'Lifecycle' },
 ];
 
-export function Orientation({ onOpenArtifact, onValidate }: Props) {
+export function Orientation({ onOpenArtifact, onValidate, onOpenBuild }: Props) {
   const [view, setView] = useState<SubView>('journey');
   const { intro, sourceUrl, tracks } = ORIENTATION;
 
@@ -82,11 +83,12 @@ export function Orientation({ onOpenArtifact, onValidate }: Props) {
               index={i + 1}
               onOpen={onOpenArtifact}
               onValidate={onValidate}
+              onOpenBuild={onOpenBuild}
             />
           ))}
         </section>
       ) : view === 'scenario' ? (
-        <ScenarioPlayer onOpen={onOpenArtifact} onValidate={onValidate} />
+        <ScenarioPlayer onOpen={onOpenArtifact} onValidate={onValidate} onOpenBuild={onOpenBuild} />
       ) : view === 'lifecycle' ? (
         <LifecycleMap />
       ) : (
@@ -94,6 +96,7 @@ export function Orientation({ onOpenArtifact, onValidate }: Props) {
           track={tracks.find((t) => t.id === view) as OrientationTrack}
           onOpen={onOpenArtifact}
           onValidate={onValidate}
+          onOpenBuild={onOpenBuild}
         />
       )}
     </div>
@@ -104,10 +107,12 @@ function TrackView({
   track,
   onOpen,
   onValidate,
+  onOpenBuild,
 }: {
   track: OrientationTrack;
   onOpen: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
+  onOpenBuild: () => void;
 }) {
   return (
     <section className="orientation-steps">
@@ -119,7 +124,13 @@ function TrackView({
             .map((id) => stepById.get(id))
             .filter((s) => s)
             .map((step) => (
-              <OrientationStepCard key={step!.id} step={step!} onOpen={onOpen} onValidate={onValidate} />
+              <OrientationStepCard
+                key={step!.id}
+                step={step!}
+                onOpen={onOpen}
+                onValidate={onValidate}
+                onOpenBuild={onOpenBuild}
+              />
             ))}
         </div>
       ))}

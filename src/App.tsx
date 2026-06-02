@@ -136,7 +136,11 @@ export default function App() {
 
       {mode === 'orientation' && (
         <main className="app__main app__main--full">
-          <Orientation onOpenArtifact={openArtifact} onValidate={openValidator} />
+          <Orientation
+            onOpenArtifact={openArtifact}
+            onValidate={openValidator}
+            onOpenBuild={() => setMode('build')}
+          />
         </main>
       )}
 

@@ -7,10 +7,11 @@ import { OrientationStepCard } from './OrientationStepCard';
 interface Props {
   onOpen: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
+  onOpenBuild: () => void;
 }
 
 /** Walks a curated case scenario step by step, tracking the case state so far. */
-export function ScenarioPlayer({ onOpen, onValidate }: Props) {
+export function ScenarioPlayer({ onOpen, onValidate, onOpenBuild }: Props) {
   const [sid, setSid] = useState(ORIENTATION.scenarios[0].id);
   const [i, setI] = useState(0);
 
@@ -79,7 +80,15 @@ export function ScenarioPlayer({ onOpen, onValidate }: Props) {
         ))}
       </ol>
 
-      {step && <OrientationStepCard step={step} index={idx + 1} onOpen={onOpen} onValidate={onValidate} />}
+      {step && (
+        <OrientationStepCard
+          step={step}
+          index={idx + 1}
+          onOpen={onOpen}
+          onValidate={onValidate}
+          onOpenBuild={onOpenBuild}
+        />
+      )}
     </div>
   );
 }

@@ -66,10 +66,13 @@ The app has two modes: **Orientation** (a guided, business-first walkthrough) an
 
 ### Advanced tools
 
-- **Build** — Assemble a ready-to-send SERIS message Bundle for a case event (scheduled / performed /
-  cancelled). The envelope is locked conformant (`type = "message"`, leading MessageHeader with the
-  fixed event system, a Task with `businessStatus`, `urn:uuid` fullUrls, wired focus, facility tag);
-  the case resource is seeded from the validated example. Includes a value-set **code picker**.
+- **Build** — Assemble the **complete** SERIS message Bundle for a case event (scheduled / performed /
+  cancelled): **every resource that travels in the message** — MessageHeader, Task, Patient,
+  Practitioner, PractitionerRole, Appointment, Encounter, Procedure (+ MedicationAdministration &
+  Observation for performed) — wired together by `urn:uuid` so every reference resolves, and each
+  resource conformant to its profile. References SERIS makes by business identifier (e.g. the OR
+  Location) stay inline. Includes a value-set **code picker**. (Orientation steps show just the *main*
+  resource and link here for the full message.)
 - **Bundle Inspector** — Paste a whole message Bundle into Validate and it resolves the
   MessageHeader → focus → Task → case structure, decodes the event (+ originating use case), validates
   every entry with the same checker, flags unresolved references, and deep-links each entry.

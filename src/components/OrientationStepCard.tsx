@@ -11,6 +11,8 @@ interface Props {
   index?: number;
   onOpen: (sel: Selection) => void;
   onValidate: (json: unknown, title?: string) => void;
+  /** Switch to Build mode (to see the full message a case event produces). */
+  onOpenBuild?: () => void;
 }
 
 const GROUP_LABELS: Record<string, string> = {
@@ -21,7 +23,7 @@ const GROUP_LABELS: Record<string, string> = {
 const GROUP_ORDER = ['produces', 'extends', 'codes'] as const;
 
 /** A single business-event card: narrative, FHIR artifacts, example, template. */
-export function OrientationStepCard({ step, index, onOpen, onValidate }: Props) {
+export function OrientationStepCard({ step, index, onOpen, onValidate, onOpenBuild }: Props) {
   const [showFhir, setShowFhir] = useState(false);
   const template = step.primaryProfile ? profileByName.get(step.primaryProfile)?.template : undefined;
 
@@ -71,6 +73,21 @@ export function OrientationStepCard({ step, index, onOpen, onValidate }: Props) 
           >
             {showFhir ? '▾' : '▸'} See the FHIR output
           </button>
+          {showFhir && (
+            <p className="ostep__fhir-note">
+              📦 This shows the <strong>main resource</strong> this event produces. The actual
+              submission also carries the resources it references (Patient, Encounter, …) — references
+              to things like the OR Location use a business identifier instead.
+              {step.caseState && onOpenBuild && (
+                <>
+                  {' '}
+                  <button type="button" className="ostep__buildlink" onClick={onOpenBuild}>
+                    See the complete message in Build →
+                  </button>
+                </>
+              )}
+            </p>
+          )}
           {showFhir && (
             <div className="ostep__fhir">
               {step.example && (
